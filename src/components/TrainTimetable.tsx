@@ -6,7 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import TimeInput from "./TimeInput";
 import { Train } from "../types/train";
 import { cn } from "@/lib/utils";
-import { TableIcon } from "lucide-react";
+import { ArrowRight, TableIcon } from "lucide-react";
 
 interface TrainTimetableProps {
   trains: Train[];
@@ -31,20 +31,20 @@ const TrainTimetable = ({ trains, onTrainUpdate }: TrainTimetableProps) => {
 
   return (
     <div className="border rounded-md overflow-hidden">
-      <Table className="border-collapse">
-        <TableHeader className="bg-gray-100">
-          <TableRow className="border-b border-gray-300 hover:bg-gray-100">
-            <TableHead className="font-semibold text-sm border-r p-2 text-gray-700 bg-gray-100">Tåg ID</TableHead>
-            <TableHead className="font-semibold text-sm border-r p-2 text-gray-700 bg-gray-100">OTN</TableHead>
-            <TableHead className="font-semibold text-sm border-r p-2 text-gray-700 bg-gray-100">Op.</TableHead>
-            <TableHead className="font-semibold text-sm border-r p-2 text-gray-700 bg-gray-100">Ank.</TableHead>
-            <TableHead className="font-semibold text-sm border-r p-2 text-gray-700 bg-gray-100">Spår</TableHead>
-            <TableHead className="font-semibold text-sm border-r p-2 text-gray-700 bg-gray-100">Anmärkning</TableHead>
-            <TableHead className="font-semibold text-sm border-r p-2 text-gray-700 bg-gray-100">Ny op.</TableHead>
-            <TableHead className="font-semibold text-sm border-r p-2 text-gray-700 bg-gray-100">Ny tid</TableHead>
-            <TableHead className="font-semibold text-sm border-r p-2 text-gray-700 bg-gray-100">Nytt spår</TableHead>
-            <TableHead className="font-semibold text-sm border-r p-2 text-gray-700 bg-gray-100">Ny anmärkning</TableHead>
-            <TableHead className="font-semibold text-sm p-2 text-gray-700 bg-gray-100 text-center">Klar</TableHead>
+      <Table className="border-collapse w-full">
+        <TableHeader>
+          <TableRow className="border-b border-gray-300 bg-gray-100">
+            <TableHead className="font-semibold text-sm border-r p-2 text-gray-700 sticky top-0">Tåg ID</TableHead>
+            <TableHead className="font-semibold text-sm border-r p-2 text-gray-700 sticky top-0">OTN</TableHead>
+            <TableHead className="font-semibold text-sm border-r p-2 text-gray-700 sticky top-0">Op.</TableHead>
+            <TableHead className="font-semibold text-sm border-r p-2 text-gray-700 sticky top-0">Ank.</TableHead>
+            <TableHead className="font-semibold text-sm border-r p-2 text-gray-700 sticky top-0">Spår</TableHead>
+            <TableHead className="font-semibold text-sm border-r p-2 text-gray-700 sticky top-0">Anmärkning</TableHead>
+            <TableHead className="font-semibold text-sm border-r p-2 text-gray-700 sticky top-0">Ny op.</TableHead>
+            <TableHead className="font-semibold text-sm border-r p-2 text-gray-700 sticky top-0">Ny tid</TableHead>
+            <TableHead className="font-semibold text-sm border-r p-2 text-gray-700 sticky top-0">Nytt spår</TableHead>
+            <TableHead className="font-semibold text-sm border-r p-2 text-gray-700 sticky top-0">Ny anmärkning</TableHead>
+            <TableHead className="font-semibold text-sm p-2 text-gray-700 sticky top-0 text-center">Klar</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -52,7 +52,7 @@ const TrainTimetable = ({ trains, onTrainUpdate }: TrainTimetableProps) => {
             <TableRow 
               key={train.id}
               className={cn(
-                "border-b border-gray-200 hover:bg-gray-50",
+                "border-b hover:bg-gray-50 transition-colors",
                 index % 2 === 0 ? "bg-white" : "bg-gray-50",
                 train.highlight ? "bg-red-50" : "",
                 train.completed ? "bg-green-50" : ""
@@ -89,7 +89,12 @@ const TrainTimetable = ({ trains, onTrainUpdate }: TrainTimetableProps) => {
                     autoFocus
                   />
                 ) : (
-                  train.track
+                  <div className={cn(
+                    "flex items-center",
+                    train.newTrack ? "line-through text-gray-500" : ""
+                  )}>
+                    {train.track}
+                  </div>
                 )}
               </TableCell>
               <TableCell 
@@ -153,7 +158,11 @@ const TrainTimetable = ({ trains, onTrainUpdate }: TrainTimetableProps) => {
                     autoFocus
                   />
                 ) : (
-                  train.newTrack || ""
+                  train.newTrack ? (
+                    <div className="flex items-center gap-1 font-medium text-yellow-800">
+                      {train.track} <ArrowRight className="h-3.5 w-3.5" /> {train.newTrack}
+                    </div>
+                  ) : ""
                 )}
               </TableCell>
               <TableCell 
