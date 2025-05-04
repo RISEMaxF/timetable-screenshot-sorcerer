@@ -12,7 +12,7 @@ const TimetableHeader = ({ location, date }: TimetableHeaderProps) => {
   return (
     <div className="bg-gray-200 px-6 py-4 border-b border-gray-300">
       <h2 className="text-xl font-semibold text-center text-gray-800">
-        Ankommande tåg vid <span className="font-bold bg-white px-2 py-1 rounded-md shadow-sm">{location}</span> • {formattedDate}
+        Plankan: Ankommande tåg vid <span className="font-bold bg-white px-2 py-1 rounded-md shadow-sm">{location}</span> • {formattedDate}
       </h2>
     </div>
   );
