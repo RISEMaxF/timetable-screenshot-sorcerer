@@ -62,8 +62,7 @@ const TrainTableRow = ({
         trainId={train.id}
         editingCell={editingCell}
         onEdit={(value) => handleCellEdit(train, "track", value)}
-        onStartEdit={(e) => {
-          e.stopPropagation();
+        onStartEdit={() => {
           startEditing(train.id, "track");
         }}
         inputWidth="w-12"
@@ -81,8 +80,7 @@ const TrainTableRow = ({
         trainId={train.id}
         editingCell={editingCell}
         onEdit={(value) => handleCellEdit(train, "notes", value)}
-        onStartEdit={(e) => {
-          e.stopPropagation();
+        onStartEdit={() => {
           startEditing(train.id, "notes");
         }}
       />
@@ -93,8 +91,7 @@ const TrainTableRow = ({
         trainId={train.id}
         editingCell={editingCell}
         onEdit={(value) => handleCellEdit(train, "newOperator", value)}
-        onStartEdit={(e) => {
-          e.stopPropagation();
+        onStartEdit={() => {
           startEditing(train.id, "newOperator");
         }}
       />
@@ -114,8 +111,7 @@ const TrainTableRow = ({
         originalTrack={train.track}
         newTrack={train.newTrack}
         isEditing={editingCell.trainId === train.id && editingCell.field === "newTrack"}
-        onStartEdit={(e) => {
-          e.stopPropagation();
+        onStartEdit={() => {
           startEditing(train.id, "newTrack");
         }}
         onEdit={(value) => handleCellEdit(train, "newTrack", value)}
@@ -127,8 +123,7 @@ const TrainTableRow = ({
         trainId={train.id}
         editingCell={editingCell}
         onEdit={(value) => handleCellEdit(train, "newNotes", value)}
-        onStartEdit={(e) => {
-          e.stopPropagation();
+        onStartEdit={() => {
           startEditing(train.id, "newNotes");
         }}
       />

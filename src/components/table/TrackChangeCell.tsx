@@ -10,7 +10,7 @@ interface TrackChangeCellProps {
   originalTrack: string | number;
   newTrack: string | number | undefined;
   isEditing: boolean;
-  onStartEdit: () => void;
+  onStartEdit: () => void;  // Updated to match the signature
   onEdit: (value: string) => void;
 }
 
@@ -28,7 +28,10 @@ const TrackChangeCell = ({
         "border-r p-2 text-sm cursor-pointer",
         newTrack ? "bg-yellow-100" : ""
       )}
-      onClick={onStartEdit}
+      onClick={(e) => {
+        e.stopPropagation();
+        onStartEdit();
+      }}
     >
       {isEditing ? (
         <Input 

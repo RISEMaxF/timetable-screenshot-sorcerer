@@ -10,7 +10,7 @@ type EditableCellProps = {
   trainId: string;
   editingCell: { trainId: string; field: string | null };
   onEdit: (value: any) => void;
-  onStartEdit: () => void;
+  onStartEdit: () => void;  // Updated to match the signature
   className?: string;
   inputType?: "text" | "time";
   inputWidth?: string;
@@ -36,7 +36,10 @@ const EditableCell = ({
   return (
     <TableCell
       className={`border-r p-2 text-sm cursor-pointer ${className}`}
-      onClick={onStartEdit}
+      onClick={(e) => {
+        e.stopPropagation();
+        onStartEdit();
+      }}
     >
       {isEditing ? (
         inputType === "time" ? (
