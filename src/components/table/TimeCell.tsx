@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 interface TimeCellProps {
   time: string | undefined;
   isEditing: boolean;
-  onStartEdit: () => void;
+  onStartEdit: (e: React.MouseEvent) => void;
   onEdit: (time: string) => void;
   highlight?: boolean;
   placeholder?: string;
