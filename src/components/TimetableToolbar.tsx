@@ -8,6 +8,14 @@ import TimeUpdateDialog from "./toolbar/TimeUpdateDialog";
 import StatusUpdateDialog from "./toolbar/StatusUpdateDialog";
 import NotesUpdateDialog from "./toolbar/NotesUpdateDialog";
 import DateSelector from "./toolbar/DateSelector";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
+import { Flag, Globe } from "lucide-react";
 
 interface TimetableToolbarProps {
   location: string;
@@ -62,14 +70,45 @@ export function TimetableToolbar({
 
   return (
     <div className="flex flex-col sm:flex-row justify-between items-center gap-4 p-4 bg-gray-50 border-b border-gray-200">
-      <div className="w-full sm:w-auto">
-        <Input
-          type="text"
-          placeholder="Location"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          className="w-full sm:w-64"
-        />
+      <div className="w-full sm:w-auto flex items-center gap-2">
+        <Globe className="h-4 w-4 text-gray-500" />
+        <Select value={location} onValueChange={setLocation}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Välj region" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="SE">
+              <div className="flex items-center gap-2">
+                <Flag className="h-3.5 w-3.5" />
+                <span>Sverige</span>
+              </div>
+            </SelectItem>
+            <SelectItem value="NO">
+              <div className="flex items-center gap-2">
+                <Flag className="h-3.5 w-3.5" />
+                <span>Norge</span>
+              </div>
+            </SelectItem>
+            <SelectItem value="DK">
+              <div className="flex items-center gap-2">
+                <Flag className="h-3.5 w-3.5" />
+                <span>Danmark</span>
+              </div>
+            </SelectItem>
+            <SelectItem value="FI">
+              <div className="flex items-center gap-2">
+                <Flag className="h-3.5 w-3.5" />
+                <span>Finland</span>
+              </div>
+            </SelectItem>
+            <SelectItem value="DE">
+              <div className="flex items-center gap-2">
+                <Flag className="h-3.5 w-3.5" />
+                <span>Tyskland</span>
+              </div>
+            </SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       
       <div className="flex flex-wrap items-center gap-2 justify-between">
