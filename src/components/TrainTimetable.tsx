@@ -153,19 +153,21 @@ const TrainTimetable = ({ trains, onTrainUpdate, selectedTrains = [], onToggleSe
 
   return (
     <>
-      <div className="mb-4 flex flex-col sm:flex-row items-center gap-4" onKeyDown={handleKeyDown}>
-        {/* Search Box */}
-        <div className="relative flex-grow max-w-md">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
+      <div className="mb-4 flex flex-col sm:flex-row items-start gap-4" onKeyDown={handleKeyDown}>
+        {/* Search Box - Improved styling */}
+        <div className="relative flex-grow max-w-md w-full">
+          <div className="relative flex items-center">
+            <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+              <Search className="h-4 w-4" />
+            </div>
             <Input
-              placeholder="Search trains..."
+              placeholder="Sök tåg..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 h-11 border-2 focus-visible:ring-blue-500"
+              className="pl-10 pr-4 py-2 h-10 border-gray-300 focus-visible:ring-blue-500 w-full"
             />
           </div>
-          <div className="mt-1 flex items-center">
+          <div className="mt-1.5 flex items-center">
             <input 
               type="checkbox" 
               id="exactMatch" 
@@ -173,83 +175,87 @@ const TrainTimetable = ({ trains, onTrainUpdate, selectedTrains = [], onToggleSe
               onChange={() => setExactMatch(prev => !prev)}
               className="mr-1.5 h-4 w-4"
             />
-            <label htmlFor="exactMatch" className="text-xs text-gray-600">Exact match</label>
+            <label htmlFor="exactMatch" className="text-xs text-gray-600">Exakt matchning</label>
           </div>
         </div>
         
-        {/* Filter Dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="h-11">
-              <Filter className="mr-2 h-4 w-4" />
-              Filter
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-40">
-            <DropdownMenuItem onClick={() => setFilterStatus("all")} className="cursor-pointer">
-              All Trains
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setFilterStatus("completed")} className="cursor-pointer">
-              Completed
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setFilterStatus("pending")} className="cursor-pointer">
-              Pending
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        
-        {/* Sort Dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="h-11">
-              <ArrowUpDown className="mr-2 h-4 w-4" />
-              Sort
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-40">
-            <DropdownMenuItem onClick={() => toggleSort("id")} className="cursor-pointer">
-              Train ID
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => toggleSort("arrivalTime")} className="cursor-pointer">
-              Arrival Time
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => toggleSort("track")} className="cursor-pointer">
-              Track
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => toggleSort("completed")} className="cursor-pointer">
-              Status
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex space-x-2 items-center h-10">
+          {/* Filter Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="default" className="h-10">
+                <Filter className="mr-2 h-4 w-4" />
+                Filter
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-40">
+              <DropdownMenuItem onClick={() => setFilterStatus("all")} className="cursor-pointer">
+                Alla tåg
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setFilterStatus("completed")} className="cursor-pointer">
+                Klara
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setFilterStatus("pending")} className="cursor-pointer">
+                Väntande
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          
+          {/* Sort Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="default" className="h-10">
+                <ArrowUpDown className="mr-2 h-4 w-4" />
+                Sortera
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-40">
+              <DropdownMenuItem onClick={() => toggleSort("id")} className="cursor-pointer">
+                Tåg-ID
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => toggleSort("arrivalTime")} className="cursor-pointer">
+                Ankomsttid
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => toggleSort("track")} className="cursor-pointer">
+                Spår
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => toggleSort("completed")} className="cursor-pointer">
+                Status
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       
       <div className="border rounded-md overflow-hidden">
-        <Table className="border-collapse w-full">
-          <TrainTableHeader 
-            onSort={toggleSort} 
-            sortField={sortField} 
-            sortDirection={sortDirection} 
-          />
-          <TableBody>
-            {filteredTrains.map((train, index) => (
-              <TrainTableRow
-                key={train.id}
-                train={train}
-                index={index}
-                editingCell={editingCell}
-                startEditing={startEditing}
-                handleCellEdit={handleCellEdit}
-                onRowClick={handleRowClick}
-                isSelected={selectedTrain?.id === train.id}
-                isMultiSelected={selectedTrains.includes(train.id)}
-                onToggleSelection={onToggleSelection}
-              />
-            ))}
-            {filteredTrains.length === 0 && (
-              <EmptyState searchTerm={searchTerm} filterApplied={filterStatus !== "all"} />
-            )}
-          </TableBody>
-        </Table>
+        <div className="overflow-x-auto">
+          <Table className="border-collapse w-full">
+            <TrainTableHeader 
+              onSort={toggleSort} 
+              sortField={sortField} 
+              sortDirection={sortDirection} 
+            />
+            <TableBody>
+              {filteredTrains.map((train, index) => (
+                <TrainTableRow
+                  key={train.id}
+                  train={train}
+                  index={index}
+                  editingCell={editingCell}
+                  startEditing={startEditing}
+                  handleCellEdit={handleCellEdit}
+                  onRowClick={handleRowClick}
+                  isSelected={selectedTrain?.id === train.id}
+                  isMultiSelected={selectedTrains.includes(train.id)}
+                  onToggleSelection={onToggleSelection}
+                />
+              ))}
+              {filteredTrains.length === 0 && (
+                <EmptyState searchTerm={searchTerm} filterApplied={filterStatus !== "all"} />
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
 
       <TrainDetailDialog 

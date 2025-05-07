@@ -24,35 +24,35 @@ const HelpMenu = () => {
           className="flex items-center gap-1 bg-white border-gray-300"
         >
           <HelpCircle className="h-4 w-4" />
-          Help
+          Hjälp
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80 max-h-[500px] overflow-y-auto p-4" align="end">
         <div className="space-y-4">
-          <h3 className="font-semibold text-lg mb-2">Plankan Help Guide</h3>
+          <h3 className="font-semibold text-lg mb-2">Plankan - Hjälpguide</h3>
           
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="colors">
               <AccordionTrigger className="text-sm font-medium">
-                Color Meanings
+                Färgernas betydelse
               </AccordionTrigger>
               <AccordionContent>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-center gap-2">
                     <div className="w-4 h-4 rounded bg-pink-100 border border-pink-300"></div>
-                    <span>Time changes (arrival/departure updates)</span>
+                    <span>Tidsförändringar (ankomst/avgång uppdateringar)</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <div className="w-4 h-4 rounded bg-yellow-100 border border-yellow-300"></div>
-                    <span>Track changes</span>
+                    <span>Spårändringar</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <div className="w-4 h-4 rounded bg-green-100 border border-green-300"></div>
-                    <span>Completed trains</span>
+                    <span>Slutförda tåg</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <div className="w-4 h-4 rounded bg-blue-100 border border-blue-300"></div>
-                    <span>Selected trains</span>
+                    <span>Valda tåg</span>
                   </li>
                 </ul>
               </AccordionContent>
@@ -60,30 +60,42 @@ const HelpMenu = () => {
             
             <AccordionItem value="columns">
               <AccordionTrigger className="text-sm font-medium">
-                Column Descriptions
+                Kolumnbeskrivningar
               </AccordionTrigger>
               <AccordionContent>
                 <ul className="space-y-2 text-sm">
                   <li className="pb-1 border-b">
-                    <strong>Train ID:</strong> Unique identifier for each train
+                    <strong>Tåg-ID:</strong> Unik identifierare för varje tåg
                   </li>
                   <li className="pb-1 border-b">
-                    <strong>Arrival:</strong> Scheduled arrival time at the station
+                    <strong>OTN:</strong> Operations tracking number
                   </li>
                   <li className="pb-1 border-b">
-                    <strong>Departure:</strong> Scheduled departure time from the station
+                    <strong>Operatör:</strong> Företag som driver tågtjänsten
                   </li>
                   <li className="pb-1 border-b">
-                    <strong>Track:</strong> Platform track number assigned to the train
+                    <strong>Ankomst:</strong> Schemalagd ankomsttid till stationen
                   </li>
                   <li className="pb-1 border-b">
-                    <strong>Operator:</strong> Company operating the train service
+                    <strong>Spår:</strong> Tilldelat spår för tåget
                   </li>
                   <li className="pb-1 border-b">
-                    <strong>Status:</strong> Whether the train is completed or pending
+                    <strong>Anteckningar:</strong> Ytterligare information om tåget
                   </li>
                   <li className="pb-1 border-b">
-                    <strong>Notes:</strong> Additional information about the train
+                    <strong>Ny operatör:</strong> Uppdatering av ny operatör, om det ändrats
+                  </li>
+                  <li className="pb-1 border-b">
+                    <strong>Ny tid:</strong> Uppdaterad ankomsttid, om det ändrats
+                  </li>
+                  <li className="pb-1 border-b">
+                    <strong>Spårändring:</strong> Information om spårbyten
+                  </li>
+                  <li className="pb-1 border-b">
+                    <strong>Nya anteckningar:</strong> Nyligen tillagda kommentarer
+                  </li>
+                  <li className="pb-1 border-b">
+                    <strong>Klar:</strong> Om tåget är slutfört eller väntar
                   </li>
                 </ul>
               </AccordionContent>
@@ -91,37 +103,37 @@ const HelpMenu = () => {
             
             <AccordionItem value="usage">
               <AccordionTrigger className="text-sm font-medium">
-                Usage Guide
+                Användarguide
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-2 text-sm">
-                  <h4 className="font-medium">Basic Operations</h4>
+                  <h4 className="font-medium">Grundläggande funktioner</h4>
                   <ul className="list-disc pl-5 space-y-1">
-                    <li>Click on any cell to edit its content</li>
-                    <li>Click row to view detailed train information</li>
-                    <li>Use search box to find trains by ID or other details</li>
-                    <li>Filter trains by status using the filter dropdown</li>
-                    <li>Sort columns by clicking column headers</li>
+                    <li>Klicka på valfri cell för att redigera dess innehåll</li>
+                    <li>Klicka på en rad för att visa detaljerad tåginformation</li>
+                    <li>Använd sökrutan för att hitta tåg efter ID eller andra detaljer</li>
+                    <li>Filtrera tåg efter status med filtermenyn</li>
+                    <li>Sortera kolumner genom att klicka på kolumnrubrikerna</li>
                   </ul>
                   
-                  <h4 className="font-medium mt-3">Searching</h4>
+                  <h4 className="font-medium mt-3">Sökning</h4>
                   <ul className="list-disc pl-5 space-y-1">
-                    <li>By default, search finds partial matches (e.g., "SJ" will match "JSA")</li>
-                    <li>Enable "Exact match" checkbox for stricter search results</li>
-                    <li>Search works across train ID, operator, track, and notes</li>
+                    <li>Som standard hittar sökningen delvis matchningar (t.ex. "SJ" matchar "JSA")</li>
+                    <li>Aktivera kryssrutan "Exakt matchning" för striktare sökresultat</li>
+                    <li>Sökning fungerar över tåg-ID, operatör, spår och anteckningar</li>
                   </ul>
                   
-                  <h4 className="font-medium mt-3">Multi-selection</h4>
+                  <h4 className="font-medium mt-3">Flervalsläge</h4>
                   <ul className="list-disc pl-5 space-y-1">
-                    <li>Hold Ctrl/Cmd while clicking rows to select multiple trains</li>
-                    <li>Use batch actions to update multiple trains at once</li>
-                    <li>Press Esc to clear all selections</li>
+                    <li>Håll ned Ctrl/Cmd medan du klickar på rader för att välja flera tåg</li>
+                    <li>Använd gruppåtgärder för att uppdatera flera tåg på en gång</li>
+                    <li>Tryck på Esc för att rensa alla val</li>
                   </ul>
                   
-                  <h4 className="font-medium mt-3">Keyboard Shortcuts</h4>
+                  <h4 className="font-medium mt-3">Tangentbordsgenvägar</h4>
                   <ul className="list-disc pl-5 space-y-1">
-                    <li><kbd className="px-1 py-0.5 bg-gray-100 rounded border">Ctrl+F</kbd> - Focus search box</li>
-                    <li><kbd className="px-1 py-0.5 bg-gray-100 rounded border">Esc</kbd> - Clear selection</li>
+                    <li><kbd className="px-1 py-0.5 bg-gray-100 rounded border">Ctrl+F</kbd> - Fokusera sökrutan</li>
+                    <li><kbd className="px-1 py-0.5 bg-gray-100 rounded border">Esc</kbd> - Rensa markering</li>
                   </ul>
                 </div>
               </AccordionContent>
