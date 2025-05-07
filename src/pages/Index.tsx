@@ -1,21 +1,77 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TrainTimetable from "../components/TrainTimetable";
 import TimetableHeader from "../components/TimetableHeader";
 import { TimetableToolbar } from "../components/TimetableToolbar";
 import { trainData } from "../data/trainData";
 import { Train } from "../types/train";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { toast } from "@/hooks/use-toast";
+import { useHotkeys } from "react-hotkeys-hook";
 
 const Index = () => {
   const [trains, setTrains] = useState(trainData);
   const [location, setLocation] = useState("Hagalund");
   const [date, setDate] = useState(new Date());
+  const [selectedTrains, setSelectedTrains] = useState<string[]>([]);
+  
+  // Initialize keyboard shortcuts
+  useHotkeys('ctrl+f', (e) => {
+    e.preventDefault();
+    document.querySelector<HTMLInputElement>('input[placeholder="Search trains..."]')?.focus();
+  }, { enableOnFormTags: ['INPUT'] });
+  
+  useHotkeys('escape', () => {
+    setSelectedTrains([]);
+  });
 
   const handleTrainUpdate = (updatedTrain: Train) => {
     setTrains(trains.map((train) => 
       train.id === updatedTrain.id ? updatedTrain : train
     ));
   };
+
+  const handleBatchUpdate = (fieldName: keyof Train, value: any) => {
+    if (!selectedTrains.length) return;
+    
+    const updatedTrains = trains.map(train => 
+      selectedTrains.includes(train.id) ? { ...train, [fieldName]: value } : train
+    );
+    
+    setTrains(updatedTrains);
+    
+    toast({
+      title: "Batch update complete",
+      description: `Updated ${fieldName} for ${selectedTrains.length} trains`,
+      variant: "success"
+    });
+  };
+
+  const toggleTrainSelection = (trainId: string) => {
+    setSelectedTrains(prev => 
+      prev.includes(trainId) 
+        ? prev.filter(id => id !== trainId) 
+        : [...prev, trainId]
+    );
+  };
+
+  // Keyboard shortcut help
+  useEffect(() => {
+    const showHelpToast = () => {
+      toast({
+        title: "Keyboard Shortcuts",
+        description: "Ctrl+F: Search | Esc: Clear selection | Click row: View details",
+        duration: 5000,
+      });
+    };
+    
+    // Show help toast once on component mount
+    const timer = setTimeout(() => {
+      showHelpToast();
+    }, 2000);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -49,21 +105,27 @@ const Index = () => {
           />
         </div>
         
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
-          <TimetableToolbar 
-            location={location} 
-            setLocation={setLocation} 
-            date={date} 
-            setDate={setDate} 
-          />
-          <TimetableHeader location={location} date={date} />
-          <div className="overflow-x-auto">
-            <TrainTimetable 
-              trains={trains} 
-              onTrainUpdate={handleTrainUpdate} 
+        <TooltipProvider>
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
+            <TimetableToolbar 
+              location={location} 
+              setLocation={setLocation} 
+              date={date} 
+              setDate={setDate} 
+              selectedCount={selectedTrains.length}
+              onBatchUpdate={handleBatchUpdate}
             />
+            <TimetableHeader location={location} date={date} />
+            <div className="overflow-x-auto">
+              <TrainTimetable 
+                trains={trains} 
+                onTrainUpdate={handleTrainUpdate} 
+                selectedTrains={selectedTrains}
+                onToggleSelection={toggleTrainSelection}
+              />
+            </div>
           </div>
-        </div>
+        </TooltipProvider>
       </div>
     </div>
   );

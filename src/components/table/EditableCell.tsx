@@ -3,6 +3,9 @@ import React from "react";
 import { Input } from "@/components/ui/input";
 import TimeInput from "../TimeInput";
 import { TableCell } from "../ui/table";
+import { cn } from "@/lib/utils";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { Info } from "lucide-react";
 
 type EditableCellProps = {
   value: string | number | null;
@@ -10,11 +13,12 @@ type EditableCellProps = {
   trainId: string;
   editingCell: { trainId: string; field: string | null };
   onEdit: (value: any) => void;
-  onStartEdit: () => void;  // Updated to match the signature
+  onStartEdit: () => void;
   className?: string;
   inputType?: "text" | "time";
   inputWidth?: string;
   placeholder?: string;
+  tooltip?: string;
   formatDisplay?: (value: any) => React.ReactNode;
 };
 
@@ -29,13 +33,14 @@ const EditableCell = ({
   inputType = "text",
   inputWidth = "w-full",
   placeholder = "",
+  tooltip = "",
   formatDisplay = (val) => val || "-",
 }: EditableCellProps) => {
   const isEditing = editingCell.trainId === trainId && editingCell.field === field;
 
   return (
     <TableCell
-      className={`border-r p-2 text-sm cursor-pointer ${className}`}
+      className={`border-r p-2 text-sm cursor-pointer relative group ${className}`}
       onClick={(e) => {
         e.stopPropagation();
         onStartEdit();
@@ -56,7 +61,18 @@ const EditableCell = ({
           />
         )
       ) : (
-        formatDisplay(value)
+        <div className="flex items-center w-full justify-between">
+          <div className="flex-1">{formatDisplay(value)}</div>
+          
+          {tooltip && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Info className="h-3.5 w-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity ml-1" />
+              </TooltipTrigger>
+              <TooltipContent side="top">{tooltip}</TooltipContent>
+            </Tooltip>
+          )}
+        </div>
       )}
     </TableCell>
   );
