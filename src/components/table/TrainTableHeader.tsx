@@ -41,30 +41,41 @@ const TrainTableHeader = ({
         >
           Tåg-ID {renderSortIcon("id")}
         </TableHead>
-        <TableHead className={`${headerClasses} w-20`}>OTN</TableHead>
-        <TableHead className={`${headerClasses} w-24`}>Operatör</TableHead>
+        <TableHead 
+          className={`${headerClasses} w-20`}
+          onClick={() => onSort && onSort("announcedTrainNumber")}
+        >
+          Annons. tågnr {renderSortIcon("announcedTrainNumber")}
+        </TableHead>
         <TableHead 
           className={`${headerClasses} w-24`}
-          onClick={() => onSort && onSort("arrivalTime")}
+          onClick={() => onSort && onSort("operator")}
         >
-          Ankomst {renderSortIcon("arrivalTime")}
+          Operatör {renderSortIcon("operator")}
         </TableHead>
         <TableHead 
-          className={`${headerClasses} w-16`}
-          onClick={() => onSort && onSort("track")}
+          className={`${headerClasses} w-24`}
+          onClick={() => onSort && onSort("from")}
         >
-          Spår {renderSortIcon("track")}
+          Från {renderSortIcon("from")}
         </TableHead>
-        <TableHead className={`${headerClasses} w-32`}>Anteckningar</TableHead>
-        <TableHead className={`${headerClasses} w-28`}>Ny operatör</TableHead>
-        <TableHead className={`${headerClasses} w-20`}>Ny tid</TableHead>
-        <TableHead className={`${headerClasses} w-28`}>Spårändring</TableHead>
-        <TableHead className={`${headerClasses} w-32`}>Nya anteckningar</TableHead>
         <TableHead 
-          className={`${headerClasses} w-16 text-center`}
-          onClick={() => onSort && onSort("completed")}
+          className={`${headerClasses} w-24`}
+          onClick={() => onSort && onSort("to")}
         >
-          Klar {renderSortIcon("completed")}
+          Till {renderSortIcon("to")}
+        </TableHead>
+        <TableHead 
+          className={`${headerClasses} w-24`}
+          onClick={() => onSort && onSort("latest")}
+        >
+          Senast {renderSortIcon("latest")}
+        </TableHead>
+        <TableHead 
+          className={`${headerClasses} w-28`}
+          onClick={() => onSort && onSort("updated")}
+        >
+          Uppdaterad {renderSortIcon("updated")}
         </TableHead>
       </TableRow>
     </TableHeader>

@@ -18,7 +18,7 @@ const Index = () => {
   // Initialize keyboard shortcuts
   useHotkeys('ctrl+f', (e) => {
     e.preventDefault();
-    document.querySelector<HTMLInputElement>('input[placeholder="Search trains..."]')?.focus();
+    document.querySelector<HTMLInputElement>('input[placeholder="Sök tåg..."]')?.focus();
   }, { enableOnFormTags: ['INPUT'] });
   
   useHotkeys('escape', () => {
@@ -72,7 +72,7 @@ const Index = () => {
               <circle cx="12" cy="12" r="2"/>
               <circle cx="8" cy="12" r="2"/>
             </svg>
-            Plankan
+            Tåginfo
           </h1>
           <div className="flex items-center gap-4">
             <HelpMenu />
@@ -95,7 +95,7 @@ const Index = () => {
               onBatchUpdate={handleBatchUpdate}
             />
             <TimetableHeader location={location} date={date} />
-            <div className="overflow-x-auto">
+            <div>
               <TrainTimetable 
                 trains={trains} 
                 onTrainUpdate={handleTrainUpdate} 

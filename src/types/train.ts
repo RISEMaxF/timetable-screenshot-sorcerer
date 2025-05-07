@@ -1,15 +1,12 @@
 
 export interface Train {
   id: string;
-  otn: string | null;
+  announcedTrainNumber?: string;
   operator: string;
-  arrivalTime: string;
-  track: string | number;
-  notes: string | null;
-  newOperator?: string;
-  newTime?: string;
-  newTrack?: string | number;
-  newNotes?: string;
-  completed: boolean;
-  highlight?: boolean;
+  from?: string;
+  to?: string;
+  latest?: string;
+  updated?: string;
+  highlighted?: boolean;
+  completed?: boolean;
 }

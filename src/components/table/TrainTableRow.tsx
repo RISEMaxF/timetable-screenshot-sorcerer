@@ -3,22 +3,13 @@ import React from "react";
 import { TableCell, TableRow } from "../ui/table";
 import { Train } from "../../types/train";
 import { Checkbox } from "../ui/checkbox";
-import EditableCell from "./EditableCell";
-import TrackChangeCell from "./TrackChangeCell";
-import TimeCell from "./TimeCell";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { Info } from "lucide-react";
+import { Info, RefreshCw } from "lucide-react";
 
 interface TrainTableRowProps {
   train: Train;
   index: number;
-  editingCell: {
-    trainId: string;
-    field: keyof Train | null;
-  };
-  startEditing: (trainId: string, field: keyof Train) => void;
-  handleCellEdit: (train: Train, field: keyof Train, value: any) => void;
   onRowClick: (train: Train) => void;
   isSelected: boolean;
   isMultiSelected?: boolean;
@@ -28,9 +19,6 @@ interface TrainTableRowProps {
 const TrainTableRow = ({
   train,
   index,
-  editingCell,
-  startEditing,
-  handleCellEdit,
   onRowClick,
   isSelected,
   isMultiSelected = false,
@@ -58,7 +46,7 @@ const TrainTableRow = ({
       className={cn(
         "border-b hover:bg-gray-50 transition-colors cursor-pointer",
         index % 2 === 0 ? "bg-white" : "bg-gray-50",
-        train.highlight ? "bg-pink-50" : "",
+        train.highlighted ? "bg-pink-50" : "",
         train.completed ? "bg-green-50" : "",
         isSelected ? "bg-blue-50" : "",
         isMultiSelected ? "bg-indigo-100" : ""
@@ -79,113 +67,19 @@ const TrainTableRow = ({
           <span>{train.id}</span>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Info className="h-3.5 w-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <RefreshCw className="h-3.5 w-3.5 text-gray-400 hover:text-gray-600 transition-colors" />
             </TooltipTrigger>
-            <TooltipContent side="top">Tåg-ID</TooltipContent>
+            <TooltipContent side="top">Uppdatera tåginformation</TooltipContent>
           </Tooltip>
         </div>
       </TableCell>
       
-      <TableCell className="border-r p-2 text-sm">{train.otn || "-"}</TableCell>
+      <TableCell className="border-r p-2 text-sm">{train.announcedTrainNumber || "-"}</TableCell>
       <TableCell className="border-r p-2 text-sm">{train.operator}</TableCell>
-      
-      <TimeCell
-        time={train.arrivalTime}
-        isEditing={editingCell.trainId === train.id && editingCell.field === "arrivalTime"}
-        onStartEdit={(e) => {
-          e.stopPropagation();
-          startEditing(train.id, "arrivalTime");
-        }}
-        onEdit={(value) => handleCellEdit(train, "arrivalTime", value)}
-        highlight={train.highlight}
-        tooltip="Schemalagd ankomsttid (klicka för att redigera)"
-      />
-
-      <EditableCell
-        value={train.track}
-        field="track"
-        trainId={train.id}
-        editingCell={editingCell}
-        onEdit={(value) => handleCellEdit(train, "track", value)}
-        onStartEdit={() => {
-          startEditing(train.id, "track");
-        }}
-        inputWidth="w-12"
-        className={cn(train.newTrack ? "line-through text-gray-500" : "")}
-        tooltip="Spårnummer (klicka för att redigera)"
-        formatDisplay={(value) => (
-          <div className={cn("flex items-center", train.newTrack ? "line-through text-gray-500" : "")}>
-            {value}
-          </div>
-        )}
-      />
-
-      <EditableCell
-        value={train.notes}
-        field="notes"
-        trainId={train.id}
-        editingCell={editingCell}
-        onEdit={(value) => handleCellEdit(train, "notes", value)}
-        onStartEdit={() => {
-          startEditing(train.id, "notes");
-        }}
-        tooltip="Ytterligare anteckningar (klicka för att redigera)"
-      />
-
-      <EditableCell
-        value={train.newOperator}
-        field="newOperator"
-        trainId={train.id}
-        editingCell={editingCell}
-        onEdit={(value) => handleCellEdit(train, "newOperator", value)}
-        onStartEdit={() => {
-          startEditing(train.id, "newOperator");
-        }}
-        tooltip="Uppdaterad operatörsinformation (klicka för att redigera)"
-      />
-
-      <TimeCell
-        time={train.newTime}
-        isEditing={editingCell.trainId === train.id && editingCell.field === "newTime"}
-        onStartEdit={(e) => {
-          e.stopPropagation();
-          startEditing(train.id, "newTime");
-        }}
-        onEdit={(value) => handleCellEdit(train, "newTime", value)}
-        tooltip="Uppdaterad ankomsttid (klicka för att redigera)"
-      />
-
-      <TrackChangeCell
-        trainId={train.id}
-        originalTrack={train.track}
-        newTrack={train.newTrack}
-        isEditing={editingCell.trainId === train.id && editingCell.field === "newTrack"}
-        onStartEdit={() => {
-          startEditing(train.id, "newTrack");
-        }}
-        onEdit={(value) => handleCellEdit(train, "newTrack", value)}
-        tooltip="Information om spårbyten (klicka för att redigera)"
-      />
-
-      <EditableCell
-        value={train.newNotes}
-        field="newNotes"
-        trainId={train.id}
-        editingCell={editingCell}
-        onEdit={(value) => handleCellEdit(train, "newNotes", value)}
-        onStartEdit={() => {
-          startEditing(train.id, "newNotes");
-        }}
-        tooltip="Uppdaterade anteckningar (klicka för att redigera)"
-      />
-
-      <TableCell className="p-2 text-center" onClick={(e) => e.stopPropagation()}>
-        <Checkbox 
-          checked={train.completed} 
-          onCheckedChange={(checked) => handleCellEdit(train, "completed", checked)}
-          className="border-gray-400"
-        />
-      </TableCell>
+      <TableCell className="border-r p-2 text-sm">{train.from || "-"}</TableCell>
+      <TableCell className="border-r p-2 text-sm">{train.to || "-"}</TableCell>
+      <TableCell className="border-r p-2 text-sm">{train.latest || "-"}</TableCell>
+      <TableCell className="p-2 text-sm">{train.updated || "-"}</TableCell>
     </TableRow>
   );
 };

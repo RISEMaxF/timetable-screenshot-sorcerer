@@ -1,3 +1,4 @@
+
 import { useState, useMemo } from "react";
 import { Table, TableBody } from "@/components/ui/table";
 import { Train } from "../types/train";
@@ -8,8 +9,7 @@ import TrainDetailDialog from "./dialog/TrainDetailDialog";
 import SearchBar from "./table/SearchBar";
 import TableControls from "./table/TableControls";
 import { filterTrains } from "@/utils/searchUtils";
-import { useEditingCell } from "@/hooks/useEditingCell";
-import { useTableKeyboardNavigation } from "@/hooks/useTableKeyboardNavigation";
+import TrainMap from "./map/TrainMap";
 
 interface TrainTimetableProps {
   trains: Train[];
@@ -32,13 +32,6 @@ const TrainTimetable = ({ trains, onTrainUpdate, selectedTrains = [], onToggleSe
   const [sortField, setSortField] = useState<SortField>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
   const [filterStatus, setFilterStatus] = useState<"all" | "completed" | "pending">("all");
-  
-  // Custom hooks for cell editing and keyboard navigation
-  const { editingCell, handleCellEdit, startEditing } = useEditingCell(onTrainUpdate);
-  const { handleKeyDown } = useTableKeyboardNavigation(
-    (cell) => editingCell.trainId === cell.trainId && editingCell.field === cell.field ? 
-      null : cell
-  );
 
   const handleRowClick = (train: Train) => {
     setSelectedTrain(train);
@@ -66,7 +59,7 @@ const TrainTimetable = ({ trains, onTrainUpdate, selectedTrains = [], onToggleSe
 
   return (
     <>
-      <div className="mb-4 flex flex-col sm:flex-row items-start gap-4" onKeyDown={handleKeyDown}>
+      <div className="mb-4 flex flex-col sm:flex-row items-start gap-4">
         <SearchBar 
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
@@ -80,34 +73,40 @@ const TrainTimetable = ({ trains, onTrainUpdate, selectedTrains = [], onToggleSe
         />
       </div>
       
-      <div className="border rounded-md overflow-hidden">
-        <div className="overflow-x-auto">
-          <Table className="border-collapse w-full">
-            <TrainTableHeader 
-              onSort={toggleSort} 
-              sortField={sortField} 
-              sortDirection={sortDirection} 
-            />
-            <TableBody>
-              {filteredTrains.map((train, index) => (
-                <TrainTableRow
-                  key={train.id}
-                  train={train}
-                  index={index}
-                  editingCell={editingCell}
-                  startEditing={startEditing}
-                  handleCellEdit={handleCellEdit}
-                  onRowClick={handleRowClick}
-                  isSelected={selectedTrain?.id === train.id}
-                  isMultiSelected={selectedTrains.includes(train.id)}
-                  onToggleSelection={onToggleSelection}
-                />
-              ))}
-              {filteredTrains.length === 0 && (
-                <EmptyState searchTerm={searchTerm} filterApplied={filterStatus !== "all"} />
-              )}
-            </TableBody>
-          </Table>
+      <div className="flex flex-col lg:flex-row gap-4">
+        <div className="lg:w-2/3 border rounded-md overflow-hidden">
+          <div className="overflow-x-auto">
+            <Table className="border-collapse w-full">
+              <TrainTableHeader 
+                onSort={toggleSort} 
+                sortField={sortField} 
+                sortDirection={sortDirection} 
+              />
+              <TableBody>
+                {filteredTrains.map((train, index) => (
+                  <TrainTableRow
+                    key={train.id}
+                    train={train}
+                    index={index}
+                    onRowClick={handleRowClick}
+                    isSelected={selectedTrain?.id === train.id}
+                    isMultiSelected={selectedTrains.includes(train.id)}
+                    onToggleSelection={onToggleSelection}
+                  />
+                ))}
+                {filteredTrains.length === 0 && (
+                  <EmptyState searchTerm={searchTerm} filterApplied={filterStatus !== "all"} />
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+        
+        <div className="lg:w-1/3 h-[500px]">
+          <TrainMap 
+            trains={trains} 
+            selectedTrainId={selectedTrain?.id}
+          />
         </div>
       </div>
 
