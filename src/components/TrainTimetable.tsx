@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from "react";
 import { Table, TableBody } from "@/components/ui/table";
 import { Train } from "../types/train";
@@ -36,8 +35,10 @@ const TrainTimetable = ({ trains, onTrainUpdate, selectedTrains = [], onToggleSe
   
   // Custom hooks for cell editing and keyboard navigation
   const { editingCell, handleCellEdit, startEditing } = useEditingCell(onTrainUpdate);
-  const { handleKeyDown } = useTableKeyboardNavigation(setEditingCell => 
-    setEditingCell({ trainId: "", field: null }));
+  const { handleKeyDown } = useTableKeyboardNavigation(
+    (cell) => editingCell.trainId === cell.trainId && editingCell.field === cell.field ? 
+      null : cell
+  );
 
   const handleRowClick = (train: Train) => {
     setSelectedTrain(train);

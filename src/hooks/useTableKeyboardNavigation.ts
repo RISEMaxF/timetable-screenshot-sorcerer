@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import { Train } from "@/types/train";
 
 export const useTableKeyboardNavigation = (
-  setEditingCell: (cell: { trainId: string; field: keyof Train | null }) => void
+  setEditingCell: React.Dispatch<React.SetStateAction<{ trainId: string; field: keyof Train | null }>>
 ) => {
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     // Implement keyboard navigation between cells

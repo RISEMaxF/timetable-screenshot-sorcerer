@@ -29,7 +29,7 @@ const SearchBar = ({ searchTerm, setSearchTerm, exactMatch, setExactMatch }: Sea
           type="checkbox" 
           id="exactMatch" 
           checked={exactMatch}
-          onChange={() => setExactMatch(prev => !prev)}
+          onChange={() => setExactMatch(!exactMatch)}
           className="mr-1.5 h-4 w-4"
         />
         <label htmlFor="exactMatch" className="text-xs text-gray-600">Exakt matchning</label>
