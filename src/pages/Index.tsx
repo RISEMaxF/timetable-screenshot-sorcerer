@@ -1,12 +1,11 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import TrainTimetable from "../components/TrainTimetable";
 import TimetableHeader from "../components/TimetableHeader";
 import { TimetableToolbar } from "../components/TimetableToolbar";
 import { trainData } from "../data/trainData";
 import { Train } from "../types/train";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { toast } from "@/hooks/use-toast";
 import { useHotkeys } from "react-hotkeys-hook";
 import HelpMenu from "../components/HelpMenu";
 
@@ -40,12 +39,6 @@ const Index = () => {
     );
     
     setTrains(updatedTrains);
-    
-    toast({
-      title: "Batch update complete",
-      description: `Updated ${fieldName} for ${selectedTrains.length} trains`,
-      variant: "default"
-    });
   };
 
   const toggleTrainSelection = (trainId: string) => {
@@ -55,24 +48,6 @@ const Index = () => {
         : [...prev, trainId]
     );
   };
-
-  // Keyboard shortcut help
-  useEffect(() => {
-    const showHelpToast = () => {
-      toast({
-        title: "Keyboard Shortcuts",
-        description: "Ctrl+F: Search | Esc: Clear selection | Click row: View details",
-        duration: 5000,
-      });
-    };
-    
-    // Show help toast once on component mount
-    const timer = setTimeout(() => {
-      showHelpToast();
-    }, 2000);
-    
-    return () => clearTimeout(timer);
-  }, []);
 
   return (
     <div className="min-h-screen bg-gray-100">

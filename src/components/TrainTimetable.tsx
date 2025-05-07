@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from "react";
 import { Table, TableBody } from "@/components/ui/table";
 import { Train } from "../types/train";
@@ -9,7 +8,6 @@ import TrainDetailDialog from "./dialog/TrainDetailDialog";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Search, Filter, ArrowUpDown } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -45,10 +43,6 @@ const TrainTimetable = ({ trains, onTrainUpdate, selectedTrains = [], onToggleSe
     const updatedTrain = { ...train, [field]: value };
     onTrainUpdate(updatedTrain);
     setEditingCell({ trainId: "", field: null });
-    toast({
-      title: "Train updated",
-      description: `${field} updated for train ${train.id}`,
-    });
   };
 
   const startEditing = (trainId: string, field: keyof Train) => {
