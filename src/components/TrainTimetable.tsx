@@ -1,3 +1,4 @@
+
 import { useState, useMemo } from "react";
 import { Table, TableBody } from "@/components/ui/table";
 import { Train } from "../types/train";
@@ -19,8 +20,8 @@ import {
 interface TrainTimetableProps {
   trains: Train[];
   onTrainUpdate: (train: Train) => void;
-  selectedTrains?: string[];
-  onToggleSelection?: (trainId: string) => void;
+  selectedTrains: string[];
+  onToggleSelection: (trainId: string) => void;
 }
 
 type SortField = keyof Train | null;
@@ -35,6 +36,7 @@ const TrainTimetable = ({ trains, onTrainUpdate, selectedTrains = [], onToggleSe
   const [selectedTrain, setSelectedTrain] = useState<Train | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [exactMatch, setExactMatch] = useState(false);
   const [sortField, setSortField] = useState<SortField>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
   const [filterStatus, setFilterStatus] = useState<"all" | "completed" | "pending">("all");
@@ -71,6 +73,29 @@ const TrainTimetable = ({ trains, onTrainUpdate, selectedTrains = [], onToggleSe
     }
   };
 
+  const fuzzyMatch = (text: string | undefined | null, search: string): boolean => {
+    if (!text) return false;
+    if (!search.trim()) return true;
+    
+    const searchLower = search.toLowerCase();
+    const textLower = text.toString().toLowerCase();
+    
+    // For exact match
+    if (exactMatch) {
+      return textLower.includes(searchLower);
+    }
+    
+    // For fuzzy match - check if characters appear in sequence
+    let searchIndex = 0;
+    for (let i = 0; i < textLower.length && searchIndex < searchLower.length; i++) {
+      if (textLower[i] === searchLower[searchIndex]) {
+        searchIndex++;
+      }
+    }
+    
+    return searchIndex === searchLower.length;
+  };
+
   const filteredTrains = useMemo(() => {
     let result = [...trains];
     
@@ -79,10 +104,10 @@ const TrainTimetable = ({ trains, onTrainUpdate, selectedTrains = [], onToggleSe
       const lowerSearchTerm = searchTerm.toLowerCase().trim();
       result = result.filter(
         train => 
-          train.id.toLowerCase().includes(lowerSearchTerm) || 
-          train.operator?.toLowerCase().includes(lowerSearchTerm) ||
-          train.track?.toString().toLowerCase().includes(lowerSearchTerm) ||
-          train.notes?.toLowerCase().includes(lowerSearchTerm)
+          fuzzyMatch(train.id, searchTerm) || 
+          fuzzyMatch(train.operator, searchTerm) ||
+          fuzzyMatch(train.track?.toString(), searchTerm) ||
+          fuzzyMatch(train.notes, searchTerm)
       );
     }
     
@@ -115,7 +140,7 @@ const TrainTimetable = ({ trains, onTrainUpdate, selectedTrains = [], onToggleSe
     }
     
     return result;
-  }, [trains, searchTerm, sortField, sortDirection, filterStatus]);
+  }, [trains, searchTerm, sortField, sortDirection, filterStatus, exactMatch]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     // Implement keyboard navigation between cells
@@ -130,20 +155,32 @@ const TrainTimetable = ({ trains, onTrainUpdate, selectedTrains = [], onToggleSe
     <>
       <div className="mb-4 flex flex-col sm:flex-row items-center gap-4" onKeyDown={handleKeyDown}>
         {/* Search Box */}
-        <div className="relative w-full sm:w-64">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
-          <Input
-            placeholder="Search trains..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-8"
-          />
+        <div className="relative flex-grow max-w-md">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
+            <Input
+              placeholder="Search trains..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 pr-4 py-2 h-11 border-2 focus-visible:ring-blue-500"
+            />
+          </div>
+          <div className="mt-1 flex items-center">
+            <input 
+              type="checkbox" 
+              id="exactMatch" 
+              checked={exactMatch}
+              onChange={() => setExactMatch(prev => !prev)}
+              className="mr-1.5 h-4 w-4"
+            />
+            <label htmlFor="exactMatch" className="text-xs text-gray-600">Exact match</label>
+          </div>
         </div>
         
         {/* Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="h-10">
+            <Button variant="outline" size="sm" className="h-11">
               <Filter className="mr-2 h-4 w-4" />
               Filter
             </Button>
@@ -164,7 +201,7 @@ const TrainTimetable = ({ trains, onTrainUpdate, selectedTrains = [], onToggleSe
         {/* Sort Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="h-10">
+            <Button variant="outline" size="sm" className="h-11">
               <ArrowUpDown className="mr-2 h-4 w-4" />
               Sort
             </Button>

@@ -104,6 +104,13 @@ const HelpMenu = () => {
                     <li>Sort columns by clicking column headers</li>
                   </ul>
                   
+                  <h4 className="font-medium mt-3">Searching</h4>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>By default, search finds partial matches (e.g., "SJ" will match "JSA")</li>
+                    <li>Enable "Exact match" checkbox for stricter search results</li>
+                    <li>Search works across train ID, operator, track, and notes</li>
+                  </ul>
+                  
                   <h4 className="font-medium mt-3">Multi-selection</h4>
                   <ul className="list-disc pl-5 space-y-1">
                     <li>Hold Ctrl/Cmd while clicking rows to select multiple trains</li>
