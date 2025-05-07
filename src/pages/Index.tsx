@@ -8,6 +8,7 @@ import { Train } from "../types/train";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { toast } from "@/hooks/use-toast";
 import { useHotkeys } from "react-hotkeys-hook";
+import HelpMenu from "../components/HelpMenu";
 
 const Index = () => {
   const [trains, setTrains] = useState(trainData);
@@ -98,11 +99,14 @@ const Index = () => {
             </svg>
             Plankan
           </h1>
-          <img 
-            src="https://www.ri.se/themes/rise/dist/images/rise-logo-black.svg" 
-            alt="RISE Logo" 
-            className="h-12"
-          />
+          <div className="flex items-center gap-4">
+            <HelpMenu />
+            <img 
+              src="https://www.ri.se/themes/rise/dist/images/rise-logo-black.svg" 
+              alt="RISE Logo" 
+              className="h-12"
+            />
+          </div>
         </div>
         
         <TooltipProvider>
