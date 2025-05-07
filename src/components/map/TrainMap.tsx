@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 import { Map, View } from 'ol';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
@@ -89,10 +88,10 @@ const TrainMap: React.FC<TrainMapProps> = ({ trains, selectedTrainId }) => {
               fill: new Fill({
                 color: isSelected ? '#1e40af' : '#404040'
               }),
-              stroke: new Style({
+              stroke: new Stroke({
                 color: '#ffffff',
                 width: 2
-              }).getStroke()
+              })
             })
           });
         } else {

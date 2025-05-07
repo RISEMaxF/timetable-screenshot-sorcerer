@@ -1,4 +1,3 @@
-
 import { Train } from "../types/train";
 
 export const trainData: Train[] = [
@@ -8,7 +7,9 @@ export const trainData: Train[] = [
     from: "Rmh",
     to: "Gäg",
     updated: "2025-04-24 00:15",
-    highlighted: false
+    highlighted: false,
+    arrivalTime: "14:30",
+    track: "1"
   },
   {
     id: "0000000049702",
@@ -16,7 +17,9 @@ export const trainData: Train[] = [
     from: "Akt",
     to: "Åt",
     updated: "2025-04-30 13:36",
-    highlighted: false
+    highlighted: false,
+    arrivalTime: "15:20",
+    track: "2"
   },
   {
     id: "02",
@@ -24,7 +27,9 @@ export const trainData: Train[] = [
     from: "Lnk",
     to: "Övn",
     updated: "06:51",
-    highlighted: false
+    highlighted: false,
+    arrivalTime: "06:45",
+    track: "3"
   },
   {
     id: "0605",
@@ -32,7 +37,10 @@ export const trainData: Train[] = [
     from: "Bjö",
     to: "Ås",
     updated: "2025-04-30 12:58",
-    highlighted: true
+    highlighted: true,
+    arrivalTime: "13:10",
+    track: "4",
+    newTrack: "6"
   },
   {
     id: "1",
@@ -42,7 +50,9 @@ export const trainData: Train[] = [
     to: "Smn",
     latest: "Mc",
     updated: "07:17",
-    highlighted: false
+    highlighted: false,
+    arrivalTime: "07:15",
+    track: "1"
   },
   {
     id: "10",
@@ -52,7 +62,10 @@ export const trainData: Train[] = [
     to: "Du",
     latest: "Vha",
     updated: "14:12",
-    highlighted: false
+    highlighted: false,
+    arrivalTime: "14:00",
+    track: "2",
+    newTime: "14:15"
   },
   {
     id: "100",
