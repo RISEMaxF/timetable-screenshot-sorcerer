@@ -1,5 +1,6 @@
 
 import { format } from "date-fns";
+import { sv } from "date-fns/locale";
 
 interface TimetableHeaderProps {
   location: string;
@@ -7,12 +8,12 @@ interface TimetableHeaderProps {
 }
 
 const TimetableHeader = ({ location, date }: TimetableHeaderProps) => {
-  const formattedDate = format(date, "EEEE, d MMM yyyy");
+  const formattedDate = format(date, "EEEE, d MMM yyyy", { locale: sv });
   
   return (
     <div className="bg-gray-200 px-6 py-4 border-b border-gray-300">
       <h2 className="text-xl font-semibold text-center text-gray-800">
-        Plankan: Ankommande tåg vid <span className="font-bold bg-white px-2 py-1 rounded-md shadow-sm">{location}</span> • {formattedDate}
+        Tåg info: <span className="font-bold bg-white px-2 py-1 rounded-md shadow-sm">{location}</span> • {formattedDate}
       </h2>
     </div>
   );
