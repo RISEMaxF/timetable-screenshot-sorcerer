@@ -1,14 +1,13 @@
-
 import React from "react";
 import { 
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose 
 } from "../ui/dialog";
 import { Train } from "../../types/train";
-import { X, ChevronDown, ChevronUp, Info } from "lucide-react";
+import { X, ChevronDown, ChevronUp, Info, ScrollIcon } from "lucide-react";
 import { 
   Accordion, AccordionContent, AccordionItem, AccordionTrigger 
 } from "../ui/accordion";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { ScrollArea } from "../ui/scroll-area";
 import { cn } from "@/lib/utils";
 
 interface TrainDetailDialogProps {
@@ -78,8 +77,10 @@ const TrainDetailDialog = ({ train, isOpen, onClose }: TrainDetailDialogProps) =
             <DialogTitle className="text-xl font-bold">
               Information för tåg {train.id}
             </DialogTitle>
+            {/* Keeping only one close button */}
             <DialogClose className="hover:bg-gray-100 rounded-full p-1">
               <X className="h-5 w-5" />
+              <span className="sr-only">Close</span>
             </DialogClose>
           </div>
           <DialogDescription className="text-base text-black flex justify-between items-center mt-4">
@@ -141,30 +142,40 @@ const TrainDetailDialog = ({ train, isOpen, onClose }: TrainDetailDialogProps) =
               </div>
             </div>
             
-            <ScrollArea className="max-h-[300px] overflow-auto">
-              <div className="divide-y">
-                {history.map((item, index) => (
-                  <div 
-                    key={index} 
-                    className={cn(
-                      "grid grid-cols-4 gap-4 p-3",
-                      index % 2 === 0 ? "bg-white" : "bg-gray-50",
-                      item.type === "Faktisk" ? "bg-green-50" : ""
-                    )}
-                  >
-                    <div className="text-sm">{item.actor}</div>
-                    <div className="text-sm font-medium text-amber-500">{item.time}</div>
-                    <div className="text-sm">{item.type}</div>
-                    <div className="text-sm">
-                      {item.reportedAt}
-                      {item.details && (
-                        <div className="text-xs text-gray-500 mt-1">{item.details}</div>
+            {/* Adding visual indicator for scrollable content */}
+            <div className="relative">
+              <ScrollArea className="max-h-[300px] overflow-auto">
+                <div className="divide-y">
+                  {history.map((item, index) => (
+                    <div 
+                      key={index} 
+                      className={cn(
+                        "grid grid-cols-4 gap-4 p-3",
+                        index % 2 === 0 ? "bg-white" : "bg-gray-50",
+                        item.type === "Faktisk" ? "bg-green-50" : ""
                       )}
+                    >
+                      <div className="text-sm">{item.actor}</div>
+                      <div className="text-sm font-medium text-amber-500">{item.time}</div>
+                      <div className="text-sm">{item.type}</div>
+                      <div className="text-sm">
+                        {item.reportedAt}
+                        {item.details && (
+                          <div className="text-xs text-gray-500 mt-1">{item.details}</div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+              </ScrollArea>
+              {/* Scroll indicator */}
+              <div className="absolute bottom-0 left-0 right-0 flex justify-center py-1 bg-gradient-to-t from-gray-100 to-transparent pointer-events-none">
+                <div className="bg-gray-200 rounded-full px-3 py-1 flex items-center shadow-sm">
+                  <span className="text-xs text-gray-600 mr-1">Scroll</span>
+                  <ChevronDown className="h-3 w-3 text-gray-600" />
+                </div>
               </div>
-            </ScrollArea>
+            </div>
           </div>
 
           <div className="mt-5">
