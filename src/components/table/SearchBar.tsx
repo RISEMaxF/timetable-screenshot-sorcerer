@@ -21,7 +21,7 @@ const SearchBar = ({ searchTerm, setSearchTerm, exactMatch, setExactMatch }: Sea
           placeholder="Sök tåg..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10 pr-4 py-2 h-10 border-gray-300 focus-visible:ring-blue-500 w-full"
+          className="pl-10 pr-4 py-2 h-10 border-gray-200 rounded-md focus-visible:ring-blue-500 w-full shadow-sm"
         />
       </div>
       <div className="mt-1.5 flex items-center">
@@ -30,7 +30,7 @@ const SearchBar = ({ searchTerm, setSearchTerm, exactMatch, setExactMatch }: Sea
           id="exactMatch" 
           checked={exactMatch}
           onChange={() => setExactMatch(!exactMatch)}
-          className="mr-1.5 h-4 w-4"
+          className="mr-1.5 h-4 w-4 rounded text-blue-500 focus:ring-blue-500"
         />
         <label htmlFor="exactMatch" className="text-xs text-gray-600">Exakt matchning</label>
       </div>

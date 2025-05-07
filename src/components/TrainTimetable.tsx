@@ -59,22 +59,24 @@ const TrainTimetable = ({ trains, onTrainUpdate, selectedTrains = [], onToggleSe
 
   return (
     <>
-      <div className="mb-4 flex flex-col sm:flex-row items-start gap-4">
-        <SearchBar 
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          exactMatch={exactMatch}
-          setExactMatch={setExactMatch}
-        />
-        
-        <TableControls 
-          onSort={toggleSort}
-          setFilterStatus={setFilterStatus}
-        />
+      <div className="mb-6 p-3 bg-white rounded-lg shadow-sm border border-gray-100">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <SearchBar 
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            exactMatch={exactMatch}
+            setExactMatch={setExactMatch}
+          />
+          
+          <TableControls 
+            onSort={toggleSort}
+            setFilterStatus={setFilterStatus}
+          />
+        </div>
       </div>
       
       <div className="flex flex-col lg:flex-row gap-4">
-        <div className="lg:w-3/5 border rounded-md overflow-hidden">
+        <div className="lg:w-3/5 border rounded-md overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
             <Table className="border-collapse w-full">
               <TrainTableHeader 
