@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef } from 'react';
 import { Map, View } from 'ol';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
@@ -8,6 +9,7 @@ import Feature from 'ol/Feature';
 import { fromLonLat } from 'ol/proj';
 import 'ol/ol.css';
 import { Train } from '@/types/train';
+import { Circle as LucideCircle, Square, Layers, MapPin } from 'lucide-react';
 
 interface TrainMapProps {
   trains: Train[];
@@ -132,7 +134,35 @@ const TrainMap: React.FC<TrainMapProps> = ({ trains, selectedTrainId }) => {
   }, [trains, selectedTrainId]);
 
   return (
-    <div ref={mapRef} className="h-full w-full rounded-lg border border-gray-200 shadow-inner" />
+    <div className="flex flex-col">
+      <div ref={mapRef} className="h-[600px] w-full rounded-lg border border-gray-200 shadow-inner" />
+      
+      <div className="mt-3 p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
+        <h3 className="text-sm font-medium text-gray-700 mb-2">Map Legend</h3>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-0.5 bg-gray-600"></div>
+            <span className="text-xs text-gray-600">Train Route</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-0.5 bg-blue-700"></div>
+            <span className="text-xs text-gray-600">Selected Route</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 rounded-full bg-gray-600 flex items-center justify-center">
+              <div className="w-2 h-2 rounded-full bg-white"></div>
+            </div>
+            <span className="text-xs text-gray-600">Station</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 rounded-full bg-blue-700 flex items-center justify-center">
+              <div className="w-2 h-2 rounded-full bg-white"></div>
+            </div>
+            <span className="text-xs text-gray-600">Selected Station</span>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

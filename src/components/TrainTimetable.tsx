@@ -74,7 +74,7 @@ const TrainTimetable = ({ trains, onTrainUpdate, selectedTrains = [], onToggleSe
       </div>
       
       <div className="flex flex-col lg:flex-row gap-4">
-        <div className="lg:w-2/3 border rounded-md overflow-hidden">
+        <div className="lg:w-3/5 border rounded-md overflow-hidden">
           <div className="overflow-x-auto">
             <Table className="border-collapse w-full">
               <TrainTableHeader 
@@ -102,7 +102,7 @@ const TrainTimetable = ({ trains, onTrainUpdate, selectedTrains = [], onToggleSe
           </div>
         </div>
         
-        <div className="lg:w-1/3 h-[500px]">
+        <div className="lg:w-2/5">
           <TrainMap 
             trains={trains} 
             selectedTrainId={selectedTrain?.id}
