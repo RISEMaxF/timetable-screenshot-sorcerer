@@ -82,7 +82,7 @@ const TrainTimetable = ({ trains, onTrainUpdate, selectedTrains = [], onToggleSe
                 sortField={sortField} 
                 sortDirection={sortDirection} 
               />
-              <TableBody>
+              <TableBody className="divide-y divide-gray-200">
                 {filteredTrains.map((train, index) => (
                   <TrainTableRow
                     key={train.id}

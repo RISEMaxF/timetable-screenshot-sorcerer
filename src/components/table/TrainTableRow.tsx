@@ -41,6 +41,8 @@ const TrainTableRow = ({
     }
   };
 
+  const cellClasses = "border-r p-2 text-sm";
+
   return (
     <TableRow 
       className={cn(
@@ -54,7 +56,7 @@ const TrainTableRow = ({
       onClick={handleRowClick}
       data-testid={`train-row-${train.id}`}
     >
-      <TableCell className="w-10 p-2" onClick={handleCheckboxClick}>
+      <TableCell className="w-10 px-2 py-2" onClick={handleCheckboxClick}>
         <Checkbox
           checked={isMultiSelected}
           onCheckedChange={() => onToggleSelection && onToggleSelection(train.id)}
@@ -62,7 +64,7 @@ const TrainTableRow = ({
         />
       </TableCell>
       
-      <TableCell className="font-medium border-r p-2 text-sm">
+      <TableCell className={`font-medium ${cellClasses}`}>
         <div className="flex items-center justify-between">
           <span>{train.id}</span>
           <Tooltip>
@@ -74,11 +76,11 @@ const TrainTableRow = ({
         </div>
       </TableCell>
       
-      <TableCell className="border-r p-2 text-sm">{train.announcedTrainNumber || "-"}</TableCell>
-      <TableCell className="border-r p-2 text-sm">{train.operator}</TableCell>
-      <TableCell className="border-r p-2 text-sm">{train.from || "-"}</TableCell>
-      <TableCell className="border-r p-2 text-sm">{train.to || "-"}</TableCell>
-      <TableCell className="border-r p-2 text-sm">{train.latest || "-"}</TableCell>
+      <TableCell className={cellClasses}>{train.announcedTrainNumber || "-"}</TableCell>
+      <TableCell className={cellClasses}>{train.operator}</TableCell>
+      <TableCell className={cellClasses}>{train.from || "-"}</TableCell>
+      <TableCell className={cellClasses}>{train.to || "-"}</TableCell>
+      <TableCell className={cellClasses}>{train.latest || "-"}</TableCell>
       <TableCell className="p-2 text-sm">{train.updated || "-"}</TableCell>
     </TableRow>
   );
