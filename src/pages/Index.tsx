@@ -43,7 +43,7 @@ const Index = () => {
     toast({
       title: "Batch update complete",
       description: `Updated ${fieldName} for ${selectedTrains.length} trains`,
-      variant: "success"
+      variant: "default"
     });
   };
 

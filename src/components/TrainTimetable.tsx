@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from "react";
 import { Table, TableBody } from "@/components/ui/table";
 import { Train } from "../types/train";
@@ -20,12 +19,14 @@ import {
 interface TrainTimetableProps {
   trains: Train[];
   onTrainUpdate: (train: Train) => void;
+  selectedTrains?: string[];
+  onToggleSelection?: (trainId: string) => void;
 }
 
 type SortField = keyof Train | null;
 type SortDirection = "asc" | "desc";
 
-const TrainTimetable = ({ trains, onTrainUpdate }: TrainTimetableProps) => {
+const TrainTimetable = ({ trains, onTrainUpdate, selectedTrains = [], onToggleSelection }: TrainTimetableProps) => {
   const [editingCell, setEditingCell] = useState<{
     trainId: string;
     field: keyof Train | null;
@@ -203,6 +204,8 @@ const TrainTimetable = ({ trains, onTrainUpdate }: TrainTimetableProps) => {
                 handleCellEdit={handleCellEdit}
                 onRowClick={handleRowClick}
                 isSelected={selectedTrain?.id === train.id}
+                isMultiSelected={selectedTrains.includes(train.id)}
+                onToggleSelection={onToggleSelection}
               />
             ))}
             {filteredTrains.length === 0 && (
