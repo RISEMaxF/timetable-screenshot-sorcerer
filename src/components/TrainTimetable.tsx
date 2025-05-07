@@ -60,7 +60,7 @@ const TrainTimetable = ({ trains, onTrainUpdate, selectedTrains = [], onToggleSe
   return (
     <>
       <div className="mb-6 p-3 bg-white rounded-lg shadow-sm border border-gray-100">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex items-center justify-between gap-4">
           <SearchBar 
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}

@@ -17,11 +17,11 @@ interface TableControlsProps {
 
 const TableControls = ({ onSort, setFilterStatus }: TableControlsProps) => {
   return (
-    <div className="flex space-x-3 items-center">
+    <div className="flex space-x-2 items-center">
       {/* Filter Dropdown */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm" className="h-10 bg-white border-gray-200 shadow-sm text-gray-700 hover:bg-gray-50">
+          <Button variant="outline" size="sm" className="h-9 bg-white border-gray-200 shadow-sm text-gray-700 hover:bg-gray-50">
             <Filter className="mr-2 h-4 w-4" />
             Filter
           </Button>
@@ -42,7 +42,7 @@ const TableControls = ({ onSort, setFilterStatus }: TableControlsProps) => {
       {/* Sort Dropdown */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm" className="h-10 bg-white border-gray-200 shadow-sm text-gray-700 hover:bg-gray-50">
+          <Button variant="outline" size="sm" className="h-9 bg-white border-gray-200 shadow-sm text-gray-700 hover:bg-gray-50">
             <ArrowUpDown className="mr-2 h-4 w-4" />
             Sortera
           </Button>

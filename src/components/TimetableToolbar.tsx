@@ -69,11 +69,11 @@ export function TimetableToolbar({
   };
 
   return (
-    <div className="flex flex-col sm:flex-row justify-between items-center gap-4 p-4 bg-gray-50 border-b border-gray-200">
-      <div className="w-full sm:w-auto flex items-center gap-2">
+    <div className="flex flex-row justify-between items-center p-4 bg-gray-50 border-b border-gray-200">
+      <div className="flex items-center gap-2">
         <Globe className="h-4 w-4 text-gray-500" />
-        <Select value={location} onValueChange={setLocation}>
-          <SelectTrigger className="w-[180px]">
+        <Select value={location || "SE"} onValueChange={setLocation}>
+          <SelectTrigger className="w-[140px] h-9">
             <SelectValue placeholder="Välj region" />
           </SelectTrigger>
           <SelectContent>
@@ -111,7 +111,7 @@ export function TimetableToolbar({
         </Select>
       </div>
       
-      <div className="flex flex-wrap items-center gap-2 justify-between">
+      <div className="flex items-center gap-2">
         <DateSelector date={date} setDate={setDate} />
         
         <BatchActionButtons 
