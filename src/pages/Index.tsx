@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import TrainTimetable from "../components/TrainTimetable";
 import TimetableHeader from "../components/TimetableHeader";
@@ -11,7 +10,7 @@ import HelpMenu from "../components/HelpMenu";
 
 const Index = () => {
   const [trains, setTrains] = useState(trainData);
-  const [location, setLocation] = useState("Hagalund");
+  const [location, setLocation] = useState("ALL");
   const [date, setDate] = useState(new Date());
   const [selectedTrains, setSelectedTrains] = useState<string[]>([]);
   

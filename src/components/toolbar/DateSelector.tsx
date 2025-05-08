@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
+import { sv } from "date-fns/locale";
 import { Calendar as CalendarIcon } from "lucide-react";
 
 interface DateSelectorProps {
@@ -17,7 +18,7 @@ const DateSelector = ({ date, setDate }: DateSelectorProps) => {
         <PopoverTrigger asChild>
           <Button variant="outline" className="w-full sm:w-auto justify-start text-left font-normal">
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {format(date, "PPP")}
+            {format(date, "PPP", { locale: sv })}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0">
@@ -27,12 +28,13 @@ const DateSelector = ({ date, setDate }: DateSelectorProps) => {
             onSelect={(newDate) => newDate && setDate(newDate)}
             initialFocus
             className="p-3 pointer-events-auto"
+            locale={sv}
           />
         </PopoverContent>
       </Popover>
       
       <Button variant="outline" onClick={() => setDate(new Date())}>
-        Today
+        Idag
       </Button>
     </div>
   );
