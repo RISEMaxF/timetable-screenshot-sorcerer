@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import TrainTimetable from "../components/TrainTimetable";
-import TimetableHeader from "../components/TimetableHeader";
 import { TimetableToolbar } from "../components/TimetableToolbar";
 import { trainData } from "../data/trainData";
 import { Train } from "../types/train";
@@ -17,7 +16,6 @@ const Index = () => {
   const [location, setLocation] = useState("ALL");
   const [date, setDate] = useState(new Date());
   const [selectedTrains, setSelectedTrains] = useState<string[]>([]);
-  const [selectedDates, setSelectedDates] = useState<Date[]>([new Date()]);
   
   // Search and filter states
   const [searchTerm, setSearchTerm] = useState("");
@@ -103,18 +101,7 @@ const Index = () => {
               selectedCount={selectedTrains.length}
               onBatchUpdate={handleBatchUpdate}
             />
-            <TimetableHeader 
-              location={location} 
-              setLocation={setLocation}
-              date={date}
-              setDate={setDate}
-              searchTerm={searchTerm}
-              setSearchTerm={setSearchTerm}
-              exactMatch={exactMatch}
-              setExactMatch={setExactMatch}
-              setFilterStatus={setFilterStatus}
-              onSort={(field) => handleSort(field as keyof Train)}
-            />
+            
             <div className="p-4">
               <div className="flex flex-col lg:flex-row gap-4">
                 <TrainTimetable 
