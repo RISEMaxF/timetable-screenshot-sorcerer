@@ -4,7 +4,6 @@ import { Train } from "@/types/train";
 import BatchActionButtons from "./toolbar/BatchActionButtons";
 import LocationSelector from "./toolbar/LocationSelector";
 import DialogManager from "./toolbar/DialogManager";
-import TimetableHeader from "./timetable/TimetableHeader";
 import { DateRangePicker } from "./datepicker/DateRangePicker";
 import SearchInput from "./toolbar/SearchInput";
 import CustomizeButton from "./toolbar/CustomizeButton";
@@ -16,6 +15,10 @@ interface TimetableToolbarProps {
   setDate: (date: Date) => void;
   selectedCount?: number;
   onBatchUpdate?: (field: keyof Train, value: any) => void;
+  searchTerm?: string;
+  setSearchTerm?: (value: string) => void;
+  exactMatch?: boolean;
+  setExactMatch?: (value: boolean) => void;
 }
 
 export function TimetableToolbar({ 
@@ -24,13 +27,15 @@ export function TimetableToolbar({
   date, 
   setDate,
   selectedCount = 0,
-  onBatchUpdate
+  onBatchUpdate,
+  searchTerm = "",
+  setSearchTerm = () => {},
+  exactMatch = false,
+  setExactMatch = () => {}
 }: TimetableToolbarProps) {
   const [openDialog, setOpenDialog] = useState("");
   const [station, setStation] = useState("ALL");
   const [selectedDates, setSelectedDates] = useState<Date[]>([date]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [exactMatch, setExactMatch] = useState(false);
   
   const handleOpenDialog = (dialogType: string) => {
     setOpenDialog(dialogType);
@@ -66,30 +71,23 @@ export function TimetableToolbar({
 
   return (
     <div className="flex flex-col bg-gray-50 border-b border-gray-200">
-      <TimetableHeader 
-        location={location}
-        setLocation={setLocation}
-        date={date}
-        setDate={setDate}
-      />
-      
-      <div className="flex flex-col space-y-4 p-4">
-        {/* Search row */}
-        <div className="flex items-center gap-3">
-          <SearchInput 
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            exactMatch={exactMatch}
-            setExactMatch={setExactMatch}
-          />
-          <CustomizeButton />
-        </div>
-        
-        {/* Filters row */}
-        <div className="flex flex-wrap justify-between items-center">
-          <div className="flex items-center gap-2 flex-wrap">
+      <div className="bg-white px-6 py-4 border-b border-gray-200 shadow-sm">
+        <div className="flex flex-col gap-4">
+          {/* Search row */}
+          <div className="flex items-center gap-3">
+            <SearchInput 
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              exactMatch={exactMatch}
+              setExactMatch={setExactMatch}
+            />
+            <CustomizeButton />
+          </div>
+          
+          {/* Filters row */}
+          <div className="flex flex-wrap gap-3 items-center">
             <LocationSelector 
-              location={location} 
+              location={location}
               setLocation={setLocation}
               station={station}
               setStation={setStation}
@@ -97,13 +95,17 @@ export function TimetableToolbar({
             />
             
             <DateRangePicker 
-              date={date} 
-              setDate={setDate} 
+              date={date}
+              setDate={setDate}
               selectedDates={selectedDates}
               setSelectedDates={setSelectedDates}
             />
           </div>
-          
+        </div>
+      </div>
+      
+      <div className="flex flex-col space-y-4 p-4">
+        <div className="flex flex-wrap justify-between items-center">
           <BatchActionButtons 
             selectedCount={selectedCount} 
             onOpenDialog={handleOpenDialog} 

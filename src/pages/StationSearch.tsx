@@ -10,6 +10,7 @@ const StationSearch = () => {
   const [stationLocation, setStationLocation] = useState("ALL");
   const [stationName, setStationName] = useState("ALL");
   const [searchDate, setSearchDate] = useState(new Date());
+  const [selectedDates, setSelectedDates] = useState<Date[]>([new Date()]);
   
   // Function to handle search
   const handleSearch = () => {
@@ -55,6 +56,8 @@ const StationSearch = () => {
               <DateRangePicker 
                 date={searchDate}
                 setDate={setSearchDate}
+                selectedDates={selectedDates}
+                setSelectedDates={setSelectedDates}
               />
             </div>
             

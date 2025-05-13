@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronsUpDown } from "lucide-react";
 import {
@@ -25,8 +25,6 @@ interface LocationSelectorProps {
   showFlags?: boolean;
 }
 
-const locations = Object.values(COUNTRIES);
-
 const stations = [
   { value: "ALL", label: "Alla stationer" },
   { value: "Stockholm", label: "Stockholm" },
@@ -37,7 +35,6 @@ const stations = [
   { value: "Oslo", label: "Oslo" },
   { value: "Köpenhamn", label: "Köpenhamn" },
   { value: "Helsinki", label: "Helsinki" },
-  // Add the requested placeholder stations
   { value: "Tågholm", label: "Tågholm" },
   { value: "Rälsby", label: "Rälsby" },
   { value: "Ångalund", label: "Ångalund" },
@@ -64,6 +61,7 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
 }) => {
   const [openLocation, setOpenLocation] = useState(false);
   const [openStation, setOpenStation] = useState(false);
+  const locations = Object.values(COUNTRIES);
 
   // Find the current country from our COUNTRIES object
   const currentCountry = COUNTRIES[location] || COUNTRIES.ALL;
@@ -74,6 +72,7 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
 
   return (
     <div className="flex space-x-2">
+      {/* Country dropdown */}
       <Popover open={openLocation} onOpenChange={setOpenLocation}>
         <PopoverTrigger asChild>
           <Button
@@ -133,6 +132,7 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
         </PopoverContent>
       </Popover>
 
+      {/* Station dropdown */}
       <Popover open={openStation} onOpenChange={setOpenStation}>
         <PopoverTrigger asChild>
           <Button

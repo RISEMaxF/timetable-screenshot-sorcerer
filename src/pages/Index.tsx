@@ -100,6 +100,10 @@ const Index = () => {
               setDate={setDate} 
               selectedCount={selectedTrains.length}
               onBatchUpdate={handleBatchUpdate}
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              exactMatch={exactMatch}
+              setExactMatch={setExactMatch}
             />
             
             <div className="p-4">
