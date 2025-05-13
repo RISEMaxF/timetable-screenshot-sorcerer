@@ -5,18 +5,39 @@ import { Building2, TrainFront } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LocationSelector from "@/components/toolbar/LocationSelector";
 import { DateRangePicker } from "@/components/datepicker/DateRangePicker";
+import { trainData } from "@/data/trainData";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { filterTrains } from "@/utils/searchUtils";
+import { cn } from "@/lib/utils";
 
 const StationSearch = () => {
   const [stationLocation, setStationLocation] = useState("ALL");
   const [selectedStation, setSelectedStation] = useState("ALL");
   const [searchDate, setSearchDate] = useState(new Date());
   const [selectedDates, setSelectedDates] = useState<Date[]>([new Date()]);
+  const [searchResults, setSearchResults] = useState(trainData);
+  const [hasSearched, setHasSearched] = useState(false);
   
   // Function to handle search
   const handleSearch = () => {
     console.log("Searching for trains at location:", stationLocation);
     console.log("Selected station:", selectedStation);
     console.log("Date:", searchDate);
+    
+    // Filter trains based on selected country and station
+    const filteredTrains = filterTrains(
+      trainData,
+      "",
+      "all",
+      false,
+      null,
+      "asc",
+      stationLocation,
+      selectedStation
+    );
+    
+    setSearchResults(filteredTrains);
+    setHasSearched(true);
   };
 
   return (
@@ -69,11 +90,63 @@ const StationSearch = () => {
             </Button>
           </div>
           
-          <div className="p-8 text-center text-gray-500">
-            <Building2 className="mx-auto h-12 w-12 text-gray-300 mb-4" />
-            <h3 className="text-lg font-medium mb-2">Välj land och station</h3>
-            <p>Välj ett land, station och datum för att visa avgångar</p>
-          </div>
+          {!hasSearched ? (
+            <div className="p-8 text-center text-gray-500">
+              <Building2 className="mx-auto h-12 w-12 text-gray-300 mb-4" />
+              <h3 className="text-lg font-medium mb-2">Välj land och station</h3>
+              <p>Välj ett land, station och datum för att visa avgångar</p>
+            </div>
+          ) : searchResults.length === 0 ? (
+            <div className="p-8 text-center text-gray-500">
+              <Building2 className="mx-auto h-12 w-12 text-gray-300 mb-4" />
+              <h3 className="text-lg font-medium mb-2">Inga resultat</h3>
+              <p>Inga tåg hittades för de valda kriterierna</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[100px]">Tåg ID</TableHead>
+                    <TableHead>Operator</TableHead>
+                    <TableHead>Från</TableHead>
+                    <TableHead>Till</TableHead>
+                    <TableHead>Ankomsttid</TableHead>
+                    <TableHead>Spår</TableHead>
+                    <TableHead>Land</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {searchResults.map((train, index) => (
+                    <TableRow 
+                      key={train.id}
+                      className={cn(
+                        index % 2 === 0 ? "bg-white" : "bg-gray-50",
+                        train.highlighted ? "bg-pink-50" : ""
+                      )}
+                    >
+                      <TableCell className="font-medium">{train.id}</TableCell>
+                      <TableCell>{train.operator}</TableCell>
+                      <TableCell>{train.from || "-"}</TableCell>
+                      <TableCell>{train.to || "-"}</TableCell>
+                      <TableCell>{train.arrivalTime || "-"}</TableCell>
+                      <TableCell>{train.track || "-"}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <img 
+                            src={`https://flagcdn.com/w20/${train.country.toLowerCase()}.png`} 
+                            alt={train.country} 
+                            className="w-5 h-auto"
+                          />
+                          {train.country}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
         </div>
       </div>
     </div>
