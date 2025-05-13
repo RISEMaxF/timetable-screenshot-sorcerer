@@ -96,10 +96,10 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0">
-          <Command>
+          <Command key={`country-${openLocation}`}>
             <CommandInput placeholder="Sök land..." />
             <CommandEmpty>Inga träffar.</CommandEmpty>
-            <CommandGroup className="overflow-hidden p-1 text-foreground" heading="Länder">
+            <CommandGroup heading="Länder">
               {locations.map((country) => (
                 <CommandItem
                   key={country.code}
@@ -147,10 +147,10 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0">
-          <Command>
+          <Command key={`station-${openStation}`}>
             <CommandInput placeholder="Sök station..." />
             <CommandEmpty>Inga träffar.</CommandEmpty>
-            <CommandGroup className="overflow-hidden p-1 text-foreground" heading="Stationer">
+            <CommandGroup heading="Stationer">
               {stations.map((s) => (
                 <CommandItem
                   key={s.value}
