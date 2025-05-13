@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 import { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
-import { Search, Filter, SlidersHorizontal, Globe, Calendar } from "lucide-react";
+import { Search, Filter, SlidersHorizontal, Globe, Calendar, Building2, Flag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,10 +12,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 
 interface TimetableHeaderProps {
   location: string;
+  setLocation: (location: string) => void;
   date: Date;
   searchTerm?: string;
   setSearchTerm?: (value: string) => void;
@@ -27,6 +35,7 @@ interface TimetableHeaderProps {
 
 const TimetableHeader = ({ 
   location, 
+  setLocation,
   date, 
   searchTerm = "", 
   setSearchTerm = () => {}, 
@@ -37,37 +46,64 @@ const TimetableHeader = ({
 }: TimetableHeaderProps) => {
   const formattedDate = format(date, "EEEE d MMMM yyyy", { locale: sv });
   const [isFocused, setIsFocused] = useState(false);
+  const [station, setStation] = useState("ALL");
   const inputRef = useRef<HTMLInputElement>(null);
+  
+  const stations = {
+    "ALL": "Alla stationer",
+    "SE": {
+      "STO": "Stockholm C",
+      "GOT": "Göteborg C",
+      "MAL": "Malmö C",
+      "UPP": "Uppsala C",
+      "HAG": "Hagalund"
+    },
+    "NO": {
+      "OSL": "Oslo S",
+      "BER": "Bergen",
+      "TRO": "Trondheim"
+    },
+    "DK": {
+      "CPH": "København H",
+      "ARH": "Aarhus H"
+    },
+    "FI": {
+      "HEL": "Helsinki",
+      "TAM": "Tampere"
+    },
+    "DE": {
+      "BER": "Berlin Hbf",
+      "HAM": "Hamburg Hbf",
+      "MUN": "München Hbf"
+    }
+  };
+
+  const getStationsForLocation = () => {
+    if (location === "ALL") return [{ value: "ALL", label: "Alla stationer" }];
+    
+    const locationStations = stations[location as keyof typeof stations];
+    if (typeof locationStations === 'object') {
+      return [
+        { value: "ALL", label: "Alla stationer" },
+        ...Object.entries(locationStations).map(([value, label]) => ({ value, label }))
+      ];
+    }
+    
+    return [{ value: "ALL", label: "Alla stationer" }];
+  };
+
+  const availableStations = getStationsForLocation();
   
   return (
     <div className="bg-white px-6 py-4 border-b border-gray-200 shadow-sm">
       <div className="flex flex-col gap-2">
-        <div className="flex justify-between items-center mb-2">
-          <h2 className="text-xl font-semibold text-gray-800">
-            Tåg info
-          </h2>
+        <div className="flex justify-end items-center mb-2">
           <span className="text-sm text-gray-500 font-medium">
             {formattedDate}
           </span>
         </div>
 
         <div className="flex flex-wrap gap-3 items-center">
-          {/* Location selector */}
-          <div className="relative">
-            <Button variant="outline" size="sm" className="h-10 pl-3 pr-4 rounded-full bg-white border-gray-200 shadow-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-              <Globe className="h-4 w-4 text-gray-500" />
-              <span>Alla stationer</span>
-            </Button>
-          </div>
-
-          {/* Date selector */}
-          <div className="relative">
-            <Button variant="outline" size="sm" className="h-10 pl-3 pr-4 rounded-full bg-white border-gray-200 shadow-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-gray-500" />
-              <span>13 maj 2025</span>
-            </Button>
-          </div>
-
           {/* Search and filter container */}
           <div className={cn(
             "flex-1 flex items-center transition-all duration-200 rounded-full border shadow-sm overflow-hidden",
@@ -143,6 +179,75 @@ const TimetableHeader = ({
                 </div>
               </DropdownMenuContent>
             </DropdownMenu>
+          </div>
+          
+          {/* Location selector */}
+          <div className="relative">
+            <Select value={location} onValueChange={(val) => { setLocation(val); setStation("ALL"); }}>
+              <SelectTrigger className="h-10 px-3 rounded-full bg-white border-gray-200 shadow-sm hover:bg-gray-50 w-[140px]">
+                <div className="flex items-center gap-2">
+                  <Globe className="h-4 w-4 text-gray-500" />
+                  <SelectValue placeholder="Välj region" />
+                </div>
+              </SelectTrigger>
+              <SelectContent className="bg-white border border-gray-100 shadow-lg rounded-lg">
+                <SelectItem value="ALL">
+                  <div className="flex items-center gap-2">
+                    <Globe className="h-3.5 w-3.5" />
+                    <span>Alla länder</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="SE">
+                  <div className="flex items-center gap-2">
+                    <Flag className="h-3.5 w-3.5" />
+                    <span>Sverige</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="NO">
+                  <div className="flex items-center gap-2">
+                    <Flag className="h-3.5 w-3.5" />
+                    <span>Norge</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="DK">
+                  <div className="flex items-center gap-2">
+                    <Flag className="h-3.5 w-3.5" />
+                    <span>Danmark</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="FI">
+                  <div className="flex items-center gap-2">
+                    <Flag className="h-3.5 w-3.5" />
+                    <span>Finland</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="DE">
+                  <div className="flex items-center gap-2">
+                    <Flag className="h-3.5 w-3.5" />
+                    <span>Tyskland</span>
+                  </div>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Station selector */}
+          <div className="relative">
+            <Select value={station} onValueChange={setStation}>
+              <SelectTrigger className="h-10 px-3 rounded-full bg-white border-gray-200 shadow-sm hover:bg-gray-50 w-[180px]">
+                <div className="flex items-center gap-2">
+                  <Building2 className="h-4 w-4 text-gray-500" />
+                  <SelectValue placeholder="Välj station" />
+                </div>
+              </SelectTrigger>
+              <SelectContent className="bg-white border border-gray-100 shadow-lg rounded-lg">
+                {availableStations.map((station) => (
+                  <SelectItem key={station.value} value={station.value}>
+                    {station.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           
           <Button variant="outline" size="sm" className="h-10 px-3 rounded-full bg-white border-gray-200 shadow-sm text-gray-700 hover:bg-gray-50">
