@@ -97,7 +97,8 @@ const Index = () => {
             <TimetableHeader 
               location={location} 
               setLocation={setLocation}
-              date={date} 
+              date={date}
+              setDate={setDate}
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
               exactMatch={exactMatch}
