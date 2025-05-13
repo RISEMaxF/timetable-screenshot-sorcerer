@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Train } from "@/types/train";
 import BatchActionButtons from "./toolbar/BatchActionButtons";
@@ -253,38 +252,6 @@ export function TimetableToolbar({
       setSelectedDates(dates);
       // Update the main date to the first selected date
       setDate(dates[0]);
-    }
-  };
-
-  const handleOpenDialog = (dialogType: string) => {
-    setOpenDialog(dialogType);
-  };
-
-  const handleCloseDialog = () => {
-    setOpenDialog("");
-  };
-
-  const handleBatchTrackUpdate = (value: string) => {
-    if (onBatchUpdate) {
-      onBatchUpdate("track", value);
-    }
-  };
-
-  const handleBatchTimeUpdate = (value: string) => {
-    if (onBatchUpdate) {
-      onBatchUpdate("arrivalTime", value);
-    }
-  };
-
-  const handleBatchStatusUpdate = (value: boolean) => {
-    if (onBatchUpdate) {
-      onBatchUpdate("completed", value);
-    }
-  };
-
-  const handleBatchNotesUpdate = (value: string) => {
-    if (onBatchUpdate) {
-      onBatchUpdate("notes", value);
     }
   };
 
