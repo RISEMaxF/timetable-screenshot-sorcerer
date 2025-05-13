@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Train } from "@/types/train";
 import BatchActionButtons from "./toolbar/BatchActionButtons";
@@ -34,7 +33,6 @@ export function TimetableToolbar({
   setExactMatch = () => {}
 }: TimetableToolbarProps) {
   const [openDialog, setOpenDialog] = useState("");
-  const [station, setStation] = useState("ALL");
   const [selectedDates, setSelectedDates] = useState<Date[]>([date]);
   
   const handleOpenDialog = (dialogType: string) => {
@@ -89,8 +87,6 @@ export function TimetableToolbar({
             <LocationSelector 
               location={location}
               setLocation={setLocation}
-              station={station}
-              setStation={setStation}
               showFlags={true}
             />
             

@@ -8,14 +8,12 @@ import { DateRangePicker } from "@/components/datepicker/DateRangePicker";
 
 const StationSearch = () => {
   const [stationLocation, setStationLocation] = useState("ALL");
-  const [stationName, setStationName] = useState("ALL");
   const [searchDate, setSearchDate] = useState(new Date());
   const [selectedDates, setSelectedDates] = useState<Date[]>([new Date()]);
   
   // Function to handle search
   const handleSearch = () => {
-    console.log("Searching for trains at:", stationName);
-    console.log("Location:", stationLocation);
+    console.log("Searching for trains at location:", stationLocation);
     console.log("Date:", searchDate);
   };
 
@@ -48,8 +46,6 @@ const StationSearch = () => {
               <LocationSelector
                 location={stationLocation}
                 setLocation={setStationLocation} 
-                station={stationName}
-                setStation={setStationName}
                 showFlags={true}
               />
               
@@ -69,22 +65,15 @@ const StationSearch = () => {
             </Button>
           </div>
           
-          {stationName === "ALL" ? (
-            <div className="p-8 text-center text-gray-500">
-              <Building2 className="mx-auto h-12 w-12 text-gray-300 mb-4" />
-              <h3 className="text-lg font-medium mb-2">Ingen station vald</h3>
-              <p>Välj en station och datum för att visa avgångar</p>
-            </div>
-          ) : (
-            <div className="p-8 text-center">
-              <h3 className="text-lg font-medium mb-2">Avgångar från {stationName}</h3>
-              <p className="text-gray-500">Inga avgångar hittades för detta datum</p>
-            </div>
-          )}
+          <div className="p-8 text-center text-gray-500">
+            <Building2 className="mx-auto h-12 w-12 text-gray-300 mb-4" />
+            <h3 className="text-lg font-medium mb-2">Välj land och datum</h3>
+            <p>Välj ett land och datum för att visa avgångar</p>
+          </div>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default StationSearch;
