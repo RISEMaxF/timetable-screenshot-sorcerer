@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Train } from "@/types/train";
 import BatchActionButtons from "./toolbar/BatchActionButtons";
@@ -246,6 +247,97 @@ export function TimetableToolbar({
     }
   };
 
+  // When multiple dates are selected
+  const handleMultiDatesSelect = (dates: Date[] | undefined) => {
+    if (dates && dates.length > 0) {
+      setSelectedDates(dates);
+      // Update the main date to the first selected date
+      setDate(dates[0]);
+    }
+  };
+
+  const handleOpenDialog = (dialogType: string) => {
+    setOpenDialog(dialogType);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog("");
+  };
+
+  const handleBatchTrackUpdate = (value: string) => {
+    if (onBatchUpdate) {
+      onBatchUpdate("track", value);
+    }
+  };
+
+  const handleBatchTimeUpdate = (value: string) => {
+    if (onBatchUpdate) {
+      onBatchUpdate("arrivalTime", value);
+    }
+  };
+
+  const handleBatchStatusUpdate = (value: boolean) => {
+    if (onBatchUpdate) {
+      onBatchUpdate("completed", value);
+    }
+  };
+
+  const handleBatchNotesUpdate = (value: string) => {
+    if (onBatchUpdate) {
+      onBatchUpdate("notes", value);
+    }
+  };
+
+  // Render the calendar based on the current mode
+  const renderCalendar = () => {
+    if (dateRangeType === 'single') {
+      return (
+        <Calendar
+          mode="single"
+          selected={date}
+          onSelect={handleSingleDateSelect}
+          initialFocus
+          numberOfMonths={2}
+          locale={sv}
+        />
+      );
+    } else if (dateRangeType === 'range') {
+      return (
+        <Calendar
+          mode="range"
+          selected={dateRange}
+          onSelect={handleRangeSelect}
+          initialFocus
+          numberOfMonths={2}
+          locale={sv}
+        />
+      );
+    } else if (dateRangeType === 'multi') {
+      return (
+        <Calendar
+          mode="multiple"
+          selected={selectedDates}
+          onSelect={handleMultiDatesSelect}
+          initialFocus
+          numberOfMonths={2}
+          locale={sv}
+        />
+      );
+    }
+    
+    // Default fallback
+    return (
+      <Calendar
+        mode="single"
+        selected={date}
+        onSelect={handleSingleDateSelect}
+        initialFocus
+        numberOfMonths={2}
+        locale={sv}
+      />
+    );
+  };
+
   return (
     <div className="flex flex-col bg-gray-50 border-b border-gray-200">
       <Tabs 
@@ -358,19 +450,7 @@ export function TimetableToolbar({
                     </div>
                   </div>
                   
-                  <Calendar
-                    mode={dateRangeType === 'range' ? "range" : dateRangeType === 'multi' ? "multiple" : "single"}
-                    selected={dateRangeType === 'range' ? dateRange : dateRangeType === 'multi' ? selectedDates : date}
-                    onSelect={dateRangeType === 'range' 
-                      ? handleRangeSelect 
-                      : dateRangeType === 'multi' 
-                        ? setSelectedDates 
-                        : handleSingleDateSelect
-                    }
-                    initialFocus
-                    numberOfMonths={2}
-                    locale={sv}
-                  />
+                  {renderCalendar()}
                 </PopoverContent>
               </Popover>
             </div>
