@@ -1,19 +1,10 @@
+
 import { useState } from "react";
 import { Train } from "@/types/train";
 import BatchActionButtons from "./toolbar/BatchActionButtons";
-import TrackUpdateDialog from "./toolbar/TrackUpdateDialog";
-import TimeUpdateDialog from "./toolbar/TimeUpdateDialog";
-import StatusUpdateDialog from "./toolbar/StatusUpdateDialog";
-import NotesUpdateDialog from "./toolbar/NotesUpdateDialog";
 import DateSelector from "./toolbar/DateSelector";
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from "@/components/ui/select";
-import { Flag, Globe, Building2 } from "lucide-react";
+import LocationSelector from "./toolbar/LocationSelector";
+import DialogManager from "./toolbar/DialogManager";
 
 interface TimetableToolbarProps {
   location: string;
@@ -34,35 +25,6 @@ export function TimetableToolbar({
 }: TimetableToolbarProps) {
   const [openDialog, setOpenDialog] = useState("");
   const [station, setStation] = useState("ALL");
-  
-  const stations = {
-    "ALL": "Alla stationer",
-    "SE": {
-      "STO": "Stockholm C",
-      "GOT": "Göteborg C",
-      "MAL": "Malmö C",
-      "UPP": "Uppsala C",
-      "HAG": "Hagalund"
-    },
-    "NO": {
-      "OSL": "Oslo S",
-      "BER": "Bergen",
-      "TRO": "Trondheim"
-    },
-    "DK": {
-      "CPH": "København H",
-      "ARH": "Aarhus H"
-    },
-    "FI": {
-      "HEL": "Helsinki",
-      "TAM": "Tampere"
-    },
-    "DE": {
-      "BER": "Berlin Hbf",
-      "HAM": "Hamburg Hbf",
-      "MUN": "München Hbf"
-    }
-  };
 
   const handleOpenDialog = (dialogType: string) => {
     setOpenDialog(dialogType);
@@ -96,26 +58,14 @@ export function TimetableToolbar({
     }
   };
 
-  const getStationsForLocation = () => {
-    if (location === "ALL") return [{ value: "ALL", label: "Alla stationer" }];
-    
-    const locationStations = stations[location as keyof typeof stations];
-    if (typeof locationStations === 'object') {
-      return [
-        { value: "ALL", label: "Alla stationer" },
-        ...Object.entries(locationStations).map(([value, label]) => ({ value, label }))
-      ];
-    }
-    
-    return [{ value: "ALL", label: "Alla stationer" }];
-  };
-
-  const availableStations = getStationsForLocation();
-
   return (
     <div className="flex flex-row justify-between items-center p-4 bg-gray-50 border-b border-gray-200">
-      <div className="flex items-center gap-3">
-      </div>
+      <LocationSelector 
+        location={location}
+        setLocation={setLocation}
+        station={station}
+        setStation={setStation}
+      />
       
       <div className="flex items-center gap-2">
         <DateSelector date={date} setDate={setDate} />
@@ -126,33 +76,14 @@ export function TimetableToolbar({
         />
       </div>
 
-      {/* Dialogs */}
-      <TrackUpdateDialog
-        isOpen={openDialog === "track"}
-        onClose={handleCloseDialog}
+      <DialogManager 
+        openDialog={openDialog}
+        onCloseDialog={handleCloseDialog}
         selectedCount={selectedCount}
-        onUpdate={handleBatchTrackUpdate}
-      />
-      
-      <TimeUpdateDialog
-        isOpen={openDialog === "time"}
-        onClose={handleCloseDialog}
-        selectedCount={selectedCount}
-        onUpdate={handleBatchTimeUpdate}
-      />
-      
-      <StatusUpdateDialog
-        isOpen={openDialog === "completed"}
-        onClose={handleCloseDialog}
-        selectedCount={selectedCount}
-        onUpdate={handleBatchStatusUpdate}
-      />
-      
-      <NotesUpdateDialog
-        isOpen={openDialog === "notes"}
-        onClose={handleCloseDialog}
-        selectedCount={selectedCount}
-        onUpdate={handleBatchNotesUpdate}
+        onBatchTrackUpdate={handleBatchTrackUpdate}
+        onBatchTimeUpdate={handleBatchTimeUpdate}
+        onBatchStatusUpdate={handleBatchStatusUpdate}
+        onBatchNotesUpdate={handleBatchNotesUpdate}
       />
     </div>
   );
