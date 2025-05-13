@@ -7,6 +7,8 @@ import DialogManager from "./toolbar/DialogManager";
 import { DateRangePicker } from "./datepicker/DateRangePicker";
 import SearchInput from "./toolbar/SearchInput";
 import CustomizeButton from "./toolbar/CustomizeButton";
+import { Button } from "@/components/ui/button";
+import { Search } from "lucide-react";
 
 interface TimetableToolbarProps {
   location: string;
@@ -22,6 +24,7 @@ interface TimetableToolbarProps {
   setSearchTerm?: (value: string) => void;
   exactMatch?: boolean;
   setExactMatch?: (value: boolean) => void;
+  onSearch?: () => void;
 }
 
 export function TimetableToolbar({ 
@@ -37,7 +40,8 @@ export function TimetableToolbar({
   searchTerm = "",
   setSearchTerm = () => {},
   exactMatch = false,
-  setExactMatch = () => {}
+  setExactMatch = () => {},
+  onSearch = () => {}
 }: TimetableToolbarProps) {
   const [openDialog, setOpenDialog] = useState("");
   const [selectedDates, setSelectedDates] = useState<Date[]>([date]);
@@ -105,6 +109,17 @@ export function TimetableToolbar({
               selectedDates={selectedDates}
               setSelectedDates={setSelectedDates}
             />
+          </div>
+          
+          {/* Search button in bottom right */}
+          <div className="flex justify-end mt-2">
+            <Button 
+              onClick={onSearch} 
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              <Search className="mr-2 h-4 w-4" />
+              Sök
+            </Button>
           </div>
         </div>
       </div>

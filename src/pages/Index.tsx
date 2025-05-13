@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import TrainTimetable from "../components/TrainTimetable";
@@ -51,6 +52,12 @@ const Index = () => {
     );
     
     setTrains(updatedTrains);
+  };
+
+  const handleSearch = () => {
+    console.log("Performing search with term:", searchTerm);
+    // The actual filtering is already happening in filterTrains in TrainTimetable
+    // This function can be used for additional search actions if needed
   };
 
   const toggleTrainSelection = (trainId: string) => {
@@ -110,6 +117,7 @@ const Index = () => {
               setSearchTerm={setSearchTerm}
               exactMatch={exactMatch}
               setExactMatch={setExactMatch}
+              onSearch={handleSearch}
             />
             
             <div className="p-4">
