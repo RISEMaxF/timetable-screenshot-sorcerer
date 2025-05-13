@@ -15,6 +15,7 @@ const Index = () => {
   const [location, setLocation] = useState("ALL");
   const [date, setDate] = useState(new Date());
   const [selectedTrains, setSelectedTrains] = useState<string[]>([]);
+  const [selectedDates, setSelectedDates] = useState<Date[]>([new Date()]);
   
   // Search and filter states
   const [searchTerm, setSearchTerm] = useState("");
