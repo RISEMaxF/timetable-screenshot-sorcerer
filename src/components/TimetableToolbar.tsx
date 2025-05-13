@@ -16,6 +16,7 @@ interface TimetableToolbarProps {
   date: Date;
   setDate: (date: Date) => void;
   selectedCount?: number;
+  selectedTrains?: Train[]; // Added this prop
   onBatchUpdate?: (field: keyof Train, value: any) => void;
   searchTerm?: string;
   setSearchTerm?: (value: string) => void;
@@ -31,6 +32,7 @@ export function TimetableToolbar({
   date, 
   setDate,
   selectedCount = 0,
+  selectedTrains = [], // Added default value
   onBatchUpdate,
   searchTerm = "",
   setSearchTerm = () => {},
@@ -111,7 +113,8 @@ export function TimetableToolbar({
         <div className="flex flex-wrap justify-between items-center">
           <BatchActionButtons 
             selectedCount={selectedCount} 
-            onOpenDialog={handleOpenDialog} 
+            onOpenDialog={handleOpenDialog}
+            selectedTrains={selectedTrains} 
           />
         </div>
       </div>

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import TrainTimetable from "../components/TrainTimetable";
@@ -25,6 +24,9 @@ const Index = () => {
   const [sortField, setSortField] = useState<keyof Train | null>(null);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   
+  // Get the actual train objects that are selected
+  const selectedTrainObjects = trains.filter(train => selectedTrains.includes(train.id));
+
   // Initialize keyboard shortcuts
   useHotkeys('ctrl+f', (e) => {
     e.preventDefault();
@@ -102,6 +104,7 @@ const Index = () => {
               date={date} 
               setDate={setDate} 
               selectedCount={selectedTrains.length}
+              selectedTrains={selectedTrainObjects}
               onBatchUpdate={handleBatchUpdate}
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
