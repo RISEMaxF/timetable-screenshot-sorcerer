@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import TrainTimetable from "../components/TrainTimetable";
 import TimetableHeader from "../components/TimetableHeader";
 import { TimetableToolbar } from "../components/TimetableToolbar";
@@ -8,7 +9,8 @@ import { Train } from "../types/train";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useHotkeys } from "react-hotkeys-hook";
 import HelpMenu from "../components/HelpMenu";
-import { TrainFront } from "lucide-react";
+import { TrainFront, Building2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const [trains, setTrains] = useState(trainData);
@@ -76,6 +78,12 @@ const Index = () => {
             Tåginfo
           </h1>
           <div className="flex items-center gap-4">
+            <Link to="/station-search">
+              <Button variant="outline" className="flex items-center gap-2">
+                <Building2 className="h-4 w-4" />
+                Stationsök
+              </Button>
+            </Link>
             <HelpMenu />
             <img 
               src="https://www.ri.se/themes/rise/dist/images/rise-logo-black.svg" 

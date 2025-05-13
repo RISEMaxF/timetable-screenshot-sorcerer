@@ -6,20 +6,22 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
-import { Flag, Globe, Building2 } from "lucide-react";
+import { Globe, Building2 } from "lucide-react";
 
 interface LocationSelectorProps {
   location: string;
   setLocation: (location: string) => void;
   station: string;
   setStation: (station: string) => void;
+  showFlags?: boolean;
 }
 
 const LocationSelector = ({ 
   location, 
   setLocation, 
   station, 
-  setStation 
+  setStation,
+  showFlags = false
 }: LocationSelectorProps) => {
   const stations = {
     "ALL": "Alla stationer",
@@ -50,6 +52,14 @@ const LocationSelector = ({
     }
   };
 
+  const countryFlags = {
+    "SE": "🇸🇪",
+    "NO": "🇳🇴",
+    "DK": "🇩🇰",
+    "FI": "🇫🇮",
+    "DE": "🇩🇪"
+  };
+
   const getStationsForLocation = () => {
     if (location === "ALL") return [{ value: "ALL", label: "Alla stationer" }];
     
@@ -66,6 +76,11 @@ const LocationSelector = ({
 
   const availableStations = getStationsForLocation();
 
+  const getFlagForCountry = (countryCode: string) => {
+    if (countryCode === "ALL" || !showFlags) return null;
+    return countryFlags[countryCode as keyof typeof countryFlags] || null;
+  };
+
   return (
     <div className="flex items-center gap-3">
       <Select value={location} onValueChange={(val) => { setLocation(val); setStation("ALL"); }}>
@@ -73,8 +88,10 @@ const LocationSelector = ({
           <div className="flex items-center gap-2">
             {location === "ALL" ? (
               <Globe className="h-4 w-4 text-gray-500" />
+            ) : showFlags ? (
+              <span className="text-lg">{getFlagForCountry(location)}</span>
             ) : (
-              <Flag className="h-4 w-4 text-gray-500" />
+              <Globe className="h-4 w-4 text-gray-500" />
             )}
             <SelectValue placeholder="Välj land" />
           </div>
@@ -88,31 +105,31 @@ const LocationSelector = ({
           </SelectItem>
           <SelectItem value="SE">
             <div className="flex items-center gap-2">
-              <Flag className="h-3.5 w-3.5" />
+              {showFlags ? <span className="text-lg">🇸🇪</span> : null}
               <span>Sverige</span>
             </div>
           </SelectItem>
           <SelectItem value="NO">
             <div className="flex items-center gap-2">
-              <Flag className="h-3.5 w-3.5" />
+              {showFlags ? <span className="text-lg">🇳🇴</span> : null}
               <span>Norge</span>
             </div>
           </SelectItem>
           <SelectItem value="DK">
             <div className="flex items-center gap-2">
-              <Flag className="h-3.5 w-3.5" />
+              {showFlags ? <span className="text-lg">🇩🇰</span> : null}
               <span>Danmark</span>
             </div>
           </SelectItem>
           <SelectItem value="FI">
             <div className="flex items-center gap-2">
-              <Flag className="h-3.5 w-3.5" />
+              {showFlags ? <span className="text-lg">🇫🇮</span> : null}
               <span>Finland</span>
             </div>
           </SelectItem>
           <SelectItem value="DE">
             <div className="flex items-center gap-2">
-              <Flag className="h-3.5 w-3.5" />
+              {showFlags ? <span className="text-lg">🇩🇪</span> : null}
               <span>Tyskland</span>
             </div>
           </SelectItem>
