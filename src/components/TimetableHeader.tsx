@@ -99,9 +99,9 @@ const TimetableHeader = ({
   
   return (
     <div className="bg-white px-6 py-4 border-b border-gray-200 shadow-sm">
-      <div className="flex flex-col gap-2">
-        <div className="flex flex-wrap gap-3 items-center">
-          {/* Search and filter container */}
+      <div className="flex flex-col gap-4">
+        {/* Search row */}
+        <div className="flex items-center gap-3">
           <div className={cn(
             "flex-1 flex items-center transition-all duration-200 rounded-full border shadow-sm overflow-hidden",
             isFocused ? "ring-2 ring-blue-200 border-blue-300" : "border-gray-200"
@@ -177,7 +177,15 @@ const TimetableHeader = ({
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          
+
+          <Button variant="outline" size="sm" className="h-10 px-3 rounded-full bg-white border-gray-200 shadow-sm text-gray-700 hover:bg-gray-50">
+            <SlidersHorizontal className="h-4 w-4 mr-1" />
+            <span className="hidden sm:inline">Anpassa</span>
+          </Button>
+        </div>
+        
+        {/* Filters row */}
+        <div className="flex flex-wrap gap-3 items-center">
           {/* Location selector */}
           <div className="relative">
             <Select value={location} onValueChange={(val) => { setLocation(val); setStation("ALL"); }}>
@@ -276,11 +284,6 @@ const TimetableHeader = ({
               Idag
             </Button>
           </div>
-          
-          <Button variant="outline" size="sm" className="h-10 px-3 rounded-full bg-white border-gray-200 shadow-sm text-gray-700 hover:bg-gray-50">
-            <SlidersHorizontal className="h-4 w-4 mr-1" />
-            <span className="hidden sm:inline">Anpassa</span>
-          </Button>
         </div>
       </div>
     </div>
