@@ -1,6 +1,6 @@
-
-import { addDays, subDays } from "date-fns";
-import { DateDirection } from "./types";
+import { addDays, subDays, format } from "date-fns";
+import { sv } from "date-fns/locale";
+import { DateDirection, DateRangeType } from "./types";
 
 /**
  * Calculate range of dates based on a central date, days count, and direction
@@ -47,4 +47,35 @@ export function generateMultiDaySelection(centerDate: Date, count: number, dir: 
   }
   
   return newDates;
+}
+
+/**
+ * Format date display based on dateRangeType and selection
+ */
+export function formatDateDisplay({
+  dateRangeType,
+  date,
+  dateRange,
+  selectedDates
+}: {
+  dateRangeType: DateRangeType;
+  date: Date;
+  dateRange: {
+    from: Date;
+    to?: Date;
+  };
+  selectedDates: Date[];
+}): string {
+  if (dateRangeType === 'single') {
+    return format(date, "PPP", { locale: sv });
+  } else if (dateRangeType === 'range' && dateRange.from && dateRange.to) {
+    return `${format(dateRange.from, "d MMM", { locale: sv })} - ${format(dateRange.to, "d MMM", { locale: sv })}`;
+  } else if (dateRangeType === 'multi' && selectedDates.length > 0) {
+    if (selectedDates.length === 1) {
+      return format(selectedDates[0], "PPP", { locale: sv });
+    } else {
+      return `${selectedDates.length} dagar: ${format(selectedDates[0], "d MMM", { locale: sv })} - ${format(selectedDates[selectedDates.length - 1], "d MMM", { locale: sv })}`;
+    }
+  }
+  return format(date, "PPP", { locale: sv });
 }

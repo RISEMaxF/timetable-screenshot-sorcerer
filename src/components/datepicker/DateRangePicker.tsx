@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { format, addDays, subDays } from "date-fns";
 import { sv } from "date-fns/locale";
@@ -14,7 +13,7 @@ import { DaysCountSelector } from "./DaysCountSelector";
 import { DirectionSelector } from "./DirectionSelector";
 import { DatePickerCalendar } from "./DatePickerCalendar";
 import { DateRangeType, DateDirection, DateRange } from "./types";
-import { calculateDateRange, generateMultiDaySelection } from "./dateUtils";
+import { calculateDateRange, generateMultiDaySelection, formatDateDisplay } from "./dateUtils";
 
 interface DateRangePickerProps {
   date: Date;
@@ -155,22 +154,6 @@ export function DateRangePicker({
     }
   };
 
-  // Function to format the date display based on the current selection mode
-  const formatDateDisplay = () => {
-    if (dateRangeType === 'single') {
-      return format(date, "PPP", { locale: sv });
-    } else if (dateRangeType === 'range' && dateRange.from && dateRange.to) {
-      return `${format(dateRange.from, "d MMM", { locale: sv })} - ${format(dateRange.to, "d MMM", { locale: sv })}`;
-    } else if (dateRangeType === 'multi' && localSelectedDates.length > 0) {
-      if (localSelectedDates.length === 1) {
-        return format(localSelectedDates[0], "PPP", { locale: sv });
-      } else {
-        return `${localSelectedDates.length} dagar: ${format(localSelectedDates[0], "d MMM", { locale: sv })} - ${format(localSelectedDates[localSelectedDates.length - 1], "d MMM", { locale: sv })}`;
-      }
-    }
-    return format(date, "PPP", { locale: sv });
-  };
-
   // Update date selection when a date is picked in single mode
   const handleSingleDateSelect = (newDate: Date | undefined) => {
     if (newDate) {
@@ -280,7 +263,12 @@ export function DateRangePicker({
       <PopoverTrigger asChild>
         <Button variant="outline" className="w-full sm:w-auto h-10 px-3 rounded-full bg-white border-gray-200 shadow-sm hover:bg-gray-50">
           <CalendarIcon className="h-4 w-4 mr-2 text-gray-500" />
-          {formatDateDisplay()}
+          {formatDateDisplay({
+            dateRangeType,
+            date: date,
+            dateRange,
+            selectedDates: localSelectedDates
+          })}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0 bg-white border border-gray-100 shadow-lg rounded-lg">
