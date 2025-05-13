@@ -1,7 +1,7 @@
 
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Search, Filter, SlidersHorizontal, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";

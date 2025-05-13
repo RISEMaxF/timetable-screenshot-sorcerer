@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Check, ChevronsUpDown, Globe } from "lucide-react";
+import { Check, ChevronsUpDown } from "lucide-react";
 import {
   Command,
   CommandEmpty,
@@ -100,7 +100,7 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
           <Command>
             <CommandInput placeholder="Sök land..." />
             <CommandEmpty>Inga träffar.</CommandEmpty>
-            <CommandGroup>
+            <CommandGroup heading="Länder">
               {locations.map((country) => (
                 <CommandItem
                   key={country.code}
