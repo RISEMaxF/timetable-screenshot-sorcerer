@@ -6,7 +6,6 @@ import TrainTableHeader from "./table/TrainTableHeader";
 import TrainTableRow from "./table/TrainTableRow";
 import EmptyState from "./table/EmptyState";
 import TrainDetailDialog from "./dialog/TrainDetailDialog";
-import TableControls from "./table/TableControls";
 import { filterTrains } from "@/utils/searchUtils";
 import TrainMap from "./map/TrainMap";
 
@@ -15,23 +14,30 @@ interface TrainTimetableProps {
   onTrainUpdate: (train: Train) => void;
   selectedTrains: string[];
   onToggleSelection: (trainId: string) => void;
+  searchTerm?: string;
+  exactMatch?: boolean;
+  filterStatus?: "all" | "completed" | "pending";
+  sortField?: keyof Train | null;
+  sortDirection?: "asc" | "desc";
+  onSort?: (field: keyof Train) => void;
 }
 
-type SortField = keyof Train | null;
-type SortDirection = "asc" | "desc";
-
-const TrainTimetable = ({ trains, onTrainUpdate, selectedTrains = [], onToggleSelection }: TrainTimetableProps) => {
+const TrainTimetable = ({ 
+  trains, 
+  onTrainUpdate, 
+  selectedTrains = [], 
+  onToggleSelection,
+  searchTerm = "",
+  exactMatch = false,
+  filterStatus = "all",
+  sortField = null,
+  sortDirection = "asc",
+  onSort = () => {}
+}: TrainTimetableProps) => {
   // State for detail dialog
   const [selectedTrain, setSelectedTrain] = useState<Train | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   
-  // State for filtering and sorting
-  const [searchTerm, setSearchTerm] = useState("");
-  const [exactMatch, setExactMatch] = useState(false);
-  const [sortField, setSortField] = useState<SortField>(null);
-  const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
-  const [filterStatus, setFilterStatus] = useState<"all" | "completed" | "pending">("all");
-
   const handleRowClick = (train: Train) => {
     setSelectedTrain(train);
     setIsDetailOpen(true);
@@ -39,15 +45,6 @@ const TrainTimetable = ({ trains, onTrainUpdate, selectedTrains = [], onToggleSe
 
   const handleCloseDetail = () => {
     setIsDetailOpen(false);
-  };
-
-  const toggleSort = (field: keyof Train) => {
-    if (sortField === field) {
-      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
-    } else {
-      setSortField(field);
-      setSortDirection("asc");
-    }
   };
 
   // Filter and sort trains
@@ -62,7 +59,7 @@ const TrainTimetable = ({ trains, onTrainUpdate, selectedTrains = [], onToggleSe
         <div className="overflow-x-auto">
           <Table className="border-collapse w-full">
             <TrainTableHeader 
-              onSort={toggleSort} 
+              onSort={onSort} 
               sortField={sortField} 
               sortDirection={sortDirection} 
             />

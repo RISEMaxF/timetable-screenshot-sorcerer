@@ -21,6 +21,7 @@ const Index = () => {
   const [exactMatch, setExactMatch] = useState(false);
   const [filterStatus, setFilterStatus] = useState<"all" | "completed" | "pending">("all");
   const [sortField, setSortField] = useState<keyof Train | null>(null);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   
   // Initialize keyboard shortcuts
   useHotkeys('ctrl+f', (e) => {
@@ -56,8 +57,13 @@ const Index = () => {
     );
   };
 
-  const handleSort = (field: string) => {
-    setSortField(field as keyof Train);
+  const handleSort = (field: keyof Train) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortDirection("asc");
+    }
   };
 
   return (
@@ -96,7 +102,7 @@ const Index = () => {
               exactMatch={exactMatch}
               setExactMatch={setExactMatch}
               setFilterStatus={setFilterStatus}
-              onSort={handleSort}
+              onSort={(field) => handleSort(field as keyof Train)}
             />
             <div className="p-4">
               <div className="flex flex-col lg:flex-row gap-4">
@@ -105,6 +111,12 @@ const Index = () => {
                   onTrainUpdate={handleTrainUpdate} 
                   selectedTrains={selectedTrains}
                   onToggleSelection={toggleTrainSelection}
+                  searchTerm={searchTerm}
+                  exactMatch={exactMatch}
+                  filterStatus={filterStatus}
+                  sortField={sortField}
+                  sortDirection={sortDirection}
+                  onSort={handleSort}
                 />
               </div>
             </div>

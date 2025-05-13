@@ -2,7 +2,7 @@
 import { TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ArrowDown, ArrowUp, SeparatorVertical } from "lucide-react";
 import { Train } from "@/types/train";
-import { Separator } from "../ui/separator";
+import { cn } from "@/lib/utils";
 
 interface TrainTableHeaderProps {
   onSort?: (field: keyof Train) => void;
@@ -37,7 +37,7 @@ const TrainTableHeader = ({
         
         {/* Data columns with consistent widths */}
         <TableHead 
-          className={`${headerClasses} w-20`}
+          className={cn(headerClasses, "w-20", sortField === "id" && "bg-gray-200")}
           onClick={() => onSort && onSort("id")}
         >
           <div className="flex items-center justify-between">
@@ -49,7 +49,7 @@ const TrainTableHeader = ({
         </TableHead>
         
         <TableHead 
-          className={`${headerClasses} w-20`}
+          className={cn(headerClasses, "w-20", sortField === "announcedTrainNumber" && "bg-gray-200")}
           onClick={() => onSort && onSort("announcedTrainNumber")}
         >
           <div className="flex items-center justify-between">
@@ -61,7 +61,7 @@ const TrainTableHeader = ({
         </TableHead>
         
         <TableHead 
-          className={`${headerClasses} w-24`}
+          className={cn(headerClasses, "w-24", sortField === "operator" && "bg-gray-200")}
           onClick={() => onSort && onSort("operator")}
         >
           <div className="flex items-center justify-between">
@@ -73,7 +73,7 @@ const TrainTableHeader = ({
         </TableHead>
         
         <TableHead 
-          className={`${headerClasses} w-24`}
+          className={cn(headerClasses, "w-24", sortField === "from" && "bg-gray-200")}
           onClick={() => onSort && onSort("from")}
         >
           <div className="flex items-center justify-between">
@@ -85,7 +85,7 @@ const TrainTableHeader = ({
         </TableHead>
         
         <TableHead 
-          className={`${headerClasses} w-24`}
+          className={cn(headerClasses, "w-24", sortField === "to" && "bg-gray-200")}
           onClick={() => onSort && onSort("to")}
         >
           <div className="flex items-center justify-between">
@@ -97,7 +97,7 @@ const TrainTableHeader = ({
         </TableHead>
         
         <TableHead 
-          className={`${headerClasses} w-24`}
+          className={cn(headerClasses, "w-24", sortField === "latest" && "bg-gray-200")}
           onClick={() => onSort && onSort("latest")}
         >
           <div className="flex items-center justify-between">
@@ -109,7 +109,7 @@ const TrainTableHeader = ({
         </TableHead>
         
         <TableHead 
-          className={`${headerClasses} w-28`}
+          className={cn(headerClasses, "w-28", sortField === "updated" && "bg-gray-200")}
           onClick={() => onSort && onSort("updated")}
         >
           <span className="flex items-center">
