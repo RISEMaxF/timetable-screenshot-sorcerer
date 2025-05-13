@@ -56,12 +56,14 @@ const TrainTableRow = ({
       onClick={handleRowClick}
       data-testid={`train-row-${train.id}`}
     >
-      <TableCell className="w-10 px-2 py-2" onClick={handleCheckboxClick}>
-        <Checkbox
-          checked={isMultiSelected}
-          onCheckedChange={() => onToggleSelection && onToggleSelection(train.id)}
-          aria-label={`Select train ${train.id}`}
-        />
+      <TableCell className="w-10 px-2 py-2">
+        <div onClick={handleCheckboxClick}>
+          <Checkbox
+            checked={isMultiSelected || false}
+            className="cursor-pointer"
+            aria-label={`Select train ${train.id}`}
+          />
+        </div>
       </TableCell>
       
       <TableCell className={`font-medium ${cellClasses}`}>
