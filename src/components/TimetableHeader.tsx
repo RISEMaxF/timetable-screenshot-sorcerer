@@ -19,12 +19,15 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 
 interface TimetableHeaderProps {
   location: string;
   setLocation: (location: string) => void;
   date: Date;
+  setDate: (date: Date) => void;
   searchTerm?: string;
   setSearchTerm?: (value: string) => void;
   exactMatch?: boolean;
@@ -36,7 +39,8 @@ interface TimetableHeaderProps {
 const TimetableHeader = ({ 
   location, 
   setLocation,
-  date, 
+  date,
+  setDate,
   searchTerm = "", 
   setSearchTerm = () => {}, 
   exactMatch = false,
@@ -44,7 +48,6 @@ const TimetableHeader = ({
   setFilterStatus = () => {},
   onSort = () => {}
 }: TimetableHeaderProps) => {
-  const formattedDate = format(date, "EEEE d MMMM yyyy", { locale: sv });
   const [isFocused, setIsFocused] = useState(false);
   const [station, setStation] = useState("ALL");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -97,12 +100,6 @@ const TimetableHeader = ({
   return (
     <div className="bg-white px-6 py-4 border-b border-gray-200 shadow-sm">
       <div className="flex flex-col gap-2">
-        <div className="flex justify-end items-center mb-2">
-          <span className="text-sm text-gray-500 font-medium">
-            {formattedDate}
-          </span>
-        </div>
-
         <div className="flex flex-wrap gap-3 items-center">
           {/* Search and filter container */}
           <div className={cn(
@@ -248,6 +245,36 @@ const TimetableHeader = ({
                 ))}
               </SelectContent>
             </Select>
+          </div>
+          
+          {/* Date selector */}
+          <div className="flex items-center gap-2">
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" className="h-10 px-3 rounded-full bg-white border-gray-200 shadow-sm hover:bg-gray-50">
+                  <Calendar className="h-4 w-4 mr-2 text-gray-500" />
+                  {format(date, "PPP", { locale: sv })}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0 bg-white border border-gray-100 shadow-lg rounded-lg">
+                <CalendarComponent
+                  mode="single"
+                  selected={date}
+                  onSelect={(newDate) => newDate && setDate(newDate)}
+                  initialFocus
+                  className="p-3 pointer-events-auto"
+                  locale={sv}
+                />
+              </PopoverContent>
+            </Popover>
+            
+            <Button 
+              variant="outline" 
+              onClick={() => setDate(new Date())}
+              className="h-10 px-3 rounded-full bg-white border-gray-200 shadow-sm hover:bg-gray-50"
+            >
+              Idag
+            </Button>
           </div>
           
           <Button variant="outline" size="sm" className="h-10 px-3 rounded-full bg-white border-gray-200 shadow-sm text-gray-700 hover:bg-gray-50">

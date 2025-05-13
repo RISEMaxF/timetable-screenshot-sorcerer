@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { Train } from "@/types/train";
 import BatchActionButtons from "./toolbar/BatchActionButtons";
-import DateSelector from "./toolbar/DateSelector";
 import LocationSelector from "./toolbar/LocationSelector";
 import DialogManager from "./toolbar/DialogManager";
 
@@ -60,16 +59,9 @@ export function TimetableToolbar({
 
   return (
     <div className="flex flex-row justify-between items-center p-4 bg-gray-50 border-b border-gray-200">
-      <LocationSelector 
-        location={location}
-        setLocation={setLocation}
-        station={station}
-        setStation={setStation}
-      />
+      <div></div> {/* Empty div to maintain layout */}
       
       <div className="flex items-center gap-2">
-        <DateSelector date={date} setDate={setDate} />
-        
         <BatchActionButtons 
           selectedCount={selectedCount} 
           onOpenDialog={handleOpenDialog} 
