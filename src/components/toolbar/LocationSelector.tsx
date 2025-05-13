@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronsUpDown, Globe } from "lucide-react";
@@ -36,6 +37,22 @@ const stations = [
   { value: "Oslo", label: "Oslo" },
   { value: "Köpenhamn", label: "Köpenhamn" },
   { value: "Helsinki", label: "Helsinki" },
+  // Add the requested placeholder stations
+  { value: "Tågholm", label: "Tågholm" },
+  { value: "Rälsby", label: "Rälsby" },
+  { value: "Ångalund", label: "Ångalund" },
+  { value: "Lokförberg", label: "Lokförberg" },
+  { value: "Järnvägshavn", label: "Järnvägshavn" },
+  { value: "Stationsdal", label: "Stationsdal" },
+  { value: "Spåravik", label: "Spåravik" },
+  { value: "Vagnsjö", label: "Vagnsjö" },
+  { value: "Pendeltorp", label: "Pendeltorp" },
+  { value: "Biljettfors", label: "Biljettfors" },
+  { value: "Växellunda", label: "Växellunda" },
+  { value: "Perrongberg", label: "Perrongberg" },
+  { value: "Signalfält", label: "Signalfält" },
+  { value: "Konduktörsby", label: "Konduktörsby" },
+  { value: "Tunnelö", label: "Tunnelö" },
 ];
 
 const LocationSelector: React.FC<LocationSelectorProps> = ({
@@ -50,6 +67,10 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
 
   // Find the current country from our COUNTRIES object
   const currentCountry = COUNTRIES[location] || COUNTRIES.ALL;
+
+  // Find the selected station or default to "Välj station"
+  const selectedStation = stations.find((s) => s.value === station);
+  const stationLabel = selectedStation ? selectedStation.label : "Välj station";
 
   return (
     <div className="flex space-x-2">
@@ -121,7 +142,7 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
             aria-label="Select a station"
             className="w-[180px] justify-between bg-white"
           >
-            {station ? stations.find((s) => s.value === station)?.label : "Välj station"}
+            {stationLabel}
             <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
