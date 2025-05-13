@@ -40,61 +40,80 @@ const TrainMap: React.FC<TrainMapProps> = ({ trains, selectedTrainId }) => {
     // Create vector source for train routes
     const vectorSource = new VectorSource();
     
-    // Add routes for each train
-    trains.forEach(train => {
-      if (!train.country) return;
+    // Add routes only for the selected train or show a placeholder if no train is selected
+    if (selectedTrainId) {
+      // Find the selected train
+      const selectedTrain = trains.find(train => train.id === selectedTrainId);
       
-      const coordinates = trainCoordinates[train.country] || trainCoordinates.default;
-      
-      // Add small random offsets to make points slightly different for each train
-      const fromLon = coordinates.from[0] + (Math.random() - 0.5) * 0.5;
-      const fromLat = coordinates.from[1] + (Math.random() - 0.5) * 0.5;
-      const toLon = coordinates.to[0] + (Math.random() - 0.5) * 0.5;
-      const toLat = coordinates.to[1] + (Math.random() - 0.5) * 0.5;
-      
-      // Create route as LineString feature
-      const routeFeature = new Feature({
-        geometry: new LineString([
-          fromLonLat([fromLon, fromLat]),
-          fromLonLat([toLon, toLat])
-        ]),
-        id: train.id,
-        name: `Train ${train.id}`
-      });
+      if (selectedTrain && selectedTrain.country) {
+        const coordinates = trainCoordinates[selectedTrain.country] || trainCoordinates.default;
+        
+        // Add small random offsets to make points slightly different
+        const fromLon = coordinates.from[0] + (Math.random() - 0.5) * 0.5;
+        const fromLat = coordinates.from[1] + (Math.random() - 0.5) * 0.5;
+        const toLon = coordinates.to[0] + (Math.random() - 0.5) * 0.5;
+        const toLat = coordinates.to[1] + (Math.random() - 0.5) * 0.5;
+        
+        // Create route as LineString feature
+        const routeFeature = new Feature({
+          geometry: new LineString([
+            fromLonLat([fromLon, fromLat]),
+            fromLonLat([toLon, toLat])
+          ]),
+          id: selectedTrain.id,
+          name: `Train ${selectedTrain.id}`
+        });
 
-      // Create start point
-      const startFeature = new Feature({
-        geometry: new Point(fromLonLat([fromLon, fromLat])),
-        id: `${train.id}-start`,
-        name: `Start of train ${train.id} (${train.from})`
-      });
-      
-      // Create end point
-      const endFeature = new Feature({
-        geometry: new Point(fromLonLat([toLon, toLat])),
-        id: `${train.id}-end`,
-        name: `End of train ${train.id} (${train.to})`
-      });
+        // Create start point
+        const startFeature = new Feature({
+          geometry: new Point(fromLonLat([fromLon, fromLat])),
+          id: `${selectedTrain.id}-start`,
+          name: `Start of train ${selectedTrain.id} (${selectedTrain.from})`
+        });
+        
+        // Create end point
+        const endFeature = new Feature({
+          geometry: new Point(fromLonLat([toLon, toLat])),
+          id: `${selectedTrain.id}-end`,
+          name: `End of train ${selectedTrain.id} (${selectedTrain.to})`
+        });
 
-      vectorSource.addFeature(routeFeature);
-      vectorSource.addFeature(startFeature);
-      vectorSource.addFeature(endFeature);
-    });
+        vectorSource.addFeature(routeFeature);
+        vectorSource.addFeature(startFeature);
+        vectorSource.addFeature(endFeature);
+      }
+    } else {
+      // If no train is selected, we can add a placeholder or leave the map empty
+      // Here we choose to leave it empty
+    }
 
     // Create vector layer for train routes
     const vectorLayer = new VectorLayer({
       source: vectorSource,
       style: (feature) => {
         const id = feature.get('id') as string;
-        const isSelected = id.includes(selectedTrainId || '');
         
-        if (id.endsWith('-start') || id.endsWith('-end')) {
-          // Style for station points
+        if (id.endsWith('-start')) {
+          // Style for departure station
           return new Style({
             image: new Circle({
-              radius: 5,
+              radius: 6,
               fill: new Fill({
-                color: isSelected ? '#1e40af' : '#404040'
+                color: '#22c55e' // Green for departure
+              }),
+              stroke: new Stroke({
+                color: '#ffffff',
+                width: 2
+              })
+            })
+          });
+        } else if (id.endsWith('-end')) {
+          // Style for arrival station
+          return new Style({
+            image: new Circle({
+              radius: 6,
+              fill: new Fill({
+                color: '#ef4444' // Red for arrival
               }),
               stroke: new Stroke({
                 color: '#ffffff',
@@ -106,8 +125,8 @@ const TrainMap: React.FC<TrainMapProps> = ({ trains, selectedTrainId }) => {
           // Style for route lines
           return new Style({
             stroke: new Stroke({
-              color: isSelected ? '#1e40af' : '#666666',
-              width: isSelected ? 3 : 2
+              color: '#1e40af',
+              width: 3
             })
           });
         }
@@ -129,6 +148,15 @@ const TrainMap: React.FC<TrainMapProps> = ({ trains, selectedTrainId }) => {
       })
     });
 
+    // Fit view to the route if a train is selected
+    if (selectedTrainId && vectorSource.getFeatures().length > 0) {
+      const extent = vectorSource.getExtent();
+      map.getView().fit(extent, {
+        padding: [50, 50, 50, 50],
+        maxZoom: 10
+      });
+    }
+
     mapInstanceRef.current = map;
 
     return () => {
@@ -137,7 +165,7 @@ const TrainMap: React.FC<TrainMapProps> = ({ trains, selectedTrainId }) => {
         mapInstanceRef.current = null;
       }
     };
-  }, [trains, selectedTrainId]);
+  }, [trains, selectedTrainId]); // Re-run effect when selectedTrainId changes
 
   return (
     <div className="flex flex-col">
@@ -147,25 +175,26 @@ const TrainMap: React.FC<TrainMapProps> = ({ trains, selectedTrainId }) => {
         <h3 className="text-sm font-medium text-gray-700 mb-2">Map Legend</h3>
         <div className="grid grid-cols-2 gap-3">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-0.5 bg-gray-600"></div>
+            <div className="w-6 h-0.5 bg-blue-700"></div>
             <span className="text-xs text-gray-600">Train Route</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-6 h-0.5 bg-blue-700"></div>
-            <span className="text-xs text-gray-600">Selected Route</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded-full bg-gray-600 flex items-center justify-center">
+            <div className="w-4 h-4 rounded-full bg-green-500 flex items-center justify-center">
               <div className="w-2 h-2 rounded-full bg-white"></div>
             </div>
-            <span className="text-xs text-gray-600">Station</span>
+            <span className="text-xs text-gray-600">Departure Station</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded-full bg-blue-700 flex items-center justify-center">
+            <div className="w-4 h-4 rounded-full bg-red-500 flex items-center justify-center">
               <div className="w-2 h-2 rounded-full bg-white"></div>
             </div>
-            <span className="text-xs text-gray-600">Selected Station</span>
+            <span className="text-xs text-gray-600">Arrival Station</span>
           </div>
+          {!selectedTrainId && (
+            <div className="col-span-2 text-xs text-gray-500 italic">
+              Select a train to view its route
+            </div>
+          )}
         </div>
       </div>
     </div>
