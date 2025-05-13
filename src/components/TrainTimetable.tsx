@@ -20,6 +20,8 @@ interface TrainTimetableProps {
   sortField?: keyof Train | null;
   sortDirection?: "asc" | "desc";
   onSort?: (field: keyof Train) => void;
+  selectedCountry?: string;
+  selectedStation?: string;
 }
 
 const TrainTimetable = ({ 
@@ -32,7 +34,9 @@ const TrainTimetable = ({
   filterStatus = "all",
   sortField = null,
   sortDirection = "asc",
-  onSort = () => {}
+  onSort = () => {},
+  selectedCountry = "ALL",
+  selectedStation = "ALL"
 }: TrainTimetableProps) => {
   // State for detail dialog
   const [selectedTrain, setSelectedTrain] = useState<Train | null>(null);
@@ -49,8 +53,17 @@ const TrainTimetable = ({
 
   // Filter and sort trains
   const filteredTrains = useMemo(() => 
-    filterTrains(trains, searchTerm, filterStatus, exactMatch, sortField, sortDirection),
-    [trains, searchTerm, filterStatus, exactMatch, sortField, sortDirection]
+    filterTrains(
+      trains, 
+      searchTerm, 
+      filterStatus, 
+      exactMatch, 
+      sortField, 
+      sortDirection, 
+      selectedCountry, 
+      selectedStation
+    ),
+    [trains, searchTerm, filterStatus, exactMatch, sortField, sortDirection, selectedCountry, selectedStation]
   );
 
   return (
@@ -76,7 +89,7 @@ const TrainTimetable = ({
                 />
               ))}
               {filteredTrains.length === 0 && (
-                <EmptyState searchTerm={searchTerm} filterApplied={filterStatus !== "all"} />
+                <EmptyState searchTerm={searchTerm} filterApplied={filterStatus !== "all" || selectedCountry !== "ALL" || selectedStation !== "ALL"} />
               )}
             </TableBody>
           </Table>

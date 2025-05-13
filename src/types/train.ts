@@ -9,6 +9,7 @@ export interface Train {
   updated?: string;
   highlighted?: boolean;
   completed?: boolean;
+  country?: string;
   
   // Adding missing properties that caused the type errors
   arrivalTime?: string;

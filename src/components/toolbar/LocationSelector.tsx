@@ -19,25 +19,81 @@ interface LocationSelectorProps {
   showFlags?: boolean;
 }
 
-// Nordic station names
-const STATIONS = [
-  { id: "ALL", name: "Alla stationer" },
-  { id: "TAGHOLM", name: "Tågholm" },
-  { id: "RALSBY", name: "Rälsby" },
-  { id: "ANGALUND", name: "Ångalund" },
-  { id: "LOKFORBERG", name: "Lokförberg" },
-  { id: "JARNVAGSHAVN", name: "Järnvägshavn" },
-  { id: "STATIONSDAL", name: "Stationsdal" },
-  { id: "SPARAVIK", name: "Spåravik" },
-  { id: "VAGNSJO", name: "Vagnsjö" },
-  { id: "PENDELTORP", name: "Pendeltorp" },
-  { id: "BILJETTFORS", name: "Biljettfors" },
-  { id: "VAXELLUNDA", name: "Växellunda" },
-  { id: "PERRONGBERG", name: "Perrongberg" },
-  { id: "SIGNALFALT", name: "Signalfält" },
-  { id: "KONDUKTORSBY", name: "Konduktörsby" },
-  { id: "TUNNELO", name: "Tunnelö" },
-];
+// Nordic station names by country
+const STATIONS = {
+  SE: [
+    { id: "ALL", name: "Alla stationer" },
+    { id: "Tågholm", name: "Tågholm" },
+    { id: "Rälsby", name: "Rälsby" },
+    { id: "Ångalund", name: "Ångalund" },
+    { id: "Lokförberg", name: "Lokförberg" },
+    { id: "Järnvägshavn", name: "Järnvägshavn" },
+    { id: "Stationsdal", name: "Stationsdal" },
+    { id: "Spåravik", name: "Spåravik" },
+    { id: "Vagnsjö", name: "Vagnsjö" },
+    { id: "Pendeltorp", name: "Pendeltorp" },
+    { id: "Biljettfors", name: "Biljettfors" },
+    { id: "Växellunda", name: "Växellunda" },
+    { id: "Perrongberg", name: "Perrongberg" },
+    { id: "Signalfält", name: "Signalfält" },
+    { id: "Konduktörsby", name: "Konduktörsby" },
+    { id: "Tunnelö", name: "Tunnelö" },
+  ],
+  DK: [
+    { id: "ALL", name: "Alla stationer" },
+    { id: "Togø", name: "Togø" },
+    { id: "Skinnerup", name: "Skinnerup" },
+    { id: "Dampholm", name: "Dampholm" },
+    { id: "Lokomotivbjerg", name: "Lokomotivbjerg" },
+    { id: "Jernbanehavn", name: "Jernbanehavn" },
+    { id: "Stationsdal", name: "Stationsdal" },
+    { id: "Sporvig", name: "Sporvig" },
+    { id: "Vognssø", name: "Vognssø" },
+    { id: "Pendlertorp", name: "Pendlertorp" },
+    { id: "Billetfos", name: "Billetfos" },
+    { id: "Skiftemark", name: "Skiftemark" },
+    { id: "Perronbjerg", name: "Perronbjerg" },
+    { id: "Signalmark", name: "Signalmark" },
+    { id: "Konduktørby", name: "Konduktørby" },
+    { id: "Tunnelø", name: "Tunnelø" },
+  ],
+  FI: [
+    { id: "ALL", name: "Alla stationer" },
+    { id: "Junasaari", name: "Junasaari" },
+    { id: "Kiskoila", name: "Kiskoila" },
+    { id: "Höyrylahti", name: "Höyrylahti" },
+    { id: "Veturivuori", name: "Veturivuori" },
+    { id: "Rautatiesatama", name: "Rautatiesatama" },
+    { id: "Asemalaakso", name: "Asemalaakso" },
+    { id: "Raideniemi", name: "Raideniemi" },
+    { id: "Vaunujärvi", name: "Vaunujärvi" },
+    { id: "Pendelöikylä", name: "Pendelöikylä" },
+    { id: "Lippukoski", name: "Lippukoski" },
+    { id: "Vaihdeniitty", name: "Vaihdeniitty" },
+    { id: "Laiturikallio", name: "Laiturikallio" },
+    { id: "Signaalipelto", name: "Signaalipelto" },
+    { id: "Konduktöörikylä", name: "Konduktöörikylä" },
+    { id: "Tunnelinluoto", name: "Tunnelinluoto" },
+  ],
+  NO: [
+    { id: "ALL", name: "Alla stationer" },
+    { id: "Oslo", name: "Oslo" },
+    { id: "Bergen", name: "Bergen" },
+    { id: "Trondheim", name: "Trondheim" },
+    { id: "Stavanger", name: "Stavanger" },
+    { id: "Drammen", name: "Drammen" },
+    { id: "Kristiansand", name: "Kristiansand" },
+    { id: "Bodø", name: "Bodø" },
+    { id: "Narvik", name: "Narvik" },
+    { id: "Fauske", name: "Fauske" },
+    { id: "Tromsø", name: "Tromsø" },
+    { id: "Halden", name: "Halden" },
+    { id: "Moss", name: "Moss" },
+  ],
+  ALL: [
+    { id: "ALL", name: "Alla stationer" },
+  ]
+};
 
 const LocationSelector: React.FC<LocationSelectorProps> = ({
   location,
@@ -54,8 +110,11 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
   // Get current country
   const currentCountry = COUNTRIES[location] || COUNTRIES.ALL;
   
+  // Get station list based on selected country
+  const stationList = STATIONS[location] || STATIONS.ALL;
+  
   // Get current station
-  const currentStation = STATIONS.find(s => s.id === station) || STATIONS[0];
+  const currentStation = stationList.find(s => s.id === station) || stationList[0];
 
   // Filter countries based on search
   const filteredCountries = Object.values(COUNTRIES).filter(country =>
@@ -63,9 +122,17 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
   );
 
   // Filter stations based on search
-  const filteredStations = STATIONS.filter(s =>
+  const filteredStations = stationList.filter(s =>
     s.name.toLowerCase().includes(stationSearch.toLowerCase())
   );
+
+  // Handle country change - reset station to ALL when country changes
+  const handleCountryChange = (countryCode: string) => {
+    setLocation(countryCode);
+    setStation("ALL");
+    setCountrySearch("");
+    setOpenCountry(false);
+  };
 
   return (
     <div className="flex space-x-2">
@@ -110,11 +177,7 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
                       "flex items-center justify-between px-2 py-2 cursor-pointer rounded-md",
                       country.code === location ? "bg-accent" : "hover:bg-muted"
                     )}
-                    onClick={() => {
-                      setLocation(country.code);
-                      setCountrySearch("");
-                      setOpenCountry(false);
-                    }}
+                    onClick={() => handleCountryChange(country.code)}
                   >
                     <div className="flex items-center">
                       {showFlags && (

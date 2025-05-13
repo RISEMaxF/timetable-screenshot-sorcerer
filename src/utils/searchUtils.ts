@@ -7,13 +7,27 @@ export function filterTrains(
   filterStatus: "all" | "completed" | "pending",
   exactMatch: boolean,
   sortField: keyof Train | null,
-  sortDirection: "asc" | "desc"
+  sortDirection: "asc" | "desc",
+  selectedCountry: string = "ALL",
+  selectedStation: string = "ALL"
 ): Train[] {
-  // First, filter by search term
+  // First, filter by country if not ALL
   let filteredTrains = trains;
+  if (selectedCountry !== "ALL") {
+    filteredTrains = trains.filter((train) => train.country === selectedCountry);
+  }
+  
+  // Then filter by station if not ALL
+  if (selectedStation !== "ALL") {
+    filteredTrains = filteredTrains.filter((train) => 
+      train.from === selectedStation || train.to === selectedStation
+    );
+  }
+
+  // Filter by search term
   if (searchTerm) {
     const searchLower = searchTerm.toLowerCase();
-    filteredTrains = trains.filter((train) => {
+    filteredTrains = filteredTrains.filter((train) => {
       if (exactMatch) {
         return (
           train.id === searchTerm ||

@@ -122,6 +122,8 @@ const Index = () => {
                   sortField={sortField}
                   sortDirection={sortDirection}
                   onSort={handleSort}
+                  selectedCountry={location}
+                  selectedStation={station}
                 />
               </div>
             </div>
