@@ -6,7 +6,6 @@ import TrainTableHeader from "./table/TrainTableHeader";
 import TrainTableRow from "./table/TrainTableRow";
 import EmptyState from "./table/EmptyState";
 import TrainDetailDialog from "./dialog/TrainDetailDialog";
-import SearchBar from "./table/SearchBar";
 import TableControls from "./table/TableControls";
 import { filterTrains } from "@/utils/searchUtils";
 import TrainMap from "./map/TrainMap";
@@ -59,57 +58,39 @@ const TrainTimetable = ({ trains, onTrainUpdate, selectedTrains = [], onToggleSe
 
   return (
     <>
-      <div className="mb-6 p-3 bg-white rounded-lg shadow-sm border border-gray-100">
-        <div className="flex items-center justify-between gap-4">
-          <SearchBar 
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            exactMatch={exactMatch}
-            setExactMatch={setExactMatch}
-          />
-          
-          <TableControls 
-            onSort={toggleSort}
-            setFilterStatus={setFilterStatus}
-          />
+      <div className="lg:w-3/5 border rounded-md overflow-hidden shadow-sm">
+        <div className="overflow-x-auto">
+          <Table className="border-collapse w-full">
+            <TrainTableHeader 
+              onSort={toggleSort} 
+              sortField={sortField} 
+              sortDirection={sortDirection} 
+            />
+            <TableBody className="divide-y divide-gray-200">
+              {filteredTrains.map((train, index) => (
+                <TrainTableRow
+                  key={train.id}
+                  train={train}
+                  index={index}
+                  onRowClick={handleRowClick}
+                  isSelected={selectedTrain?.id === train.id}
+                  isMultiSelected={selectedTrains.includes(train.id)}
+                  onToggleSelection={onToggleSelection}
+                />
+              ))}
+              {filteredTrains.length === 0 && (
+                <EmptyState searchTerm={searchTerm} filterApplied={filterStatus !== "all"} />
+              )}
+            </TableBody>
+          </Table>
         </div>
       </div>
       
-      <div className="flex flex-col lg:flex-row gap-4">
-        <div className="lg:w-3/5 border rounded-md overflow-hidden shadow-sm">
-          <div className="overflow-x-auto">
-            <Table className="border-collapse w-full">
-              <TrainTableHeader 
-                onSort={toggleSort} 
-                sortField={sortField} 
-                sortDirection={sortDirection} 
-              />
-              <TableBody className="divide-y divide-gray-200">
-                {filteredTrains.map((train, index) => (
-                  <TrainTableRow
-                    key={train.id}
-                    train={train}
-                    index={index}
-                    onRowClick={handleRowClick}
-                    isSelected={selectedTrain?.id === train.id}
-                    isMultiSelected={selectedTrains.includes(train.id)}
-                    onToggleSelection={onToggleSelection}
-                  />
-                ))}
-                {filteredTrains.length === 0 && (
-                  <EmptyState searchTerm={searchTerm} filterApplied={filterStatus !== "all"} />
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </div>
-        
-        <div className="lg:w-2/5">
-          <TrainMap 
-            trains={trains} 
-            selectedTrainId={selectedTrain?.id}
-          />
-        </div>
+      <div className="lg:w-2/5">
+        <TrainMap 
+          trains={trains} 
+          selectedTrainId={selectedTrain?.id}
+        />
       </div>
 
       <TrainDetailDialog 

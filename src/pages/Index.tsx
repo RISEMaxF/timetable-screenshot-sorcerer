@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import TrainTimetable from "../components/TrainTimetable";
 import TimetableHeader from "../components/TimetableHeader";
@@ -15,10 +16,16 @@ const Index = () => {
   const [date, setDate] = useState(new Date());
   const [selectedTrains, setSelectedTrains] = useState<string[]>([]);
   
+  // Search and filter states
+  const [searchTerm, setSearchTerm] = useState("");
+  const [exactMatch, setExactMatch] = useState(false);
+  const [filterStatus, setFilterStatus] = useState<"all" | "completed" | "pending">("all");
+  const [sortField, setSortField] = useState<keyof Train | null>(null);
+  
   // Initialize keyboard shortcuts
   useHotkeys('ctrl+f', (e) => {
     e.preventDefault();
-    document.querySelector<HTMLInputElement>('input[placeholder="Sök tåg..."]')?.focus();
+    document.querySelector<HTMLInputElement>('input[placeholder="Sök tåg, spår, destination..."]')?.focus();
   }, { enableOnFormTags: ['INPUT'] });
   
   useHotkeys('escape', () => {
@@ -49,6 +56,10 @@ const Index = () => {
     );
   };
 
+  const handleSort = (field: string) => {
+    setSortField(field as keyof Train);
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -77,14 +88,25 @@ const Index = () => {
               selectedCount={selectedTrains.length}
               onBatchUpdate={handleBatchUpdate}
             />
-            <TimetableHeader location={location} date={date} />
-            <div>
-              <TrainTimetable 
-                trains={trains} 
-                onTrainUpdate={handleTrainUpdate} 
-                selectedTrains={selectedTrains}
-                onToggleSelection={toggleTrainSelection}
-              />
+            <TimetableHeader 
+              location={location} 
+              date={date} 
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              exactMatch={exactMatch}
+              setExactMatch={setExactMatch}
+              setFilterStatus={setFilterStatus}
+              onSort={handleSort}
+            />
+            <div className="p-4">
+              <div className="flex flex-col lg:flex-row gap-4">
+                <TrainTimetable 
+                  trains={trains} 
+                  onTrainUpdate={handleTrainUpdate} 
+                  selectedTrains={selectedTrains}
+                  onToggleSelection={toggleTrainSelection}
+                />
+              </div>
             </div>
           </div>
         </TooltipProvider>
