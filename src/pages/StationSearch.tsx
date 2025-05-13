@@ -52,7 +52,7 @@ const StationSearch = () => {
             <Link to="/">
               <Button variant="outline" className="flex items-center gap-2">
                 <TrainFront className="h-4 w-4" />
-                Tågtidtabell
+                Tåginfo
               </Button>
             </Link>
             <img 
@@ -64,7 +64,7 @@ const StationSearch = () => {
         </div>
         
         <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
-          <div className="flex flex-row items-center justify-between p-4">
+          <div className="flex flex-row items-center justify-between p-4 bg-white border-b border-gray-200 shadow-sm">
             <div className="flex items-center gap-3">
               <LocationSelector
                 location={stationLocation}
