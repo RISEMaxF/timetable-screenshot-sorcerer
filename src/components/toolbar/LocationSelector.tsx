@@ -66,44 +66,67 @@ const LocationSelector = ({
 
   const availableStations = getStationsForLocation();
 
-  const getLocationIcon = () => {
-    switch (location) {
-      case "SE": return <Flag className="h-4 w-4" />;
-      case "NO": return <Flag className="h-4 w-4" />;
-      case "DK": return <Flag className="h-4 w-4" />;
-      case "FI": return <Flag className="h-4 w-4" />;
-      case "DE": return <Flag className="h-4 w-4" />;
-      default: return <Globe className="h-4 w-4" />;
-    }
-  };
-
   return (
     <div className="flex items-center gap-3">
-      <Select value={location} onValueChange={setLocation}>
-        <SelectTrigger className="w-[140px]">
+      <Select value={location} onValueChange={(val) => { setLocation(val); setStation("ALL"); }}>
+        <SelectTrigger className="w-[180px] rounded-full bg-white border-gray-200 shadow-sm hover:bg-gray-50">
           <div className="flex items-center gap-2">
-            <Globe className="h-4 w-4" />
+            {location === "ALL" ? (
+              <Globe className="h-4 w-4 text-gray-500" />
+            ) : (
+              <Flag className="h-4 w-4 text-gray-500" />
+            )}
             <SelectValue placeholder="Välj land" />
           </div>
         </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="ALL">Alla länder</SelectItem>
-          <SelectItem value="SE">Sverige</SelectItem>
-          <SelectItem value="NO">Norge</SelectItem>
-          <SelectItem value="DK">Danmark</SelectItem>
-          <SelectItem value="FI">Finland</SelectItem>
-          <SelectItem value="DE">Tyskland</SelectItem>
+        <SelectContent className="bg-white border border-gray-100 shadow-lg rounded-lg">
+          <SelectItem value="ALL">
+            <div className="flex items-center gap-2">
+              <Globe className="h-3.5 w-3.5" />
+              <span>Alla länder</span>
+            </div>
+          </SelectItem>
+          <SelectItem value="SE">
+            <div className="flex items-center gap-2">
+              <Flag className="h-3.5 w-3.5" />
+              <span>Sverige</span>
+            </div>
+          </SelectItem>
+          <SelectItem value="NO">
+            <div className="flex items-center gap-2">
+              <Flag className="h-3.5 w-3.5" />
+              <span>Norge</span>
+            </div>
+          </SelectItem>
+          <SelectItem value="DK">
+            <div className="flex items-center gap-2">
+              <Flag className="h-3.5 w-3.5" />
+              <span>Danmark</span>
+            </div>
+          </SelectItem>
+          <SelectItem value="FI">
+            <div className="flex items-center gap-2">
+              <Flag className="h-3.5 w-3.5" />
+              <span>Finland</span>
+            </div>
+          </SelectItem>
+          <SelectItem value="DE">
+            <div className="flex items-center gap-2">
+              <Flag className="h-3.5 w-3.5" />
+              <span>Tyskland</span>
+            </div>
+          </SelectItem>
         </SelectContent>
       </Select>
 
       <Select value={station} onValueChange={setStation}>
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="w-[220px] rounded-full bg-white border-gray-200 shadow-sm hover:bg-gray-50">
           <div className="flex items-center gap-2">
-            <Building2 className="h-4 w-4" />
+            <Building2 className="h-4 w-4 text-gray-500" />
             <SelectValue placeholder="Välj station" />
           </div>
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="bg-white border border-gray-100 shadow-lg rounded-lg">
           {availableStations.map((station) => (
             <SelectItem key={station.value} value={station.value}>
               {station.label}
