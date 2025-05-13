@@ -1,16 +1,16 @@
+
 import { useState } from "react";
-import { format, addDays, subDays } from "date-fns";
+import { format, addDays } from "date-fns";
 import { sv } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
-export type DateRangeType = 'single' | 'range' | 'multi';
-export type DateDirection = 'future' | 'past' | 'both';
+import { CalendarIcon } from "lucide-react";
+import { DateRangeTypeSelector } from "./DateRangeTypeSelector";
+import { DaysCountSelector } from "./DaysCountSelector";
+import { DirectionSelector } from "./DirectionSelector";
+import { DatePickerCalendar } from "./DatePickerCalendar";
+import { DateRangeType, DateDirection, DateRange } from "./types";
+import { calculateDateRange, generateMultiDaySelection } from "./dateUtils";
 
 interface DateRangePickerProps {
   date: Date;
