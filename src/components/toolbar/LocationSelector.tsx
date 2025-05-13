@@ -99,7 +99,7 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
           <Command>
             <CommandInput placeholder="Sök land..." />
             <CommandEmpty>Inga träffar.</CommandEmpty>
-            <CommandGroup heading="Länder">
+            <CommandGroup className="overflow-hidden p-1 text-foreground" heading="Länder">
               {locations.map((country) => (
                 <CommandItem
                   key={country.code}
@@ -150,7 +150,7 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
           <Command>
             <CommandInput placeholder="Sök station..." />
             <CommandEmpty>Inga träffar.</CommandEmpty>
-            <CommandGroup heading="Stationer">
+            <CommandGroup className="overflow-hidden p-1 text-foreground" heading="Stationer">
               {stations.map((s) => (
                 <CommandItem
                   key={s.value}
