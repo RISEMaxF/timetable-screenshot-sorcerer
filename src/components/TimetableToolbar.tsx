@@ -93,26 +93,26 @@ export function TimetableToolbar({
             <CustomizeButton />
           </div>
           
-          {/* Filters row */}
-          <div className="flex flex-wrap gap-3 items-center">
-            <LocationSelector 
-              location={location}
-              setLocation={setLocation}
-              station={station}
-              setStation={setStation}
-              showFlags={true}
-            />
+          {/* Filters row with search button */}
+          <div className="flex flex-wrap justify-between items-center">
+            <div className="flex flex-wrap gap-3 items-center">
+              <LocationSelector 
+                location={location}
+                setLocation={setLocation}
+                station={station}
+                setStation={setStation}
+                showFlags={true}
+              />
+              
+              <DateRangePicker 
+                date={date}
+                setDate={setDate}
+                selectedDates={selectedDates}
+                setSelectedDates={setSelectedDates}
+              />
+            </div>
             
-            <DateRangePicker 
-              date={date}
-              setDate={setDate}
-              selectedDates={selectedDates}
-              setSelectedDates={setSelectedDates}
-            />
-          </div>
-          
-          {/* Search button in bottom right */}
-          <div className="flex justify-end mt-2">
+            {/* Search button moved to this row */}
             <Button 
               onClick={onSearch} 
               className="bg-blue-600 hover:bg-blue-700 text-white"
