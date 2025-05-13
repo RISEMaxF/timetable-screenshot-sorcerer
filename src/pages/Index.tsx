@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 const Index = () => {
   const [trains, setTrains] = useState(trainData);
   const [location, setLocation] = useState("ALL");
+  const [station, setStation] = useState("ALL");
   const [date, setDate] = useState(new Date());
   const [selectedTrains, setSelectedTrains] = useState<string[]>([]);
   
@@ -95,7 +96,9 @@ const Index = () => {
           <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
             <TimetableToolbar 
               location={location} 
-              setLocation={setLocation} 
+              setLocation={setLocation}
+              station={station}
+              setStation={setStation} 
               date={date} 
               setDate={setDate} 
               selectedCount={selectedTrains.length}

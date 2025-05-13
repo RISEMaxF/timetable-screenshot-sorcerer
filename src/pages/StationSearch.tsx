@@ -8,12 +8,14 @@ import { DateRangePicker } from "@/components/datepicker/DateRangePicker";
 
 const StationSearch = () => {
   const [stationLocation, setStationLocation] = useState("ALL");
+  const [selectedStation, setSelectedStation] = useState("ALL");
   const [searchDate, setSearchDate] = useState(new Date());
   const [selectedDates, setSelectedDates] = useState<Date[]>([new Date()]);
   
   // Function to handle search
   const handleSearch = () => {
     console.log("Searching for trains at location:", stationLocation);
+    console.log("Selected station:", selectedStation);
     console.log("Date:", searchDate);
   };
 
@@ -45,7 +47,9 @@ const StationSearch = () => {
             <div className="flex items-center gap-3">
               <LocationSelector
                 location={stationLocation}
-                setLocation={setStationLocation} 
+                setLocation={setStationLocation}
+                station={selectedStation}
+                setStation={setSelectedStation} 
                 showFlags={true}
               />
               
@@ -67,8 +71,8 @@ const StationSearch = () => {
           
           <div className="p-8 text-center text-gray-500">
             <Building2 className="mx-auto h-12 w-12 text-gray-300 mb-4" />
-            <h3 className="text-lg font-medium mb-2">Välj land och datum</h3>
-            <p>Välj ett land och datum för att visa avgångar</p>
+            <h3 className="text-lg font-medium mb-2">Välj land och station</h3>
+            <p>Välj ett land, station och datum för att visa avgångar</p>
           </div>
         </div>
       </div>

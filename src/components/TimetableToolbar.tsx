@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Train } from "@/types/train";
 import BatchActionButtons from "./toolbar/BatchActionButtons";
@@ -10,6 +11,8 @@ import CustomizeButton from "./toolbar/CustomizeButton";
 interface TimetableToolbarProps {
   location: string;
   setLocation: (location: string) => void;
+  station?: string;
+  setStation?: (station: string) => void;
   date: Date;
   setDate: (date: Date) => void;
   selectedCount?: number;
@@ -22,7 +25,9 @@ interface TimetableToolbarProps {
 
 export function TimetableToolbar({ 
   location, 
-  setLocation, 
+  setLocation,
+  station = "ALL",
+  setStation = () => {},
   date, 
   setDate,
   selectedCount = 0,
@@ -87,6 +92,8 @@ export function TimetableToolbar({
             <LocationSelector 
               location={location}
               setLocation={setLocation}
+              station={station}
+              setStation={setStation}
               showFlags={true}
             />
             
