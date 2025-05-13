@@ -1,13 +1,10 @@
 
 import { useState } from "react";
-import { TrainFront, Building2 } from "lucide-react";
-import { format } from "date-fns";
-import { sv } from "date-fns/locale";
+import { Link } from "react-router-dom";
+import { Building2, TrainFront } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { CalendarIcon } from "lucide-react";
 import LocationSelector from "@/components/toolbar/LocationSelector";
+import { DateRangePicker } from "@/components/datepicker/DateRangePicker";
 
 const StationSearch = () => {
   const [stationLocation, setStationLocation] = useState("ALL");
@@ -23,6 +20,12 @@ const StationSearch = () => {
             Stationsök
           </h1>
           <div className="flex items-center gap-4">
+            <Link to="/">
+              <Button variant="outline" className="flex items-center gap-2">
+                <TrainFront className="h-4 w-4" />
+                Tågtidtabell
+              </Button>
+            </Link>
             <img 
               src="https://www.ri.se/themes/rise/dist/images/rise-logo-black.svg" 
               alt="RISE Logo" 
@@ -42,24 +45,10 @@ const StationSearch = () => {
                 showFlags={true}
               />
               
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" className="h-10 px-3 rounded-full bg-white border-gray-200 shadow-sm hover:bg-gray-50">
-                    <CalendarIcon className="h-4 w-4 mr-2 text-gray-500" />
-                    {format(searchDate, "PPP", { locale: sv })}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 bg-white border border-gray-100 shadow-lg rounded-lg">
-                  <Calendar
-                    mode="single"
-                    selected={searchDate}
-                    onSelect={(newDate) => newDate && setSearchDate(newDate)}
-                    initialFocus
-                    className="p-3 pointer-events-auto"
-                    locale={sv}
-                  />
-                </PopoverContent>
-              </Popover>
+              <DateRangePicker 
+                date={searchDate}
+                setDate={setSearchDate}
+              />
             </div>
             
             <Button className="bg-blue-600 hover:bg-blue-700">
