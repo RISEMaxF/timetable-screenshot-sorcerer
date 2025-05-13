@@ -66,7 +66,12 @@ export function TimetableToolbar({
 
   return (
     <div className="flex flex-col bg-gray-50 border-b border-gray-200">
-      <TimetableHeader />
+      <TimetableHeader 
+        location={location}
+        setLocation={setLocation}
+        date={date}
+        setDate={setDate}
+      />
       
       <div className="flex flex-col space-y-4 p-4">
         {/* Search row */}
@@ -117,4 +122,4 @@ export function TimetableToolbar({
       />
     </div>
   );
-}
+};
