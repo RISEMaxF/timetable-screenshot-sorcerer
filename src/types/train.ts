@@ -9,7 +9,7 @@ export interface Train {
   updated?: string;
   highlighted?: boolean;
   completed?: boolean;
-  country?: string;
+  country: string; // Changed from optional to required
   
   // Adding missing properties that caused the type errors
   arrivalTime?: string;

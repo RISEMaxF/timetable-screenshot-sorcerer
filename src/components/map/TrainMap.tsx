@@ -23,19 +23,17 @@ const TrainMap: React.FC<TrainMapProps> = ({ trains, selectedTrainId }) => {
   useEffect(() => {
     if (!mapRef.current) return;
 
-    // Sample train coordinates in Sweden (major cities)
-    const trainLocations = {
-      // Stockholm
-      "90817": { from: [18.0686, 59.3293], to: [16.5528, 59.6173] }, 
-      // Göteborg-Malmö
-      "99402": { from: [11.9746, 57.7089], to: [13.0359, 55.6050] },
-      // Uppsala-Stockholm
-      "90703": { from: [17.6389, 59.8586], to: [18.0686, 59.3293] },
-      // Stockholm-Linköping
-      "90785": { from: [18.0686, 59.3293], to: [15.6195, 58.4158] },
-      // Sundsvall-Umeå
-      "90620": { from: [17.3063, 62.3908], to: [20.2597, 63.8258] },
-      // Default for other trains
+    // Country-specific coordinates for trains
+    const trainCoordinates: Record<string, {from: number[], to: number[]}> = {
+      // Sweden (around Stockholm, Gothenburg, Malmö)
+      "SE": { from: [18.0686, 59.3293], to: [12.9814, 57.7089] },
+      // Denmark (around Copenhagen, Aarhus)
+      "DK": { from: [12.5683, 55.6761], to: [10.2039, 56.1629] },
+      // Finland (around Helsinki, Tampere)
+      "FI": { from: [24.9384, 60.1699], to: [23.7610, 61.4978] },
+      // Norway (around Oslo, Bergen)
+      "NO": { from: [10.7522, 59.9139], to: [5.3221, 60.3913] },
+      // Default if no country is specified
       "default": { from: [15.2066, 59.2747], to: [16.1924, 58.5877] }
     };
 
@@ -44,13 +42,21 @@ const TrainMap: React.FC<TrainMapProps> = ({ trains, selectedTrainId }) => {
     
     // Add routes for each train
     trains.forEach(train => {
-      const locations = trainLocations[train.id as keyof typeof trainLocations] || trainLocations.default;
+      if (!train.country) return;
+      
+      const coordinates = trainCoordinates[train.country] || trainCoordinates.default;
+      
+      // Add small random offsets to make points slightly different for each train
+      const fromLon = coordinates.from[0] + (Math.random() - 0.5) * 0.5;
+      const fromLat = coordinates.from[1] + (Math.random() - 0.5) * 0.5;
+      const toLon = coordinates.to[0] + (Math.random() - 0.5) * 0.5;
+      const toLat = coordinates.to[1] + (Math.random() - 0.5) * 0.5;
       
       // Create route as LineString feature
       const routeFeature = new Feature({
         geometry: new LineString([
-          fromLonLat(locations.from),
-          fromLonLat(locations.to)
+          fromLonLat([fromLon, fromLat]),
+          fromLonLat([toLon, toLat])
         ]),
         id: train.id,
         name: `Train ${train.id}`
@@ -58,16 +64,16 @@ const TrainMap: React.FC<TrainMapProps> = ({ trains, selectedTrainId }) => {
 
       // Create start point
       const startFeature = new Feature({
-        geometry: new Point(fromLonLat(locations.from)),
+        geometry: new Point(fromLonLat([fromLon, fromLat])),
         id: `${train.id}-start`,
-        name: `Start of train ${train.id}`
+        name: `Start of train ${train.id} (${train.from})`
       });
       
       // Create end point
       const endFeature = new Feature({
-        geometry: new Point(fromLonLat(locations.to)),
+        geometry: new Point(fromLonLat([toLon, toLat])),
         id: `${train.id}-end`,
-        name: `End of train ${train.id}`
+        name: `End of train ${train.id} (${train.to})`
       });
 
       vectorSource.addFeature(routeFeature);
@@ -118,7 +124,7 @@ const TrainMap: React.FC<TrainMapProps> = ({ trains, selectedTrainId }) => {
         vectorLayer
       ],
       view: new View({
-        center: fromLonLat([15.5, 60.0]), // Center of Sweden approximately
+        center: fromLonLat([15.5, 60.0]), // Center on Nordic countries
         zoom: 5
       })
     });
