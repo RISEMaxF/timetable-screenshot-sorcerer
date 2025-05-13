@@ -150,7 +150,7 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
           <Command>
             <CommandInput placeholder="Sök station..." />
             <CommandEmpty>Inga träffar.</CommandEmpty>
-            <CommandGroup>
+            <CommandGroup heading="Stationer">
               {stations.map((s) => (
                 <CommandItem
                   key={s.value}
