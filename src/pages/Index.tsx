@@ -79,7 +79,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="container mx-auto px-2 sm:px-4 lg:px-6 xl:px-8 py-6 max-w-full">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-bold text-gray-800 flex items-center">
             <TrainFront className="h-8 w-8 mr-2 text-blue-600" />
@@ -120,23 +120,21 @@ const Index = () => {
               onSearch={handleSearch}
             />
             
-            <div className="p-4">
-              <div className="flex flex-col lg:flex-row gap-4">
-                <TrainTimetable 
-                  trains={trains} 
-                  onTrainUpdate={handleTrainUpdate} 
-                  selectedTrains={selectedTrains}
-                  onToggleSelection={toggleTrainSelection}
-                  searchTerm={searchTerm}
-                  exactMatch={exactMatch}
-                  filterStatus={filterStatus}
-                  sortField={sortField}
-                  sortDirection={sortDirection}
-                  onSort={handleSort}
-                  selectedCountry={location}
-                  selectedStation={station}
-                />
-              </div>
+            <div className="p-2 sm:p-4">
+              <TrainTimetable 
+                trains={trains} 
+                onTrainUpdate={handleTrainUpdate} 
+                selectedTrains={selectedTrains}
+                onToggleSelection={toggleTrainSelection}
+                searchTerm={searchTerm}
+                exactMatch={exactMatch}
+                filterStatus={filterStatus}
+                sortField={sortField}
+                sortDirection={sortDirection}
+                onSort={handleSort}
+                selectedCountry={location}
+                selectedStation={station}
+              />
             </div>
           </div>
         </TooltipProvider>
