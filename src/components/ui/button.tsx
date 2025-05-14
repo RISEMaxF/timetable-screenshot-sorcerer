@@ -19,7 +19,8 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        search: "bg-blue-600 hover:bg-blue-700 text-white"
+        search: "bg-blue-600 hover:bg-blue-700 text-white",
+        icon: "h-10 w-10 p-0" // Added an icon variant for icon-only buttons
       },
       size: {
         default: "h-10 px-4 py-2",

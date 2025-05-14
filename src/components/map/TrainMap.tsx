@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Map, View } from 'ol';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import { OSM, Vector as VectorSource } from 'ol/source';
@@ -7,15 +7,20 @@ import 'ol/ol.css';
 import { Train } from '@/types/train';
 import MapLegend from './MapLegend';
 import { getTrainCoordinates, createTrainFeatures, getFeatureStyle } from './mapUtils';
+import { Maximize2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import MapTheaterMode from './MapTheaterMode';
 
 interface TrainMapProps {
   trains: Train[];
   selectedTrainId?: string;
+  height?: string;
 }
 
-const TrainMap: React.FC<TrainMapProps> = ({ trains, selectedTrainId }) => {
+const TrainMap: React.FC<TrainMapProps> = ({ trains, selectedTrainId, height = '600px' }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<Map | null>(null);
+  const [isTheaterMode, setIsTheaterMode] = useState(false);
   
   useEffect(() => {
     if (!mapRef.current) return;
@@ -74,10 +79,36 @@ const TrainMap: React.FC<TrainMapProps> = ({ trains, selectedTrainId }) => {
     };
   }, [trains, selectedTrainId]);
 
+  const toggleTheaterMode = () => {
+    setIsTheaterMode(prev => !prev);
+  };
+
   return (
     <div className="flex flex-col">
-      <div ref={mapRef} className="h-[600px] w-full rounded-lg border border-gray-200 shadow-inner" />
-      <MapLegend selectedTrainId={selectedTrainId} />
+      <div className="relative">
+        <div 
+          ref={mapRef} 
+          className="w-full rounded-lg border border-gray-200 shadow-inner" 
+          style={{ height }}
+        />
+        <Button 
+          variant="outline"
+          className="absolute top-3 right-3 bg-white hover:bg-gray-100 z-10 rounded-full p-2 shadow-md"
+          onClick={toggleTheaterMode}
+          title="Förstora kartan"
+        >
+          <Maximize2 className="h-4 w-4" />
+        </Button>
+      </div>
+      
+      {!isTheaterMode && <MapLegend selectedTrainId={selectedTrainId} />}
+      
+      <MapTheaterMode 
+        isOpen={isTheaterMode}
+        onClose={() => setIsTheaterMode(false)}
+        trains={trains}
+        selectedTrainId={selectedTrainId}
+      />
     </div>
   );
 };

@@ -103,7 +103,7 @@ const SearchInput = ({
         />
       </div>
       
-      {/* Columns selector dropdown */}
+      {/* Columns selector dropdown - ONLY SHOWS COLUMN OPTIONS NOW */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-10 px-3 border-l border-gray-200 text-gray-700 rounded-none hover:bg-gray-50">
@@ -132,48 +132,6 @@ const SearchInput = ({
                   {column.label}
                 </DropdownMenuCheckboxItem>
               ))}
-            </div>
-          </div>
-          
-          <DropdownMenuSeparator />
-          
-          <div className="p-2 border-b border-gray-100">
-            <h3 className="text-xs font-medium text-gray-500 mb-2">STATUS</h3>
-            <div className="space-y-1">
-              <DropdownMenuItem className="cursor-pointer hover:bg-gray-50 rounded-md"
-                onClick={() => setFilterStatus("all")}>
-                Alla tåg
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer hover:bg-gray-50 rounded-md"
-                onClick={() => setFilterStatus("completed")}>
-                Klara
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer hover:bg-gray-50 rounded-md"
-                onClick={() => setFilterStatus("pending")}>
-                Väntande
-              </DropdownMenuItem>
-            </div>
-          </div>
-          
-          <div className="p-2 border-b border-gray-100">
-            <h3 className="text-xs font-medium text-gray-500 mb-2">SORTERA EFTER</h3>
-            <div className="space-y-1">
-              <DropdownMenuItem className="cursor-pointer hover:bg-gray-50 rounded-md"
-                onClick={() => onSort("id")}>
-                Tåg-ID
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer hover:bg-gray-50 rounded-md"
-                onClick={() => onSort("arrivalTime")}>
-                Ankomsttid
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer hover:bg-gray-50 rounded-md"
-                onClick={() => onSort("track")}>
-                Spår
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer hover:bg-gray-50 rounded-md"
-                onClick={() => onSort("completed")}>
-                Status
-              </DropdownMenuItem>
             </div>
           </div>
           
@@ -238,20 +196,6 @@ const SearchInput = ({
                 onClick={() => onSort("completed")}>
                 Status
               </DropdownMenuItem>
-            </div>
-          </div>
-          
-          <div className="p-2">
-            <h3 className="text-xs font-medium text-gray-500 mb-2">SÖKALTERNATIV</h3>
-            <div className="flex items-center px-2 py-1">
-              <input 
-                type="checkbox" 
-                id="exactMatch" 
-                checked={exactMatch}
-                onChange={() => setExactMatch(!exactMatch)}
-                className="mr-2 h-4 w-4 rounded text-blue-500 focus:ring-blue-500"
-              />
-              <label htmlFor="exactMatch" className="text-sm text-gray-700">Exakt matchning</label>
             </div>
           </div>
         </DropdownMenuContent>
