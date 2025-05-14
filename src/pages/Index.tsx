@@ -24,6 +24,7 @@ const Index = () => {
   const [filterStatus, setFilterStatus] = useState<"all" | "completed" | "pending">("all");
   const [sortField, setSortField] = useState<keyof Train | null>(null);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  const [searchableColumns, setSearchableColumns] = useState<string[]>(["all"]);
   
   // Get the actual train objects that are selected
   const selectedTrainObjects = trains.filter(train => selectedTrains.includes(train.id));
@@ -118,6 +119,9 @@ const Index = () => {
               exactMatch={exactMatch}
               setExactMatch={setExactMatch}
               onSearch={handleSearch}
+              searchableColumns={searchableColumns}
+              setSearchableColumns={setSearchableColumns}
+              setFilterStatus={setFilterStatus}
             />
             
             <div className="p-2 sm:p-4">
@@ -134,6 +138,7 @@ const Index = () => {
                 onSort={handleSort}
                 selectedCountry={location}
                 selectedStation={station}
+                searchableColumns={searchableColumns}
               />
             </div>
           </div>

@@ -25,6 +25,7 @@ interface TrainTimetableProps {
   onSort?: (field: keyof Train) => void;
   selectedCountry?: string;
   selectedStation?: string;
+  searchableColumns?: string[];
 }
 
 const TrainTimetable = ({ 
@@ -39,7 +40,8 @@ const TrainTimetable = ({
   sortDirection = "asc",
   onSort = () => {},
   selectedCountry = "ALL",
-  selectedStation = "ALL"
+  selectedStation = "ALL",
+  searchableColumns = ["all"]
 }: TrainTimetableProps) => {
   // State for detail dialog
   const [selectedTrain, setSelectedTrain] = useState<Train | null>(null);
@@ -68,9 +70,10 @@ const TrainTimetable = ({
       sortField, 
       sortDirection, 
       selectedCountry, 
-      selectedStation
+      selectedStation,
+      searchableColumns
     ),
-    [trains, searchTerm, filterStatus, exactMatch, sortField, sortDirection, selectedCountry, selectedStation]
+    [trains, searchTerm, filterStatus, exactMatch, sortField, sortDirection, selectedCountry, selectedStation, searchableColumns]
   );
 
   return (

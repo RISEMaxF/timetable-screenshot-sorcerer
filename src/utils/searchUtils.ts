@@ -9,7 +9,8 @@ export function filterTrains(
   sortField: keyof Train | null,
   sortDirection: "asc" | "desc",
   selectedCountry: string = "ALL",
-  selectedStation: string = "ALL"
+  selectedStation: string = "ALL",
+  searchableColumns: string[] = ["all"]
 ): Train[] {
   // First, filter by country if not ALL
   let filteredTrains = trains;
@@ -28,21 +29,37 @@ export function filterTrains(
   if (searchTerm) {
     const searchLower = searchTerm.toLowerCase();
     filteredTrains = filteredTrains.filter((train) => {
-      if (exactMatch) {
-        return (
-          train.id === searchTerm ||
-          train.announcedTrainNumber === searchTerm ||
-          train.operator === searchTerm
-        );
-      } else {
-        return (
-          train.id.toLowerCase().includes(searchLower) ||
-          (train.announcedTrainNumber || "").toLowerCase().includes(searchLower) ||
-          train.operator.toLowerCase().includes(searchLower) ||
-          (train.from || "").toLowerCase().includes(searchLower) ||
-          (train.to || "").toLowerCase().includes(searchLower)
-        );
-      }
+      // If we're searching in all columns or no columns are selected
+      if (searchableColumns.includes("all") || searchableColumns.length === 0) {
+        if (exactMatch) {
+          return (
+            train.id === searchTerm ||
+            train.announcedTrainNumber === searchTerm ||
+            train.operator === searchTerm
+          );
+        } else {
+          return (
+            train.id.toLowerCase().includes(searchLower) ||
+            (train.announcedTrainNumber || "").toLowerCase().includes(searchLower) ||
+            train.operator.toLowerCase().includes(searchLower) ||
+            (train.from || "").toLowerCase().includes(searchLower) ||
+            (train.to || "").toLowerCase().includes(searchLower) ||
+            (train.track || "").toLowerCase().includes(searchLower)
+          );
+        }
+      } 
+      
+      // If specific columns are selected
+      return searchableColumns.some(column => {
+        const value = train[column as keyof Train];
+        if (value === null || value === undefined) return false;
+        
+        if (exactMatch) {
+          return value.toString() === searchTerm;
+        } else {
+          return value.toString().toLowerCase().includes(searchLower);
+        }
+      });
     });
   }
 

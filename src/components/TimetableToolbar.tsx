@@ -25,6 +25,9 @@ interface TimetableToolbarProps {
   exactMatch?: boolean;
   setExactMatch?: (value: boolean) => void;
   onSearch?: () => void;
+  searchableColumns?: string[];
+  setSearchableColumns?: (columns: string[]) => void;
+  setFilterStatus?: (status: "all" | "completed" | "pending") => void;
 }
 
 export function TimetableToolbar({ 
@@ -35,13 +38,16 @@ export function TimetableToolbar({
   date, 
   setDate,
   selectedCount = 0,
-  selectedTrains = [], // Added default value
+  selectedTrains = [], 
   onBatchUpdate,
   searchTerm = "",
   setSearchTerm = () => {},
   exactMatch = false,
   setExactMatch = () => {},
-  onSearch = () => {}
+  onSearch = () => {},
+  searchableColumns = ["all"],
+  setSearchableColumns = () => {},
+  setFilterStatus = () => {}
 }: TimetableToolbarProps) {
   const [openDialog, setOpenDialog] = useState("");
   const [selectedDates, setSelectedDates] = useState<Date[]>([date]);
@@ -89,6 +95,9 @@ export function TimetableToolbar({
               setSearchTerm={setSearchTerm}
               exactMatch={exactMatch}
               setExactMatch={setExactMatch}
+              searchableColumns={searchableColumns}
+              setSearchableColumns={setSearchableColumns}
+              setFilterStatus={setFilterStatus}
             />
             <CustomizeButton />
           </div>
