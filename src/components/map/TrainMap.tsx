@@ -10,6 +10,7 @@ import { getTrainCoordinates, createTrainFeatures, getFeatureStyle } from './map
 import { Maximize2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import MapTheaterMode from './MapTheaterMode';
+import { fromLonLat } from 'ol/proj';
 
 interface TrainMapProps {
   trains: Train[];
@@ -44,6 +45,9 @@ const TrainMap: React.FC<TrainMapProps> = ({ trains, selectedTrainId, height = '
       style: getFeatureStyle
     });
 
+    // Nordic countries center coordinates (approximate: Sweden, Norway, Finland, Denmark)
+    const nordicCenter = fromLonLat([15.0, 62.0]);
+
     // Create map with OSM layer and vector layer
     const map = new Map({
       target: mapRef.current,
@@ -54,7 +58,7 @@ const TrainMap: React.FC<TrainMapProps> = ({ trains, selectedTrainId, height = '
         vectorLayer
       ],
       view: new View({
-        center: [15.5, 60.0], // Center on Nordic countries in WebMercator
+        center: nordicCenter,
         zoom: 5,
         projection: 'EPSG:3857'
       })

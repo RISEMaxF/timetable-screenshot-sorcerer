@@ -1,10 +1,15 @@
 
-import React from 'react';
-import { X } from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
+import { X, Map as MapIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import TrainMap from './TrainMap';
 import { Train } from '@/types/train';
 import MapLegend from './MapLegend';
+import { Map, View } from 'ol';
+import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
+import { OSM, Vector as VectorSource } from 'ol/source';
+import { fromLonLat } from 'ol/proj';
+import 'ol/ol.css';
+import { getTrainCoordinates, createTrainFeatures, getFeatureStyle } from './mapUtils';
 
 interface MapTheaterModeProps {
   isOpen: boolean;
@@ -19,13 +24,79 @@ const MapTheaterMode: React.FC<MapTheaterModeProps> = ({
   trains, 
   selectedTrainId 
 }) => {
+  const mapRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<Map | null>(null);
+  
+  useEffect(() => {
+    if (!isOpen || !mapRef.current) return;
+    
+    // Create vector source for train routes
+    const vectorSource = new VectorSource();
+    
+    // Add routes only for the selected train
+    if (selectedTrainId) {
+      // Find the selected train
+      const selectedTrain = trains.find(train => train.id === selectedTrainId);
+      const trainCoordinates = getTrainCoordinates();
+      
+      // Create features for the selected train
+      createTrainFeatures(selectedTrain, trainCoordinates, vectorSource);
+    }
+
+    // Create vector layer for train routes
+    const vectorLayer = new VectorLayer({
+      source: vectorSource,
+      style: getFeatureStyle
+    });
+
+    // Nordic countries center coordinates (approximate: Sweden, Norway, Finland, Denmark)
+    const nordicCenter = fromLonLat([15.0, 62.0]);
+
+    // Create map with OSM layer and vector layer
+    const map = new Map({
+      target: mapRef.current,
+      layers: [
+        new TileLayer({
+          source: new OSM()
+        }),
+        vectorLayer
+      ],
+      view: new View({
+        center: nordicCenter,
+        zoom: 5,
+        projection: 'EPSG:3857'
+      })
+    });
+
+    // Fit view to the route if a train is selected
+    if (selectedTrainId && vectorSource.getFeatures().length > 0) {
+      const extent = vectorSource.getExtent();
+      map.getView().fit(extent, {
+        padding: [50, 50, 50, 50],
+        maxZoom: 10
+      });
+    }
+
+    mapInstanceRef.current = map;
+
+    return () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.setTarget(undefined);
+        mapInstanceRef.current = null;
+      }
+    };
+  }, [isOpen, trains, selectedTrainId]);
+  
   if (!isOpen) return null;
   
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center p-4 md:p-8">
       <div className="relative w-full h-full max-w-7xl max-h-[90vh] bg-white rounded-lg shadow-xl flex flex-col">
         <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
-          <h2 className="text-xl font-bold">Tågkarta</h2>
+          <h2 className="text-xl font-bold flex items-center gap-2">
+            <MapIcon className="h-5 w-5 text-blue-600" />
+            Tågkarta
+          </h2>
           <Button 
             variant="ghost" 
             size="icon" 
@@ -37,10 +108,9 @@ const MapTheaterMode: React.FC<MapTheaterModeProps> = ({
         </div>
         
         <div className="flex-1 p-4 overflow-hidden">
-          <TrainMap 
-            trains={trains} 
-            selectedTrainId={selectedTrainId} 
-            height="100%" 
+          <div 
+            ref={mapRef} 
+            className="w-full h-full rounded-lg border border-gray-200 shadow-inner" 
           />
         </div>
         
