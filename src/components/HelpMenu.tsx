@@ -29,7 +29,7 @@ const HelpMenu = () => {
       </PopoverTrigger>
       <PopoverContent className="w-80 max-h-[500px] overflow-y-auto p-4" align="end">
         <div className="space-y-4">
-          <h3 className="font-semibold text-lg mb-2">Plankan - Hjälpguide</h3>
+          <h3 className="font-semibold text-lg mb-2">Tåginfo - Hjälpguide</h3>
           
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="colors">
@@ -72,6 +72,12 @@ const HelpMenu = () => {
                   </li>
                   <li className="pb-1 border-b">
                     <strong>Operatör:</strong> Företag som driver tågtjänsten
+                  </li>
+                  <li className="pb-1 border-b">
+                    <strong>Från:</strong> Avgångsstation för tåget
+                  </li>
+                  <li className="pb-1 border-b">
+                    <strong>Till:</strong> Destination för tåget
                   </li>
                   <li className="pb-1 border-b">
                     <strong>Ankomst:</strong> Schemalagd ankomsttid till stationen
@@ -120,7 +126,15 @@ const HelpMenu = () => {
                   <ul className="list-disc pl-5 space-y-1">
                     <li>Som standard hittar sökningen delvis matchningar (t.ex. "SJ" matchar "JSA")</li>
                     <li>Aktivera kryssrutan "Exakt matchning" för striktare sökresultat</li>
-                    <li>Sökning fungerar över tåg-ID, operatör, spår och anteckningar</li>
+                    <li>Välj specifika kolumner att söka i via kolumnsväljaren</li>
+                    <li>Sökningen fungerar över tåg-ID, operatör, spår och anteckningar</li>
+                  </ul>
+                  
+                  <h4 className="font-medium mt-3">Stationssök</h4>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>Byt till "Stationsök" för att söka tåg baserat på stationer</li>
+                    <li>Sök på enskilda stationer eller mellan två stationer</li>
+                    <li>Filtrera sökresultat efter avgång, ankomst eller båda</li>
                   </ul>
                   
                   <h4 className="font-medium mt-3">Flervalsläge</h4>
@@ -134,6 +148,23 @@ const HelpMenu = () => {
                   <ul className="list-disc pl-5 space-y-1">
                     <li><kbd className="px-1 py-0.5 bg-gray-100 rounded border">Ctrl+F</kbd> - Fokusera sökrutan</li>
                     <li><kbd className="px-1 py-0.5 bg-gray-100 rounded border">Esc</kbd> - Rensa markering</li>
+                  </ul>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="map">
+              <AccordionTrigger className="text-sm font-medium">
+                Kartvy
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="space-y-2 text-sm">
+                  <p>Via tågdetaljvyn kan du se tågets position på en interaktiv karta. Kartan centreras automatiskt över Norden.</p>
+                  
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>Zooma in/ut med mushjulet eller knapparna på kartan</li>
+                    <li>Använd teaterläge för att se kartan i helskärm</li>
+                    <li>Tågikoner på kartan visar positioner för aktiva tåg</li>
                   </ul>
                 </div>
               </AccordionContent>
