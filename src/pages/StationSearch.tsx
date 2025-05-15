@@ -1,8 +1,9 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Building2, TrainFront } from "lucide-react";
+import { Building2, TrainFront, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import LocationSelector from "@/components/toolbar/LocationSelector";
 import { DateRangePicker } from "@/components/datepicker/DateRangePicker";
 import { trainData } from "@/data/trainData";
@@ -10,31 +11,67 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { filterTrains } from "@/utils/searchUtils";
 import { cn } from "@/lib/utils";
 
+type SearchMode = "station" | "route";
+
 const StationSearch = () => {
+  const [searchMode, setSearchMode] = useState<SearchMode>("station");
   const [stationLocation, setStationLocation] = useState("ALL");
   const [selectedStation, setSelectedStation] = useState("ALL");
+  const [fromLocation, setFromLocation] = useState("ALL");
+  const [selectedFromStation, setSelectedFromStation] = useState("ALL");
+  const [toLocation, setToLocation] = useState("ALL");
+  const [selectedToStation, setSelectedToStation] = useState("ALL");
   const [searchDate, setSearchDate] = useState(new Date());
   const [selectedDates, setSelectedDates] = useState<Date[]>([new Date()]);
   const [searchResults, setSearchResults] = useState(trainData);
   const [hasSearched, setHasSearched] = useState(false);
+  const [routeSearchType, setRouteSearchType] = useState<"from" | "to" | "both">("both");
   
   // Function to handle search
   const handleSearch = () => {
-    console.log("Searching for trains at location:", stationLocation);
-    console.log("Selected station:", selectedStation);
-    console.log("Date:", searchDate);
+    let filteredTrains = [];
     
-    // Filter trains based on selected country and station
-    const filteredTrains = filterTrains(
-      trainData,
-      "",
-      "all",
-      false,
-      null,
-      "asc",
-      stationLocation,
-      selectedStation
-    );
+    if (searchMode === "station") {
+      console.log("Searching for trains at location:", stationLocation);
+      console.log("Selected station:", selectedStation);
+      
+      // Filter trains based on selected country and station
+      filteredTrains = filterTrains(
+        trainData,
+        "",
+        "all",
+        false,
+        null,
+        "asc",
+        stationLocation,
+        selectedStation
+      );
+    } else {
+      // Route search mode
+      console.log("Searching for route from:", selectedFromStation, "to:", selectedToStation);
+      console.log("Route search type:", routeSearchType);
+      
+      // Filter trains based on route
+      if (routeSearchType === "from" && selectedFromStation !== "ALL") {
+        filteredTrains = trainData.filter(train => train.from === selectedFromStation);
+      } else if (routeSearchType === "to" && selectedToStation !== "ALL") {
+        filteredTrains = trainData.filter(train => train.to === selectedToStation);
+      } else if (routeSearchType === "both" && selectedFromStation !== "ALL" && selectedToStation !== "ALL") {
+        filteredTrains = trainData.filter(train => 
+          train.from === selectedFromStation && train.to === selectedToStation
+        );
+      } else {
+        // If no valid criteria, return all trains
+        filteredTrains = trainData;
+      }
+      
+      // Further filter by country if needed
+      if (fromLocation !== "ALL" && routeSearchType !== "to") {
+        filteredTrains = filteredTrains.filter(train => train.country === fromLocation);
+      } else if (toLocation !== "ALL" && routeSearchType !== "from") {
+        filteredTrains = filteredTrains.filter(train => train.country === toLocation);
+      }
+    }
     
     setSearchResults(filteredTrains);
     setHasSearched(true);
@@ -64,37 +101,133 @@ const StationSearch = () => {
         </div>
         
         <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
-          <div className="flex flex-row items-center justify-between p-4 bg-white border-b border-gray-200 shadow-sm">
-            <div className="flex items-center gap-3">
-              <LocationSelector
-                location={stationLocation}
-                setLocation={setStationLocation}
-                station={selectedStation}
-                setStation={setSelectedStation} 
-                showFlags={true}
-              />
-              
-              <DateRangePicker 
-                date={searchDate}
-                setDate={setSearchDate}
-                selectedDates={selectedDates}
-                setSelectedDates={setSelectedDates}
-              />
+          <div className="p-4 bg-white border-b border-gray-200">
+            <div className="flex justify-center space-x-6 mb-4">
+              <Button 
+                variant={searchMode === "station" ? "default" : "outline"}
+                onClick={() => setSearchMode("station")}
+                className={searchMode === "station" ? "bg-blue-600 hover:bg-blue-700" : ""}
+              >
+                Sök efter station
+              </Button>
+              <Button 
+                variant={searchMode === "route" ? "default" : "outline"}
+                onClick={() => setSearchMode("route")}
+                className={searchMode === "route" ? "bg-blue-600 hover:bg-blue-700" : ""}
+              >
+                Sök mellan stationer
+              </Button>
             </div>
             
-            <Button 
-              className="bg-blue-600 hover:bg-blue-700"
-              onClick={handleSearch}
-            >
-              Sök avgångar
-            </Button>
+            {searchMode === "station" ? (
+              <div className="flex flex-row items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <LocationSelector
+                    location={stationLocation}
+                    setLocation={setStationLocation}
+                    station={selectedStation}
+                    setStation={setSelectedStation} 
+                    showFlags={true}
+                  />
+                  
+                  <DateRangePicker 
+                    date={searchDate}
+                    setDate={setSearchDate}
+                    selectedDates={selectedDates}
+                    setSelectedDates={setSelectedDates}
+                  />
+                </div>
+                
+                <Button 
+                  className="bg-blue-600 hover:bg-blue-700"
+                  onClick={handleSearch}
+                >
+                  Sök avgångar
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-6">
+                  <div className="flex-1">
+                    <div className="text-sm font-medium mb-2">Från station</div>
+                    <LocationSelector
+                      location={fromLocation}
+                      setLocation={setFromLocation}
+                      station={selectedFromStation}
+                      setStation={setSelectedFromStation} 
+                      showFlags={true}
+                    />
+                  </div>
+                  
+                  <div className="hidden md:flex items-center justify-center">
+                    <ArrowRight className="h-6 w-6 text-gray-400" />
+                  </div>
+                  
+                  <div className="flex-1">
+                    <div className="text-sm font-medium mb-2">Till station</div>
+                    <LocationSelector
+                      location={toLocation}
+                      setLocation={setToLocation}
+                      station={selectedToStation}
+                      setStation={setSelectedToStation} 
+                      showFlags={true}
+                    />
+                  </div>
+                </div>
+                
+                <div className="flex justify-between items-center">
+                  <div>
+                    <div className="text-sm font-medium mb-2">Söktyp</div>
+                    <RadioGroup 
+                      defaultValue="both" 
+                      value={routeSearchType}
+                      onValueChange={(value) => setRouteSearchType(value as "from" | "to" | "both")}
+                      className="flex space-x-4"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="from" id="from" />
+                        <label htmlFor="from" className="text-sm">Endast från</label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="to" id="to" />
+                        <label htmlFor="to" className="text-sm">Endast till</label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="both" id="both" />
+                        <label htmlFor="both" className="text-sm">Båda</label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+                  
+                  <DateRangePicker 
+                    date={searchDate}
+                    setDate={setSearchDate}
+                    selectedDates={selectedDates}
+                    setSelectedDates={setSelectedDates}
+                  />
+                  
+                  <Button 
+                    className="bg-blue-600 hover:bg-blue-700"
+                    onClick={handleSearch}
+                  >
+                    Sök rutter
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
           
           {!hasSearched ? (
             <div className="p-8 text-center text-gray-500">
               <Building2 className="mx-auto h-12 w-12 text-gray-300 mb-4" />
-              <h3 className="text-lg font-medium mb-2">Välj land och station</h3>
-              <p>Välj ett land, station och datum för att visa avgångar</p>
+              <h3 className="text-lg font-medium mb-2">
+                {searchMode === "station" ? "Välj land och station" : "Välj sträcka"}
+              </h3>
+              <p>
+                {searchMode === "station" 
+                  ? "Välj ett land, station och datum för att visa avgångar"
+                  : "Välj från och till stationer för att visa tåg mellan dem"}
+              </p>
             </div>
           ) : searchResults.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
