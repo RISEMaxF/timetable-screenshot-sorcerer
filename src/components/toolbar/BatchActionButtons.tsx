@@ -26,27 +26,27 @@ const BatchActionButtons = ({
   return (
     <div className="flex items-center gap-2">
       <span className="text-sm font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
-        {selectedCount} selected
+        {selectedCount} valda
       </span>
       
       <Button variant="outline" size="sm" onClick={() => onOpenDialog("track")}>
         <LayoutGrid className="h-4 w-4 mr-1" />
-        Set Track
+        Ange spår
       </Button>
       
       <Button variant="outline" size="sm" onClick={() => onOpenDialog("time")}>
         <Clock className="h-4 w-4 mr-1" />
-        Set Time
+        Ange tid
       </Button>
       
       <Button variant="outline" size="sm" onClick={() => onOpenDialog("completed")}>
         <Check className="h-4 w-4 mr-1" />
-        Set Status
+        Ange status
       </Button>
       
       <Button variant="outline" size="sm" onClick={() => onOpenDialog("notes")}>
         <Pencil className="h-4 w-4 mr-1" />
-        Add Notes
+        Lägg till anteckningar
       </Button>
 
       <Button variant="outline" size="sm" onClick={handleExport}>
