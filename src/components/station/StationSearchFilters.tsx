@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import LocationSelector from "@/components/toolbar/LocationSelector";
 import { DateRangePicker } from "@/components/datepicker/DateRangePicker";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 type SearchMode = "station" | "route";
 type RouteSearchType = "from" | "to" | "both";
@@ -58,119 +59,119 @@ const StationSearchFilters = ({
 }: StationSearchFiltersProps) => {
   return (
     <div className="p-4 bg-white border-b border-gray-200">
-      <div className="flex justify-center space-x-6 mb-4">
-        <Button 
-          variant={searchMode === "station" ? "default" : "outline"}
-          onClick={() => setSearchMode("station")}
-          className={searchMode === "station" ? "bg-blue-600 hover:bg-blue-700" : ""}
-        >
-          Sök efter station
-        </Button>
-        <Button 
-          variant={searchMode === "route" ? "default" : "outline"}
-          onClick={() => setSearchMode("route")}
-          className={searchMode === "route" ? "bg-blue-600 hover:bg-blue-700" : ""}
-        >
-          Sök mellan stationer
-        </Button>
-      </div>
-      
-      {searchMode === "station" ? (
-        <div className="flex flex-row items-center justify-between">
-          <div className="flex items-center gap-3">
-            <LocationSelector
-              location={stationLocation}
-              setLocation={setStationLocation}
-              station={selectedStation}
-              setStation={setSelectedStation} 
-              showFlags={true}
-            />
-            
-            <DateRangePicker 
-              date={searchDate}
-              setDate={setSearchDate}
-              selectedDates={selectedDates}
-              setSelectedDates={setSelectedDates}
-            />
-          </div>
-          
-          <Button 
-            className="bg-blue-600 hover:bg-blue-700"
-            onClick={handleSearch}
-          >
-            Sök avgångar
-          </Button>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-6">
-            <div className="flex-1">
-              <div className="text-sm font-medium mb-2">Från station</div>
+      <Tabs 
+        value={searchMode}
+        onValueChange={(value) => setSearchMode(value as SearchMode)}
+        className="w-full"
+      >
+        <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-6">
+          <TabsTrigger value="station" className="text-base py-3">
+            Sök efter station
+          </TabsTrigger>
+          <TabsTrigger value="route" className="text-base py-3">
+            Sök mellan stationer
+          </TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="station">
+          <div className="flex flex-row items-center justify-between">
+            <div className="flex items-center gap-3">
               <LocationSelector
-                location={fromLocation}
-                setLocation={setFromLocation}
-                station={selectedFromStation}
-                setStation={setSelectedFromStation} 
+                location={stationLocation}
+                setLocation={setStationLocation}
+                station={selectedStation}
+                setStation={setSelectedStation} 
                 showFlags={true}
               />
-            </div>
-            
-            <div className="hidden md:flex items-center justify-center">
-              <ArrowRight className="h-6 w-6 text-gray-400" />
-            </div>
-            
-            <div className="flex-1">
-              <div className="text-sm font-medium mb-2">Till station</div>
-              <LocationSelector
-                location={toLocation}
-                setLocation={setToLocation}
-                station={selectedToStation}
-                setStation={setSelectedToStation} 
-                showFlags={true}
+              
+              <DateRangePicker 
+                date={searchDate}
+                setDate={setSearchDate}
+                selectedDates={selectedDates}
+                setSelectedDates={setSelectedDates}
               />
             </div>
-          </div>
-          
-          <div className="flex justify-between items-center">
-            <div>
-              <div className="text-sm font-medium mb-2">Söktyp</div>
-              <RadioGroup 
-                defaultValue="both" 
-                value={routeSearchType}
-                onValueChange={(value) => setRouteSearchType(value as "from" | "to" | "both")}
-                className="flex space-x-4"
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="from" id="from" />
-                  <label htmlFor="from" className="text-sm">Endast från</label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="to" id="to" />
-                  <label htmlFor="to" className="text-sm">Endast till</label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="both" id="both" />
-                  <label htmlFor="both" className="text-sm">Båda</label>
-                </div>
-              </RadioGroup>
-            </div>
-            
-            <DateRangePicker 
-              date={searchDate}
-              setDate={setSearchDate}
-              selectedDates={selectedDates}
-              setSelectedDates={setSelectedDates}
-            />
             
             <Button 
               className="bg-blue-600 hover:bg-blue-700"
               onClick={handleSearch}
             >
-              Sök rutter
+              Sök avgångar
             </Button>
           </div>
-        </div>
-      )}
+        </TabsContent>
+        
+        <TabsContent value="route">
+          <div className="space-y-4">
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-6">
+              <div className="flex-1">
+                <div className="text-sm font-medium mb-2">Från station</div>
+                <LocationSelector
+                  location={fromLocation}
+                  setLocation={setFromLocation}
+                  station={selectedFromStation}
+                  setStation={setSelectedFromStation} 
+                  showFlags={true}
+                />
+              </div>
+              
+              <div className="hidden md:flex items-center justify-center">
+                <ArrowRight className="h-6 w-6 text-gray-400" />
+              </div>
+              
+              <div className="flex-1">
+                <div className="text-sm font-medium mb-2">Till station</div>
+                <LocationSelector
+                  location={toLocation}
+                  setLocation={setToLocation}
+                  station={selectedToStation}
+                  setStation={setSelectedToStation} 
+                  showFlags={true}
+                />
+              </div>
+            </div>
+            
+            <div className="flex justify-between items-center">
+              <div>
+                <div className="text-sm font-medium mb-2">Söktyp</div>
+                <RadioGroup 
+                  defaultValue="both" 
+                  value={routeSearchType}
+                  onValueChange={(value) => setRouteSearchType(value as "from" | "to" | "both")}
+                  className="flex space-x-4"
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="from" id="from" />
+                    <label htmlFor="from" className="text-sm">Endast från</label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="to" id="to" />
+                    <label htmlFor="to" className="text-sm">Endast till</label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="both" id="both" />
+                    <label htmlFor="both" className="text-sm">Båda</label>
+                  </div>
+                </RadioGroup>
+              </div>
+              
+              <DateRangePicker 
+                date={searchDate}
+                setDate={setSearchDate}
+                selectedDates={selectedDates}
+                setSelectedDates={setSelectedDates}
+              />
+              
+              <Button 
+                className="bg-blue-600 hover:bg-blue-700"
+                onClick={handleSearch}
+              >
+                Sök rutter
+              </Button>
+            </div>
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
