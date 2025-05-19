@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Building2, TrainFront, ArrowRight } from "lucide-react";
+import { Building2, TrainFront, ArrowRight, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import LocationSelector from "@/components/toolbar/LocationSelector";
@@ -10,6 +10,7 @@ import { trainData } from "@/data/trainData";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { filterTrains } from "@/utils/searchUtils";
 import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
 
 type SearchMode = "station" | "route";
 
@@ -26,6 +27,7 @@ const StationSearch = () => {
   const [searchResults, setSearchResults] = useState(trainData);
   const [hasSearched, setHasSearched] = useState(false);
   const [routeSearchType, setRouteSearchType] = useState<"from" | "to" | "both">("both");
+  const [searchTerm, setSearchTerm] = useState("");
   
   // Function to handle search
   const handleSearch = () => {
@@ -76,6 +78,16 @@ const StationSearch = () => {
     setSearchResults(filteredTrains);
     setHasSearched(true);
   };
+
+  // Apply text search filter to results
+  const filteredResults = searchTerm ? searchResults.filter(train => 
+    train.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    train.operator.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    train.from?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    train.to?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    train.track?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    train.country.toLowerCase().includes(searchTerm.toLowerCase())
+  ) : searchResults;
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -236,48 +248,69 @@ const StationSearch = () => {
               <p>Inga tåg hittades för de valda kriterierna</p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[100px]">Tåg ID</TableHead>
-                    <TableHead>Operator</TableHead>
-                    <TableHead>Från</TableHead>
-                    <TableHead>Till</TableHead>
-                    <TableHead>Ankomsttid</TableHead>
-                    <TableHead>Spår</TableHead>
-                    <TableHead>Land</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {searchResults.map((train, index) => (
-                    <TableRow 
-                      key={train.id}
-                      className={cn(
-                        index % 2 === 0 ? "bg-white" : "bg-gray-50",
-                        train.highlighted ? "bg-pink-50" : ""
-                      )}
-                    >
-                      <TableCell className="font-medium">{train.id}</TableCell>
-                      <TableCell>{train.operator}</TableCell>
-                      <TableCell>{train.from || "-"}</TableCell>
-                      <TableCell>{train.to || "-"}</TableCell>
-                      <TableCell>{train.arrivalTime || "-"}</TableCell>
-                      <TableCell>{train.track || "-"}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <img 
-                            src={`https://flagcdn.com/w20/${train.country.toLowerCase()}.png`} 
-                            alt={train.country} 
-                            className="w-5 h-auto"
-                          />
-                          {train.country}
-                        </div>
-                      </TableCell>
+            <div>
+              {/* Add search bar above the table */}
+              <div className="p-4 border-b border-gray-200">
+                <div className="relative w-full max-w-md">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Search className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <Input
+                    type="text"
+                    placeholder="Sök bland resultat..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10 pr-4 py-2 w-full border-gray-300 rounded-md"
+                  />
+                </div>
+                <div className="text-sm text-gray-500 mt-2">
+                  {filteredResults.length} av {searchResults.length} tåg visas
+                </div>
+              </div>
+              
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[100px]">Tåg ID</TableHead>
+                      <TableHead>Operator</TableHead>
+                      <TableHead>Från</TableHead>
+                      <TableHead>Till</TableHead>
+                      <TableHead>Ankomsttid</TableHead>
+                      <TableHead>Spår</TableHead>
+                      <TableHead>Land</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredResults.map((train, index) => (
+                      <TableRow 
+                        key={train.id}
+                        className={cn(
+                          index % 2 === 0 ? "bg-white" : "bg-gray-50",
+                          train.highlighted ? "bg-pink-50" : ""
+                        )}
+                      >
+                        <TableCell className="font-medium">{train.id}</TableCell>
+                        <TableCell>{train.operator}</TableCell>
+                        <TableCell>{train.from || "-"}</TableCell>
+                        <TableCell>{train.to || "-"}</TableCell>
+                        <TableCell>{train.arrivalTime || "-"}</TableCell>
+                        <TableCell>{train.track || "-"}</TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <img 
+                              src={`https://flagcdn.com/w20/${train.country.toLowerCase()}.png`} 
+                              alt={train.country} 
+                              className="w-5 h-auto"
+                            />
+                            {train.country}
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             </div>
           )}
         </div>
