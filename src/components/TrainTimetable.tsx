@@ -9,8 +9,9 @@ import TrainDetailDialog from "./dialog/TrainDetailDialog";
 import { filterTrains } from "@/utils/searchUtils";
 import TrainMap from "./map/TrainMap";
 import { Button } from "./ui/button";
-import { ChevronRight, AlarmClock, MapPin, Train as TrainIcon } from "lucide-react";
+import { ChevronRight, AlarmClock, MapPin, Train as TrainIcon, Bookmark } from "lucide-react";
 import { Card, CardContent, CardFooter } from "./ui/card";
+import { Link } from "react-router-dom";
 
 interface TrainTimetableProps {
   trains: Train[];
@@ -108,6 +109,13 @@ const TrainTimetable = ({
         </div>
         
         <div className="lg:w-1/3 xl:w-1/4 flex flex-col gap-4">
+          <Link to="/favorites" className="block mb-2">
+            <Button variant="outline" className="w-full flex items-center justify-center" size="sm">
+              <Bookmark className="h-4 w-4 mr-1 text-blue-600" />
+              Visa favoriter
+            </Button>
+          </Link>
+          
           {/* Basic info card shown when a train is selected */}
           {selectedTrain && (
             <Card className="border shadow-sm">

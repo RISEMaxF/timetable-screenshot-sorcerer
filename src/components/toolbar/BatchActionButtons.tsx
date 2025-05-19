@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Pencil, FileSpreadsheet, Bookmark } from "lucide-react";
 import { Train } from "@/types/train";
 import { exportTrainsToCSV } from "@/lib/utils";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 interface BatchActionButtonsProps {
@@ -19,6 +19,19 @@ const BatchActionButtons = ({
 }: BatchActionButtonsProps) => {
   const [favoritedTrains, setFavoritedTrains] = useState<Set<string>>(new Set());
   const { toast } = useToast();
+  
+  // Load favorite trains from localStorage on component mount
+  useEffect(() => {
+    const storedFavorites = localStorage.getItem("favoriteTrains");
+    if (storedFavorites) {
+      try {
+        const favoriteIds = JSON.parse(storedFavorites);
+        setFavoritedTrains(new Set(favoriteIds));
+      } catch (error) {
+        console.error("Error loading favorites from localStorage:", error);
+      }
+    }
+  }, []);
   
   if (selectedCount === 0) return null;
   
@@ -48,6 +61,9 @@ const BatchActionButtons = ({
     });
     
     setFavoritedTrains(updatedFavorites);
+    
+    // Save to localStorage
+    localStorage.setItem("favoriteTrains", JSON.stringify(Array.from(updatedFavorites)));
     
     // Show success message
     toast({
