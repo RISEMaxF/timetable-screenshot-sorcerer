@@ -65,22 +65,30 @@ const StationSearchFilters = ({
         onValueChange={(value) => setSearchMode(value as SearchMode)}
         className="flex flex-col"
       >
-        <TabsList className="grid w-full grid-cols-2 rounded-none border-b mb-12">
-          <TabsTrigger 
-            value="station" 
-            className="text-base py-4 px-6 rounded-none border-b-2 border-transparent data-[state=active]:border-blue-600 data-[state=active]:bg-white text-gray-600 data-[state=active]:text-blue-600 relative z-10"
-          >
-            Sök efter station
-          </TabsTrigger>
-          <TabsTrigger 
-            value="route" 
-            className="text-base py-4 px-6 rounded-none border-b-2 border-transparent data-[state=active]:border-blue-600 data-[state=active]:bg-white text-gray-600 data-[state=active]:text-blue-600 relative z-10"
-          >
-            Sök mellan stationer
-          </TabsTrigger>
-        </TabsList>
+        <div className="bg-gray-100 p-1 rounded-t-lg">
+          <TabsList className="grid w-full grid-cols-2 rounded-lg bg-gray-100 p-1 h-auto mb-14">
+            <TabsTrigger 
+              value="station" 
+              className="text-base py-4 px-6 rounded-md transition-all duration-200
+                data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm
+                data-[state=inactive]:text-gray-600 data-[state=inactive]:hover:text-gray-900 data-[state=inactive]:hover:bg-gray-200
+                relative z-10"
+            >
+              Sök efter station
+            </TabsTrigger>
+            <TabsTrigger 
+              value="route" 
+              className="text-base py-4 px-6 rounded-md transition-all duration-200
+                data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm
+                data-[state=inactive]:text-gray-600 data-[state=inactive]:hover:text-gray-900 data-[state=inactive]:hover:bg-gray-200
+                relative z-10"
+            >
+              Sök mellan stationer
+            </TabsTrigger>
+          </TabsList>
+        </div>
         
-        <div className="mt-8 px-6 pb-6 pt-12 border-t border-gray-100 relative -top-12 z-0">
+        <div className="mt-0 px-6 pb-6 pt-14 relative -top-14 z-0">
           <TabsContent value="station" className="m-0 p-0">
             <div className="flex flex-row items-center justify-between flex-wrap gap-4">
               <div className="flex items-center gap-3 flex-wrap">
