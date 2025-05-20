@@ -9,7 +9,7 @@ import { trainData } from "@/data/trainData";
 type SearchMode = "station" | "route";
 
 const StationSearch = () => {
-  const [searchMode, setSearchMode] = useState<SearchMode>("station");
+  const [searchMode, setSearchMode] = useState<SearchMode>("route");
   const [stationLocation, setStationLocation] = useState("ALL");
   const [selectedStation, setSelectedStation] = useState("ALL");
   const [fromLocation, setFromLocation] = useState("ALL");
@@ -54,7 +54,7 @@ const StationSearch = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <StationHeader />
         
         <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">

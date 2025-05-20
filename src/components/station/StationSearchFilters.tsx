@@ -65,7 +65,7 @@ const StationSearchFilters = ({
         onValueChange={(value) => setSearchMode(value as SearchMode)}
         className="flex flex-col"
       >
-        <TabsList className="grid w-full grid-cols-2 mb-0 rounded-none border-b">
+        <TabsList className="grid w-full grid-cols-2 rounded-none border-b">
           <TabsTrigger 
             value="station" 
             className="text-base py-4 px-6 rounded-none border-b-2 border-transparent data-[state=active]:border-blue-600 data-[state=active]:bg-white"
@@ -80,7 +80,7 @@ const StationSearchFilters = ({
           </TabsTrigger>
         </TabsList>
         
-        <div className="mt-4 p-4">
+        <div className="mt-8 p-6">
           <TabsContent value="station" className="m-0 p-0">
             <div className="flex flex-row items-center justify-between flex-wrap gap-4">
               <div className="flex items-center gap-3 flex-wrap">
@@ -111,7 +111,7 @@ const StationSearchFilters = ({
           </TabsContent>
           
           <TabsContent value="route" className="m-0 p-0">
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div className="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-6">
                 <div className="flex-1">
                   <div className="text-sm font-medium mb-2">Från station</div>
