@@ -68,19 +68,19 @@ const StationSearchFilters = ({
         <TabsList className="grid w-full grid-cols-2 rounded-none border-b">
           <TabsTrigger 
             value="station" 
-            className="text-base py-4 px-6 rounded-none border-b-2 border-transparent data-[state=active]:border-blue-600 data-[state=active]:bg-white text-gray-600 data-[state=active]:text-blue-600"
+            className="text-base py-4 px-6 rounded-none border-b-2 border-transparent data-[state=active]:border-blue-600 data-[state=active]:bg-white text-gray-600 data-[state=active]:text-blue-600 relative z-10"
           >
             Sök efter station
           </TabsTrigger>
           <TabsTrigger 
             value="route" 
-            className="text-base py-4 px-6 rounded-none border-b-2 border-transparent data-[state=active]:border-blue-600 data-[state=active]:bg-white text-gray-600 data-[state=active]:text-blue-600"
+            className="text-base py-4 px-6 rounded-none border-b-2 border-transparent data-[state=active]:border-blue-600 data-[state=active]:bg-white text-gray-600 data-[state=active]:text-blue-600 relative z-10"
           >
             Sök mellan stationer
           </TabsTrigger>
         </TabsList>
         
-        <div className="mt-12 px-6 pb-6 pt-4 border-t border-gray-100">
+        <div className="mt-16 px-6 pb-6 pt-4 border-t border-gray-100 relative -top-1 z-0">
           <TabsContent value="station" className="m-0 p-0">
             <div className="flex flex-row items-center justify-between flex-wrap gap-4">
               <div className="flex items-center gap-3 flex-wrap">
