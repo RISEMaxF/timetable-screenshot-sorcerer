@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -60,7 +59,7 @@ const StationSearchFilters = ({
     <div className="bg-white">
       {/* Simple tab headers */}
       <div className="border-b border-gray-200">
-        <div className="flex">
+        <div className="flex justify-center">
           <button
             onClick={() => setSearchMode("station")}
             className={`px-6 py-4 text-base font-medium border-b-2 transition-colors ${
