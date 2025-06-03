@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -126,7 +127,7 @@ const StationSearchFilters = ({
                 />
               </div>
               
-              <div className="hidden md:flex items-center justify-center">
+              <div className="hidden md:flex items-center justify-center mt-8">
                 <ArrowRight className="h-6 w-6 text-gray-400" />
               </div>
               
