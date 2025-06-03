@@ -31,6 +31,29 @@ function levenshteinDistance(str1: string, str2: string): number {
 }
 
 /**
+ * Calculates a similarity score based on common character sequences
+ */
+function sequenceSimilarity(str1: string, str2: string): number {
+  const shorter = str1.length < str2.length ? str1 : str2;
+  const longer = str1.length < str2.length ? str2 : str1;
+  
+  let matches = 0;
+  let i = 0, j = 0;
+  
+  while (i < shorter.length && j < longer.length) {
+    if (shorter[i] === longer[j]) {
+      matches++;
+      i++;
+      j++;
+    } else {
+      j++;
+    }
+  }
+  
+  return matches / longer.length;
+}
+
+/**
  * Calculates a fuzzy match score between two strings
  * Returns a score between 0 and 1, where 1 is an exact match
  */
@@ -53,23 +76,36 @@ export function fuzzyMatchScore(searchTerm: string, target: string): number {
     return 0.8;
   }
   
-  // Fuzzy match using Levenshtein distance
+  // Calculate multiple similarity metrics
   const distance = levenshteinDistance(search, text);
   const maxLength = Math.max(search.length, text.length);
+  const levenshteinSimilarity = maxLength === 0 ? 1 : 1 - (distance / maxLength);
   
-  if (maxLength === 0) return 1;
+  // Calculate sequence similarity (how many characters appear in order)
+  const seqSimilarity = sequenceSimilarity(search, text);
   
-  const similarity = 1 - (distance / maxLength);
+  // Calculate character overlap (how many characters are shared)
+  const searchChars = new Set(search.split(''));
+  const textChars = new Set(text.split(''));
+  const intersection = new Set([...searchChars].filter(x => textChars.has(x)));
+  const charOverlap = intersection.size / Math.max(searchChars.size, textChars.size);
   
-  // Only consider it a match if similarity is above threshold
-  return similarity > 0.6 ? similarity * 0.7 : 0;
+  // Combine different similarity measures with weights
+  const combinedScore = (
+    levenshteinSimilarity * 0.4 +
+    seqSimilarity * 0.3 +
+    charOverlap * 0.3
+  );
+  
+  // Lower threshold for better fuzzy matching
+  return combinedScore > 0.5 ? combinedScore * 0.7 : 0;
 }
 
 /**
  * Performs fuzzy search on a text value
  * Returns true if the search term fuzzy matches the text
  */
-export function fuzzyMatch(searchTerm: string, target: string, threshold: number = 0.3): boolean {
+export function fuzzyMatch(searchTerm: string, target: string, threshold: number = 0.25): boolean {
   return fuzzyMatchScore(searchTerm, target) >= threshold;
 }
 
@@ -90,7 +126,7 @@ export function partialWordMatch(searchTerm: string, target: string): boolean {
   // Check if any search word fuzzy matches any target word
   return searchWords.some(searchWord => 
     targetWords.some(targetWord => 
-      fuzzyMatchScore(searchWord, targetWord) >= 0.5
+      fuzzyMatchScore(searchWord, targetWord) >= 0.4
     )
   );
 }
