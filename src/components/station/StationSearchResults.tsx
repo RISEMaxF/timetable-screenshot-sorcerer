@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Building2 } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
+import { fuzzyMatch, partialWordMatch } from "@/utils/fuzzySearch";
 
 interface Train {
   id: string;
@@ -29,15 +30,39 @@ const StationSearchResults = ({
   searchTerm, 
   setSearchTerm 
 }: StationSearchResultsProps) => {
-  // Apply text search filter to results
-  const filteredResults = searchTerm ? searchResults.filter(train => 
-    train.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    train.operator.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    train.from?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    train.to?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    train.track?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    train.country.toLowerCase().includes(searchTerm.toLowerCase())
-  ) : searchResults;
+  // Enhanced flexible search filter for results
+  const filteredResults = searchTerm ? searchResults.filter(train => {
+    const fieldsToSearch = [
+      train.id,
+      train.operator,
+      train.from || "",
+      train.to || "",
+      train.track || "",
+      train.country
+    ];
+
+    return fieldsToSearch.some(field => {
+      const fieldStr = field.toString();
+      const searchLower = searchTerm.toLowerCase();
+      
+      // Try exact substring match first
+      if (fieldStr.toLowerCase().includes(searchLower)) {
+        return true;
+      }
+      
+      // Try fuzzy matching for typos
+      if (fuzzyMatch(searchTerm, fieldStr)) {
+        return true;
+      }
+      
+      // Try partial word matching
+      if (partialWordMatch(searchTerm, fieldStr)) {
+        return true;
+      }
+      
+      return false;
+    });
+  }) : searchResults;
 
   if (!hasSearched) {
     return (

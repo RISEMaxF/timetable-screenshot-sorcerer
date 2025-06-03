@@ -1,5 +1,6 @@
 
 import { Train } from "../types/train";
+import { fuzzyMatch, partialWordMatch } from "./fuzzySearch";
 
 export function filterTrains(
   trains: Train[],
@@ -25,7 +26,7 @@ export function filterTrains(
     );
   }
 
-  // Filter by search term
+  // Filter by search term with improved fuzzy matching
   if (searchTerm) {
     const searchLower = searchTerm.toLowerCase();
     filteredTrains = filteredTrains.filter((train) => {
@@ -38,14 +39,36 @@ export function filterTrains(
             train.operator === searchTerm
           );
         } else {
-          return (
-            train.id.toLowerCase().includes(searchLower) ||
-            (train.announcedTrainNumber || "").toLowerCase().includes(searchLower) ||
-            train.operator.toLowerCase().includes(searchLower) ||
-            (train.from || "").toLowerCase().includes(searchLower) ||
-            (train.to || "").toLowerCase().includes(searchLower) ||
-            (train.track || "").toLowerCase().includes(searchLower)
-          );
+          // Enhanced flexible search - try multiple matching strategies
+          const fieldsToSearch = [
+            train.id,
+            train.announcedTrainNumber || "",
+            train.operator,
+            train.from || "",
+            train.to || "",
+            train.track || ""
+          ];
+
+          return fieldsToSearch.some(field => {
+            const fieldStr = field.toString();
+            
+            // Try exact substring match first (fastest)
+            if (fieldStr.toLowerCase().includes(searchLower)) {
+              return true;
+            }
+            
+            // Try fuzzy matching for typos and variations
+            if (fuzzyMatch(searchTerm, fieldStr)) {
+              return true;
+            }
+            
+            // Try partial word matching
+            if (partialWordMatch(searchTerm, fieldStr)) {
+              return true;
+            }
+            
+            return false;
+          });
         }
       } 
       
@@ -54,10 +77,17 @@ export function filterTrains(
         const value = train[column as keyof Train];
         if (value === null || value === undefined) return false;
         
+        const valueStr = value.toString();
+        
         if (exactMatch) {
-          return value.toString() === searchTerm;
+          return valueStr === searchTerm;
         } else {
-          return value.toString().toLowerCase().includes(searchLower);
+          // Enhanced flexible search for specific columns
+          return (
+            valueStr.toLowerCase().includes(searchLower) ||
+            fuzzyMatch(searchTerm, valueStr) ||
+            partialWordMatch(searchTerm, valueStr)
+          );
         }
       });
     });
