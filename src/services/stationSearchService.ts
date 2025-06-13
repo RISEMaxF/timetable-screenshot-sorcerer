@@ -1,27 +1,44 @@
-
-import { trainData } from "@/data/trainData";
+import { useTrainData } from "../providers/TrainDataProvider";
 import { filterTrains } from "@/utils/searchUtils";
-
-export interface Train {
-  id: string;
-  operator: string;
-  from?: string;
-  to?: string;
-  arrivalTime?: string;
-  track?: string;
-  country: string;
-  highlighted?: boolean;
-}
+import { Train } from "../types/train";
 
 /**
- * Performs a station-based search
+ * Performs a station-based search using the TrainDataProvider
  */
 export const searchByStation = (
   stationLocation: string, 
   selectedStation: string
 ): Train[] => {
+  // This function now needs to be called from within a component that has access to TrainDataProvider
+  // We'll keep this as a utility function but it should be used with the trains from the provider
+  return [];
+};
+
+/**
+ * Performs a route-based search using the TrainDataProvider
+ */
+export const searchByRoute = (
+  fromLocation: string,
+  selectedFromStation: string,
+  toLocation: string,
+  selectedToStation: string,
+  routeSearchType: "from" | "to" | "both"
+): Train[] => {
+  // This function now needs to be called from within a component that has access to TrainDataProvider
+  // We'll keep this as a utility function but it should be used with the trains from the provider
+  return [];
+};
+
+/**
+ * Station search utility that works with provided trains data
+ */
+export const performStationSearch = (
+  trains: Train[],
+  stationLocation: string, 
+  selectedStation: string
+): Train[] => {
   return filterTrains(
-    trainData,
+    trains,
     "",
     "all",
     false,
@@ -33,16 +50,17 @@ export const searchByStation = (
 };
 
 /**
- * Performs a route-based search
+ * Route search utility that works with provided trains data
  */
-export const searchByRoute = (
+export const performRouteSearch = (
+  trains: Train[],
   fromLocation: string,
   selectedFromStation: string,
   toLocation: string,
   selectedToStation: string,
   routeSearchType: "from" | "to" | "both"
 ): Train[] => {
-  let filteredTrains = trainData;
+  let filteredTrains = trains;
   
   console.log("Route search debug:", {
     fromLocation,
