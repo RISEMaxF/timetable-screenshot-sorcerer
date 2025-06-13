@@ -91,17 +91,17 @@ const MapTheaterMode: React.FC<MapTheaterModeProps> = ({
   
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center p-4 md:p-8">
-      <div className="relative w-full h-full max-w-7xl max-h-[90vh] bg-white rounded-lg shadow-xl flex flex-col">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
-          <h2 className="text-xl font-bold flex items-center gap-2">
-            <MapIcon className="h-5 w-5 text-blue-600" />
+      <div className="relative w-full h-full max-w-7xl max-h-[90vh] bg-card rounded-lg shadow-xl flex flex-col border border-border">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+          <h2 className="text-xl font-bold flex items-center gap-2 text-card-foreground">
+            <MapIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
             Tågkarta
           </h2>
           <Button 
             variant="ghost" 
             size="icon" 
             onClick={onClose} 
-            className="rounded-full hover:bg-gray-100"
+            className="rounded-full hover:bg-accent"
           >
             <X className="h-6 w-6" />
           </Button>
@@ -110,11 +110,11 @@ const MapTheaterMode: React.FC<MapTheaterModeProps> = ({
         <div className="flex-1 p-4 overflow-hidden">
           <div 
             ref={mapRef} 
-            className="w-full h-full rounded-lg border border-gray-200 shadow-inner" 
+            className="w-full h-full rounded-lg border border-border shadow-inner bg-muted/30" 
           />
         </div>
         
-        <div className="p-4 border-t border-gray-200">
+        <div className="p-4 border-t border-border">
           <MapLegend selectedTrainId={selectedTrainId} />
         </div>
       </div>

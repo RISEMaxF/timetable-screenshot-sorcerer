@@ -92,12 +92,12 @@ const TrainMap: React.FC<TrainMapProps> = ({ trains, selectedTrainId, height = '
       <div className="relative">
         <div 
           ref={mapRef} 
-          className="w-full rounded-lg border border-gray-200 shadow-inner" 
+          className="w-full rounded-lg border border-border shadow-inner bg-muted/30" 
           style={{ height }}
         />
         <Button 
           variant="outline"
-          className="absolute top-3 right-3 bg-white hover:bg-gray-100 z-10 rounded-full p-2 shadow-md"
+          className="absolute top-3 right-3 bg-background hover:bg-accent z-10 rounded-full p-2 shadow-md border-border"
           onClick={toggleTheaterMode}
           title="Förstora kartan"
         >
