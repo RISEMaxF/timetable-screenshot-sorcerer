@@ -4,26 +4,28 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { ThemeToggle } from "./ThemeToggle";
 
 const MainHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isMobile = useIsMobile();
 
   return (
-    <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4">
+    <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl sm:text-3xl font-bold text-gray-800 flex items-center">
-          <TrainFront className="h-6 w-6 sm:h-8 sm:w-8 mr-2 text-blue-600" />
+        <h1 className="text-xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100 flex items-center">
+          <TrainFront className="h-6 w-6 sm:h-8 sm:w-8 mr-2 text-blue-600 dark:text-blue-400" />
           <span className="hidden sm:inline">Tåginfo</span>
           <span className="sm:hidden">Tåg</span>
         </h1>
         
         {isMobile ? (
           <div className="flex items-center gap-2">
+            <ThemeToggle />
             <img 
               src="https://www.ri.se/themes/rise/dist/images/rise-logo-black.svg" 
               alt="RISE Logo" 
-              className="h-8"
+              className="h-8 dark:invert"
             />
             <Button 
               variant="outline" 
@@ -47,17 +49,18 @@ const MainHeader = () => {
                 Favoriter
               </Button>
             </Link>
+            <ThemeToggle />
             <img 
               src="https://www.ri.se/themes/rise/dist/images/rise-logo-black.svg" 
               alt="RISE Logo" 
-              className="h-12"
+              className="h-12 dark:invert"
             />
           </div>
         )}
       </div>
       
       {isMobile && isMenuOpen && (
-        <div className="mt-4 border-t pt-4 space-y-2">
+        <div className="mt-4 border-t border-gray-200 dark:border-gray-700 pt-4 space-y-2">
           <Link to="/station-search" className="block">
             <Button variant="outline" className="w-full justify-start">
               Stationsök

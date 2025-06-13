@@ -43,7 +43,7 @@ const StationSearchContent = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <StationHeader />
       
       <div className="max-w-7xl mx-auto p-3 sm:p-6">
@@ -71,7 +71,7 @@ const StationSearchContent = () => {
           handleSearch={handleSearch}
         />
 
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 mt-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 mt-6">
           <StationSearchResults
             hasSearched={hasSearched}
             searchResults={searchResults}
