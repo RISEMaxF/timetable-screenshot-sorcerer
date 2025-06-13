@@ -54,19 +54,19 @@ const FavoritesContent = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link to="/">
               <Button variant="outline" size="sm">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Tillbaka
+                <span className="hidden sm:inline">Tillbaka</span>
               </Button>
             </Link>
             <div className="flex items-center gap-2">
               <Bookmark className="h-5 w-5 text-blue-600" />
-              <h1 className="text-xl font-semibold">Favoriter</h1>
-              <span className="text-sm text-gray-500">({favoriteTrains.length} tåg)</span>
+              <h1 className="text-lg sm:text-xl font-semibold">Favoriter</h1>
+              <span className="text-sm text-gray-500">({favoriteTrains.length})</span>
             </div>
           </div>
           
@@ -74,20 +74,22 @@ const FavoritesContent = () => {
             <Button 
               variant="outline" 
               onClick={handleRemoveFromFavorites}
-              className="text-red-600 hover:text-red-700"
+              className="text-red-600 hover:text-red-700 text-xs sm:text-sm"
+              size="sm"
             >
-              Ta bort från favoriter ({selectedTrains.length})
+              <span className="hidden sm:inline">Ta bort från favoriter ({selectedTrains.length})</span>
+              <span className="sm:hidden">Ta bort ({selectedTrains.length})</span>
             </Button>
           )}
         </div>
       </div>
 
-      <div className="p-6">
+      <div className="p-3 sm:p-6">
         {favoriteTrains.length === 0 ? (
           <div className="text-center py-12">
             <Bookmark className="mx-auto h-12 w-12 text-gray-300 mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">Inga favoriter än</h3>
-            <p className="text-gray-500 mb-4">Lägg till tåg i favoriter för att se dem här</p>
+            <p className="text-gray-500 mb-4 text-sm sm:text-base">Lägg till tåg i favoriter för att se dem här</p>
             <Link to="/">
               <Button>Gå till tågschema</Button>
             </Link>

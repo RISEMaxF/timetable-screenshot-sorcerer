@@ -1,4 +1,3 @@
-
 import React from "react";
 import { TableCell, TableRow } from "../ui/table";
 import { Train } from "../../types/train";
@@ -41,7 +40,7 @@ const TrainTableRow = ({
     }
   };
 
-  const cellClasses = "border-r p-2 text-sm";
+  const cellClasses = "border-r p-1 sm:p-2 text-xs sm:text-sm";
 
   // Determine row background and hover classes based on state
   const getRowClasses = () => {
@@ -77,11 +76,11 @@ const TrainTableRow = ({
       onClick={handleRowClick}
       data-testid={`train-row-${train.id}`}
     >
-      <TableCell className="w-10 px-2 py-2">
+      <TableCell className="w-8 sm:w-10 px-1 sm:px-2 py-2">
         <div onClick={handleCheckboxClick}>
           <Checkbox
             checked={isMultiSelected || false}
-            className="cursor-pointer"
+            className="cursor-pointer h-3 w-3 sm:h-4 sm:w-4"
             aria-label={`Select train ${train.id}`}
           />
         </div>
@@ -89,22 +88,24 @@ const TrainTableRow = ({
       
       <TableCell className={`font-medium ${cellClasses}`}>
         <div className="flex items-center justify-between">
-          <span>{train.id}</span>
+          <span className="truncate">{train.id}</span>
           <Tooltip>
             <TooltipTrigger asChild>
-              <RefreshCw className="h-3.5 w-3.5 text-gray-400 hover:text-gray-600 transition-colors" />
+              <RefreshCw className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0 ml-1" />
             </TooltipTrigger>
             <TooltipContent side="top">Uppdatera tåginformation</TooltipContent>
           </Tooltip>
         </div>
       </TableCell>
       
-      <TableCell className={cellClasses}>{train.announcedTrainNumber || "-"}</TableCell>
-      <TableCell className={cellClasses}>{train.operator}</TableCell>
-      <TableCell className={cellClasses}>{train.from || "-"}</TableCell>
-      <TableCell className={cellClasses}>{train.to || "-"}</TableCell>
+      <TableCell className={`${cellClasses} hidden sm:table-cell`}>{train.announcedTrainNumber || "-"}</TableCell>
+      <TableCell className={cellClasses}>
+        <span className="truncate block">{train.operator}</span>
+      </TableCell>
+      <TableCell className={`${cellClasses} hidden md:table-cell`}>{train.from || "-"}</TableCell>
+      <TableCell className={`${cellClasses} hidden md:table-cell`}>{train.to || "-"}</TableCell>
       <TableCell className={cellClasses}>{train.latest || "-"}</TableCell>
-      <TableCell className="p-2 text-sm">{train.updated || "-"}</TableCell>
+      <TableCell className="p-1 sm:p-2 text-xs sm:text-sm hidden lg:table-cell">{train.updated || "-"}</TableCell>
     </TableRow>
   );
 };
