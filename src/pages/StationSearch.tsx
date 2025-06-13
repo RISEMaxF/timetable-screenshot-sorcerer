@@ -8,7 +8,7 @@ import { performStationSearch, performRouteSearch } from "../services/stationSea
 
 const StationSearchContent = () => {
   const { trains } = useTrainData();
-  const [searchType, setSearchType] = useState<"station" | "route">("station");
+  const [searchMode, setSearchMode] = useState<"station" | "route">("station");
   const [stationLocation, setStationLocation] = useState("ALL");
   const [selectedStation, setSelectedStation] = useState("ALL");
   const [fromLocation, setFromLocation] = useState("ALL");
@@ -19,11 +19,13 @@ const StationSearchContent = () => {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchDate, setSearchDate] = useState(new Date());
+  const [selectedDates, setSelectedDates] = useState<Date[]>([]);
 
   const handleSearch = () => {
     let results: any[] = [];
     
-    if (searchType === "station") {
+    if (searchMode === "station") {
       results = performStationSearch(trains, stationLocation, selectedStation);
     } else {
       results = performRouteSearch(
@@ -46,8 +48,8 @@ const StationSearchContent = () => {
       
       <div className="max-w-7xl mx-auto p-6">
         <StationSearchFilters
-          searchType={searchType}
-          setSearchType={setSearchType}
+          searchMode={searchMode}
+          setSearchMode={setSearchMode}
           stationLocation={stationLocation}
           setStationLocation={setStationLocation}
           selectedStation={selectedStation}
@@ -60,9 +62,13 @@ const StationSearchContent = () => {
           setToLocation={setToLocation}
           selectedToStation={selectedToStation}
           setSelectedToStation={setSelectedToStation}
+          searchDate={searchDate}
+          setSearchDate={setSearchDate}
+          selectedDates={selectedDates}
+          setSelectedDates={setSelectedDates}
           routeSearchType={routeSearchType}
           setRouteSearchType={setRouteSearchType}
-          onSearch={handleSearch}
+          handleSearch={handleSearch}
         />
 
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 mt-6">
