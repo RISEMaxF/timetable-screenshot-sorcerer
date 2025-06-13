@@ -5,6 +5,7 @@ import { TimetableToolbar } from "../components/TimetableToolbar";
 import { TrainDataProvider, useTrainData } from "../providers/TrainDataProvider";
 import { useTrainOperations } from "../hooks/useTrainOperations";
 import { Train } from "../types/train";
+import MainHeader from "../components/MainHeader";
 
 const IndexContent = () => {
   const { trains, loading, error } = useTrainData();
@@ -82,6 +83,7 @@ const IndexContent = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
+      <MainHeader />
       <TimetableToolbar
         location={location}
         setLocation={setLocation}
