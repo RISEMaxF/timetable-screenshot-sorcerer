@@ -141,7 +141,7 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            className="w-[180px] justify-between bg-white"
+            className="w-[180px] justify-between bg-background"
           >
             <div className="flex items-center">
               {showFlags && (
@@ -203,7 +203,7 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            className="w-[180px] justify-between bg-white"
+            className="w-[180px] justify-between bg-background"
           >
             <span>{currentStation.name}</span>
             <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />

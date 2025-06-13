@@ -66,8 +66,8 @@ const StationSearchResults = ({
 
   if (!hasSearched) {
     return (
-      <div className="p-8 text-center text-gray-500">
-        <Building2 className="mx-auto h-12 w-12 text-gray-300 mb-4" />
+      <div className="p-8 text-center text-muted-foreground">
+        <Building2 className="mx-auto h-12 w-12 text-muted-foreground/50 mb-4" />
         <h3 className="text-lg font-medium mb-2">Välj sökkriterier</h3>
         <p>Välj sökkriterier ovan för att visa avgångar</p>
       </div>
@@ -76,8 +76,8 @@ const StationSearchResults = ({
 
   if (searchResults.length === 0) {
     return (
-      <div className="p-8 text-center text-gray-500">
-        <Building2 className="mx-auto h-12 w-12 text-gray-300 mb-4" />
+      <div className="p-8 text-center text-muted-foreground">
+        <Building2 className="mx-auto h-12 w-12 text-muted-foreground/50 mb-4" />
         <h3 className="text-lg font-medium mb-2">Inga resultat</h3>
         <p>Inga tåg hittades för de valda kriterierna</p>
       </div>
@@ -87,20 +87,20 @@ const StationSearchResults = ({
   return (
     <div>
       {/* Search bar above the table */}
-      <div className="p-4 border-b border-gray-200">
+      <div className="p-4 border-b border-border">
         <div className="relative w-full max-w-md">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search className="h-5 w-5 text-gray-400" />
+            <Search className="h-5 w-5 text-muted-foreground" />
           </div>
           <Input
             type="text"
             placeholder="Sök bland resultat..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 w-full border-gray-300 rounded-md"
+            className="pl-10 pr-4 py-2 w-full rounded-md"
           />
         </div>
-        <div className="text-sm text-gray-500 mt-2">
+        <div className="text-sm text-muted-foreground mt-2">
           {filteredResults.length} av {searchResults.length} tåg visas
         </div>
       </div>
@@ -123,8 +123,8 @@ const StationSearchResults = ({
               <TableRow 
                 key={train.id}
                 className={cn(
-                  index % 2 === 0 ? "bg-white" : "bg-gray-50",
-                  train.highlighted ? "bg-pink-50" : ""
+                  index % 2 === 0 ? "bg-background" : "bg-muted/50",
+                  train.highlighted ? "bg-pink-50 dark:bg-pink-950/20" : ""
                 )}
               >
                 <TableCell className="font-medium">{train.id}</TableCell>

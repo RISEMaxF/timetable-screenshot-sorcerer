@@ -57,16 +57,16 @@ const StationSearchFilters = ({
   handleSearch,
 }: StationSearchFiltersProps) => {
   return (
-    <div className="bg-white">
+    <div className="bg-background dark:bg-gray-800">
       {/* Simple tab headers */}
-      <div className="border-b border-gray-200">
+      <div className="border-b border-border dark:border-gray-700">
         <div className="flex justify-center">
           <button
             onClick={() => setSearchMode("station")}
             className={`px-6 py-4 text-base font-medium border-b-2 transition-colors ${
               searchMode === "station"
-                ? "text-blue-600 border-blue-600"
-                : "text-gray-500 border-transparent hover:text-gray-700"
+                ? "text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400"
+                : "text-muted-foreground border-transparent hover:text-foreground"
             }`}
           >
             Sök efter station
@@ -75,8 +75,8 @@ const StationSearchFilters = ({
             onClick={() => setSearchMode("route")}
             className={`px-6 py-4 text-base font-medium border-b-2 transition-colors ${
               searchMode === "route"
-                ? "text-blue-600 border-blue-600"
-                : "text-gray-500 border-transparent hover:text-gray-700"
+                ? "text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400"
+                : "text-muted-foreground border-transparent hover:text-foreground"
             }`}
           >
             Sök mellan stationer
@@ -117,7 +117,7 @@ const StationSearchFilters = ({
           <div className="space-y-6">
             <div className="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-6">
               <div className="flex-1">
-                <div className="text-sm font-medium mb-2">Från station</div>
+                <div className="text-sm font-medium mb-2 text-foreground">Från station</div>
                 <LocationSelector
                   location={fromLocation}
                   setLocation={setFromLocation}
@@ -128,11 +128,11 @@ const StationSearchFilters = ({
               </div>
               
               <div className="hidden md:flex items-center justify-center mt-8">
-                <ArrowRight className="h-6 w-6 text-gray-400" />
+                <ArrowRight className="h-6 w-6 text-muted-foreground" />
               </div>
               
               <div className="flex-1">
-                <div className="text-sm font-medium mb-2">Till station</div>
+                <div className="text-sm font-medium mb-2 text-foreground">Till station</div>
                 <LocationSelector
                   location={toLocation}
                   setLocation={setToLocation}
@@ -145,7 +145,7 @@ const StationSearchFilters = ({
             
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div>
-                <div className="text-sm font-medium mb-2">Söktyp</div>
+                <div className="text-sm font-medium mb-2 text-foreground">Söktyp</div>
                 <RadioGroup 
                   defaultValue={routeSearchType}
                   value={routeSearchType}
@@ -154,15 +154,15 @@ const StationSearchFilters = ({
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="from" id="from" />
-                    <label htmlFor="from" className="text-sm">Endast från</label>
+                    <label htmlFor="from" className="text-sm text-foreground">Endast från</label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="to" id="to" />
-                    <label htmlFor="to" className="text-sm">Endast till</label>
+                    <label htmlFor="to" className="text-sm text-foreground">Endast till</label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="both" id="both" />
-                    <label htmlFor="both" className="text-sm">Båda</label>
+                    <label htmlFor="both" className="text-sm text-foreground">Båda</label>
                   </div>
                 </RadioGroup>
               </div>
