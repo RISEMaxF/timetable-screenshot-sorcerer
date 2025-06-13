@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { TrainTimetable } from "../components/TrainTimetable";
+import TrainTimetable from "../components/TrainTimetable";
 import { TimetableToolbar } from "../components/TimetableToolbar";
 import { TrainDataProvider, useTrainData } from "../providers/TrainDataProvider";
 import { useTrainOperations } from "../hooks/useTrainOperations";

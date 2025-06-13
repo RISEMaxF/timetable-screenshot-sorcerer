@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { TrainDataProvider, useTrainData } from "../providers/TrainDataProvider";
 import { useTrainOperations } from "../hooks/useTrainOperations";
-import { TrainTimetable } from "../components/TrainTimetable";
+import TrainTimetable from "../components/TrainTimetable";
 import { Button } from "../components/ui/button";
 import { ArrowLeft, Bookmark } from "lucide-react";
 import { Link } from "react-router-dom";
