@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { ThemeToggle } from "./ThemeToggle";
+import HelpMenu from "./HelpMenu";
 
 const MainHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -21,6 +22,7 @@ const MainHeader = () => {
         
         {isMobile ? (
           <div className="flex items-center gap-2">
+            <HelpMenu />
             <ThemeToggle />
             <img 
               src="https://www.ri.se/themes/rise/dist/images/rise-logo-black.svg" 
@@ -49,6 +51,7 @@ const MainHeader = () => {
                 Favoriter
               </Button>
             </Link>
+            <HelpMenu />
             <ThemeToggle />
             <img 
               src="https://www.ri.se/themes/rise/dist/images/rise-logo-black.svg" 
