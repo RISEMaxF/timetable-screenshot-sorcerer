@@ -1,3 +1,4 @@
+
 import React from "react";
 import { TableCell, TableRow } from "../ui/table";
 import { Train } from "../../types/train";
@@ -40,32 +41,32 @@ const TrainTableRow = ({
     }
   };
 
-  const cellClasses = "border-r p-1 sm:p-2 text-xs sm:text-sm";
+  const cellClasses = "border-r border-border p-1 sm:p-2 text-xs sm:text-sm";
 
   // Determine row background and hover classes based on state
   const getRowClasses = () => {
-    const baseClasses = "border-b transition-colors cursor-pointer";
+    const baseClasses = "border-b border-border transition-colors cursor-pointer";
     
     // Priority order: multi-selected > selected > completed > highlighted > default
     if (isMultiSelected) {
-      return cn(baseClasses, "bg-indigo-100 hover:bg-indigo-200");
+      return cn(baseClasses, "bg-indigo-100 dark:bg-indigo-900/20 hover:bg-indigo-200 dark:hover:bg-indigo-900/30");
     }
     
     if (isSelected) {
-      return cn(baseClasses, "bg-blue-50 hover:bg-blue-100");
+      return cn(baseClasses, "bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30");
     }
     
     if (train.completed) {
-      return cn(baseClasses, "bg-green-50 hover:bg-green-100");
+      return cn(baseClasses, "bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30");
     }
     
     if (train.highlighted) {
-      return cn(baseClasses, "bg-pink-50 hover:bg-pink-100");
+      return cn(baseClasses, "bg-pink-50 dark:bg-pink-900/20 hover:bg-pink-100 dark:hover:bg-pink-900/30");
     }
     
     // Default alternating rows
-    const defaultBg = index % 2 === 0 ? "bg-white" : "bg-gray-50";
-    const defaultHover = index % 2 === 0 ? "hover:bg-gray-50" : "hover:bg-gray-100";
+    const defaultBg = index % 2 === 0 ? "bg-background" : "bg-muted/30";
+    const defaultHover = index % 2 === 0 ? "hover:bg-muted/50" : "hover:bg-muted/40";
     
     return cn(baseClasses, defaultBg, defaultHover);
   };
@@ -91,7 +92,7 @@ const TrainTableRow = ({
           <span className="truncate">{train.id}</span>
           <Tooltip>
             <TooltipTrigger asChild>
-              <RefreshCw className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0 ml-1" />
+              <RefreshCw className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-muted-foreground hover:text-foreground transition-colors flex-shrink-0 ml-1" />
             </TooltipTrigger>
             <TooltipContent side="top">Uppdatera tåginformation</TooltipContent>
           </Tooltip>
