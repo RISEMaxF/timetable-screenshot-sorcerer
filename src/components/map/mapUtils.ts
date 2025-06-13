@@ -65,21 +65,27 @@ export const createTrainFeatures = (
   vectorSource.addFeature(endFeature);
 };
 
-// Style function for map features
+// Check if dark mode is enabled
+const isDarkMode = (): boolean => {
+  return document.documentElement.classList.contains('dark');
+};
+
+// Style function for map features with dark mode support
 export const getFeatureStyle = (feature: Feature): Style => {
   const id = feature.get('id') as string;
+  const darkMode = isDarkMode();
   
   if (id.endsWith('-start')) {
     // Style for departure station
     return new Style({
       image: new Circle({
-        radius: 6,
+        radius: 8,
         fill: new Fill({
           color: '#22c55e' // Green for departure
         }),
         stroke: new Stroke({
-          color: '#ffffff',
-          width: 2
+          color: darkMode ? '#1f2937' : '#ffffff',
+          width: 3
         })
       })
     });
@@ -87,22 +93,23 @@ export const getFeatureStyle = (feature: Feature): Style => {
     // Style for arrival station
     return new Style({
       image: new Circle({
-        radius: 6,
+        radius: 8,
         fill: new Fill({
           color: '#ef4444' // Red for arrival
         }),
         stroke: new Stroke({
-          color: '#ffffff',
-          width: 2
+          color: darkMode ? '#1f2937' : '#ffffff',
+          width: 3
         })
       })
     });
   } else {
-    // Style for route lines
+    // Style for route lines - brighter colors for dark mode
     return new Style({
       stroke: new Stroke({
-        color: '#1e40af',
-        width: 3
+        color: darkMode ? '#60a5fa' : '#1e40af', // Brighter blue for dark mode
+        width: 4,
+        lineDash: undefined
       })
     });
   }

@@ -39,6 +39,20 @@ const TrainMap: React.FC<TrainMapProps> = ({ trains, selectedTrainId, height = '
       createTrainFeatures(selectedTrain, trainCoordinates, vectorSource);
     }
 
+    // Create OSM tile layer with dark mode styling
+    const isDarkMode = document.documentElement.classList.contains('dark');
+    const osmLayer = new TileLayer({
+      source: new OSM()
+    });
+
+    // Apply dark mode filter to OSM tiles
+    if (isDarkMode) {
+      const canvas = osmLayer.getRenderer()?.getImage?.() as HTMLCanvasElement;
+      if (canvas) {
+        canvas.style.filter = 'invert(1) hue-rotate(180deg) brightness(0.8) contrast(1.2)';
+      }
+    }
+
     // Create vector layer for train routes
     const vectorLayer = new VectorLayer({
       source: vectorSource,
@@ -52,9 +66,7 @@ const TrainMap: React.FC<TrainMapProps> = ({ trains, selectedTrainId, height = '
     const map = new Map({
       target: mapRef.current,
       layers: [
-        new TileLayer({
-          source: new OSM()
-        }),
+        osmLayer,
         vectorLayer
       ],
       view: new View({
@@ -63,6 +75,11 @@ const TrainMap: React.FC<TrainMapProps> = ({ trains, selectedTrainId, height = '
         projection: 'EPSG:3857'
       })
     });
+
+    // Apply dark mode styles to map container
+    if (isDarkMode && mapRef.current) {
+      mapRef.current.style.filter = 'invert(1) hue-rotate(180deg) brightness(0.9) contrast(1.1)';
+    }
 
     // Fit view to the route if a train is selected
     if (selectedTrainId && vectorSource.getFeatures().length > 0) {
