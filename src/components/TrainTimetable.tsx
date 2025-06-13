@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from "react";
 import { Table, TableBody } from "@/components/ui/table";
 import { Train } from "../types/train";
@@ -160,7 +159,7 @@ const TrainTimetable = () => {
                     </div>
                   </div>
                 </CardContent>
-                <CardFooter className="bg-gray-50 p-4 flex justify-end border-t">
+                <CardFooter className="bg-muted p-4 flex justify-end border-t">
                   <Button 
                     variant="outline" 
                     onClick={handleOpenDetail} 
