@@ -1,9 +1,9 @@
 import React from "react";
 import { 
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose 
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription 
 } from "../ui/dialog";
 import { Train } from "../../types/train";
-import { X, ChevronDown, ChevronUp, Info, ScrollIcon } from "lucide-react";
+import { ChevronDown, ChevronUp, Info, ScrollIcon } from "lucide-react";
 import { 
   Accordion, AccordionContent, AccordionItem, AccordionTrigger 
 } from "../ui/accordion";
@@ -73,16 +73,9 @@ const TrainDetailDialog = ({ train, isOpen, onClose }: TrainDetailDialogProps) =
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-w-4xl max-h-[80vh] w-[90vw] flex flex-col">
         <DialogHeader className="border-b pb-4">
-          <div className="flex items-center justify-between">
-            <DialogTitle className="text-xl font-bold">
-              Information för tåg {train.id}
-            </DialogTitle>
-            {/* Keeping only one close button */}
-            <DialogClose className="hover:bg-gray-100 rounded-full p-1">
-              <X className="h-5 w-5" />
-              <span className="sr-only">Close</span>
-            </DialogClose>
-          </div>
+          <DialogTitle className="text-xl font-bold">
+            Information för tåg {train.id}
+          </DialogTitle>
           <DialogDescription className="text-base text-black flex justify-between items-center mt-4">
             <div className="flex items-center space-x-6">
               <div>
