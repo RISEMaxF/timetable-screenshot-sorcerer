@@ -22,9 +22,9 @@ export function DateRangePickerTrigger({
     <PopoverTrigger asChild>
       <Button 
         variant="outline" 
-        className="w-full sm:w-auto h-10 px-3 rounded-full bg-white border-gray-200 shadow-sm hover:bg-gray-50"
+        className="w-full sm:w-auto h-10 px-3 rounded-full bg-background border-border shadow-sm hover:bg-accent"
       >
-        <CalendarIcon className="h-4 w-4 mr-2 text-gray-500" />
+        <CalendarIcon className="h-4 w-4 mr-2 text-muted-foreground" />
         {formatDateDisplay({
           dateRangeType,
           date,
