@@ -1,3 +1,4 @@
+
 import React from "react";
 import { TableCell, TableRow } from "../ui/table";
 import { Train } from "../../types/train";
@@ -42,16 +43,37 @@ const TrainTableRow = ({
 
   const cellClasses = "border-r p-2 text-sm";
 
+  // Determine row background and hover classes based on state
+  const getRowClasses = () => {
+    const baseClasses = "border-b transition-colors cursor-pointer";
+    
+    // Priority order: multi-selected > selected > completed > highlighted > default
+    if (isMultiSelected) {
+      return cn(baseClasses, "bg-indigo-100 hover:bg-indigo-200");
+    }
+    
+    if (isSelected) {
+      return cn(baseClasses, "bg-blue-50 hover:bg-blue-100");
+    }
+    
+    if (train.completed) {
+      return cn(baseClasses, "bg-green-50 hover:bg-green-100");
+    }
+    
+    if (train.highlighted) {
+      return cn(baseClasses, "bg-pink-50 hover:bg-pink-100");
+    }
+    
+    // Default alternating rows
+    const defaultBg = index % 2 === 0 ? "bg-white" : "bg-gray-50";
+    const defaultHover = index % 2 === 0 ? "hover:bg-gray-50" : "hover:bg-gray-100";
+    
+    return cn(baseClasses, defaultBg, defaultHover);
+  };
+
   return (
     <TableRow 
-      className={cn(
-        "border-b hover:bg-gray-50 transition-colors cursor-pointer",
-        index % 2 === 0 ? "bg-white" : "bg-gray-50",
-        train.highlighted ? "bg-pink-50" : "",
-        train.completed ? "bg-green-50" : "",
-        isSelected ? "bg-blue-50" : "",
-        isMultiSelected ? "bg-indigo-100" : ""
-      )}
+      className={getRowClasses()}
       onClick={handleRowClick}
       data-testid={`train-row-${train.id}`}
     >
