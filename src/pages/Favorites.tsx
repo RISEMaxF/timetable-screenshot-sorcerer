@@ -13,14 +13,14 @@ const FavoritesContent = () => {
   const favoriteTrains = useMemo(() => trains, [trains]);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <MainHeader />
       <div className="max-w-7xl mx-auto p-3 sm:p-6">
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">
+          <h2 className="text-2xl font-bold text-foreground mb-2">
             Favoritmarkeringar
           </h2>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-muted-foreground">
             Här kan du se och hantera dina favoritmarkerade tåg och rutter.
           </p>
         </div>
@@ -28,11 +28,11 @@ const FavoritesContent = () => {
         {favoriteTrains.length > 0 ? (
           <TrainTimetable />
         ) : (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-8 text-center">
-            <p className="text-gray-500 dark:text-gray-400 text-lg">
+          <div className="bg-card rounded-lg shadow-sm border border-border p-8 text-center">
+            <p className="text-muted-foreground text-lg">
               Inga favoriter sparade än.
             </p>
-            <p className="text-gray-400 dark:text-gray-500 mt-2">
+            <p className="text-muted-foreground mt-2">
               Markera tåg som favoriter från huvudsidan för att se dem här.
             </p>
           </div>
