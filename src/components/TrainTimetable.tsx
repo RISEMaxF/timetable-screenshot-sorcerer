@@ -12,45 +12,26 @@ import { Button } from "./ui/button";
 import { ChevronRight, AlarmClock, MapPin, Train as TrainIcon, Bookmark } from "lucide-react";
 import { Card, CardContent, CardFooter } from "./ui/card";
 import { Link } from "react-router-dom";
+import { useTrainData } from "../providers/TrainDataProvider";
 
-interface TrainTimetableProps {
-  trains: Train[];
-  onTrainUpdate: (train: Train) => void;
-  selectedTrains: string[];
-  onToggleSelection: (trainId: string) => void;
-  searchTerm?: string;
-  exactMatch?: boolean;
-  filterStatus?: "all" | "completed" | "pending";
-  sortField?: keyof Train | null;
-  sortDirection?: "asc" | "desc";
-  onSort?: (field: keyof Train) => void;
-  selectedCountry?: string;
-  selectedStation?: string;
-  searchableColumns?: string[];
-}
+const TrainTimetable = () => {
+  const { trains, updateTrain } = useTrainData();
+  const [selectedTrains, setSelectedTrains] = useState<string[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [exactMatch, setExactMatch] = useState(false);
+  const [filterStatus, setFilterStatus] = useState<"all" | "completed" | "pending">("all");
+  const [sortField, setSortField] = useState<keyof Train | null>(null);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  const [selectedCountry, setSelectedCountry] = useState("ALL");
+  const [selectedStation, setSelectedStation] = useState("ALL");
+  const [searchableColumns, setSearchableColumns] = useState<string[]>(["all"]);
 
-const TrainTimetable = ({ 
-  trains, 
-  onTrainUpdate, 
-  selectedTrains = [], 
-  onToggleSelection,
-  searchTerm = "",
-  exactMatch = false,
-  filterStatus = "all",
-  sortField = null,
-  sortDirection = "asc",
-  onSort = () => {},
-  selectedCountry = "ALL",
-  selectedStation = "ALL",
-  searchableColumns = ["all"]
-}: TrainTimetableProps) => {
   // State for detail dialog
   const [selectedTrain, setSelectedTrain] = useState<Train | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   
   const handleRowClick = (train: Train) => {
     setSelectedTrain(train);
-    // We no longer automatically open the detail dialog
   };
 
   const handleOpenDetail = () => {
@@ -59,6 +40,23 @@ const TrainTimetable = ({
 
   const handleCloseDetail = () => {
     setIsDetailOpen(false);
+  };
+
+  const handleToggleSelection = (trainId: string) => {
+    setSelectedTrains(prev => 
+      prev.includes(trainId) 
+        ? prev.filter(id => id !== trainId)
+        : [...prev, trainId]
+    );
+  };
+
+  const handleSort = (field: keyof Train) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortDirection("asc");
+    }
   };
 
   // Filter and sort trains
@@ -84,7 +82,7 @@ const TrainTimetable = ({
           <div className="overflow-x-auto">
             <Table className="border-collapse w-full">
               <TrainTableHeader 
-                onSort={onSort} 
+                onSort={handleSort} 
                 sortField={sortField} 
                 sortDirection={sortDirection} 
               />
@@ -97,7 +95,7 @@ const TrainTimetable = ({
                     onRowClick={handleRowClick}
                     isSelected={selectedTrain?.id === train.id}
                     isMultiSelected={selectedTrains.includes(train.id)}
-                    onToggleSelection={onToggleSelection}
+                    onToggleSelection={handleToggleSelection}
                   />
                 ))}
                 {filteredTrains.length === 0 && (
