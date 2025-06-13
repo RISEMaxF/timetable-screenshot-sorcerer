@@ -6,11 +6,12 @@ import { OSM, Vector as VectorSource } from 'ol/source';
 import 'ol/ol.css';
 import { Train } from '@/types/train';
 import MapLegend from './MapLegend';
-import { getTrainCoordinates, createTrainFeatures, getFeatureStyle } from './mapUtils';
+import { getTrainCoordinates, createTrainFeatures, getFeatureStyle, applyMapTheme } from './mapUtils';
 import { Maximize2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import MapTheaterMode from './MapTheaterMode';
 import { fromLonLat } from 'ol/proj';
+import { useTheme } from '../ThemeProvider';
 
 interface TrainMapProps {
   trains: Train[];
@@ -21,7 +22,11 @@ interface TrainMapProps {
 const TrainMap: React.FC<TrainMapProps> = ({ trains, selectedTrainId, height = '600px' }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<Map | null>(null);
+  const vectorLayerRef = useRef<VectorLayer<VectorSource> | null>(null);
   const [isTheaterMode, setIsTheaterMode] = useState(false);
+  const { theme } = useTheme();
+  
+  const isDarkMode = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
   
   useEffect(() => {
     if (!mapRef.current) return;
@@ -39,25 +44,18 @@ const TrainMap: React.FC<TrainMapProps> = ({ trains, selectedTrainId, height = '
       createTrainFeatures(selectedTrain, trainCoordinates, vectorSource);
     }
 
-    // Create OSM tile layer with dark mode styling
-    const isDarkMode = document.documentElement.classList.contains('dark');
+    // Create OSM tile layer
     const osmLayer = new TileLayer({
       source: new OSM()
     });
 
-    // Apply dark mode filter to OSM tiles
-    if (isDarkMode) {
-      const canvas = osmLayer.getRenderer()?.getImage?.() as HTMLCanvasElement;
-      if (canvas) {
-        canvas.style.filter = 'invert(1) hue-rotate(180deg) brightness(0.8) contrast(1.2)';
-      }
-    }
-
-    // Create vector layer for train routes
+    // Create vector layer for train routes with theme-aware styling
     const vectorLayer = new VectorLayer({
       source: vectorSource,
-      style: getFeatureStyle
+      style: (feature) => getFeatureStyle(feature, isDarkMode)
     });
+
+    vectorLayerRef.current = vectorLayer;
 
     // Nordic countries center coordinates (approximate: Sweden, Norway, Finland, Denmark)
     const nordicCenter = fromLonLat([15.0, 62.0]);
@@ -76,10 +74,8 @@ const TrainMap: React.FC<TrainMapProps> = ({ trains, selectedTrainId, height = '
       })
     });
 
-    // Apply dark mode styles to map container
-    if (isDarkMode && mapRef.current) {
-      mapRef.current.style.filter = 'invert(1) hue-rotate(180deg) brightness(0.9) contrast(1.1)';
-    }
+    // Apply theme to map container
+    applyMapTheme(mapRef.current, isDarkMode);
 
     // Fit view to the route if a train is selected
     if (selectedTrainId && vectorSource.getFeatures().length > 0) {
@@ -98,7 +94,19 @@ const TrainMap: React.FC<TrainMapProps> = ({ trains, selectedTrainId, height = '
         mapInstanceRef.current = null;
       }
     };
-  }, [trains, selectedTrainId]);
+  }, [trains, selectedTrainId, isDarkMode]);
+
+  // Update map theme when theme changes
+  useEffect(() => {
+    if (mapRef.current) {
+      applyMapTheme(mapRef.current, isDarkMode);
+    }
+    
+    // Update vector layer styling when theme changes
+    if (vectorLayerRef.current) {
+      vectorLayerRef.current.setStyle((feature) => getFeatureStyle(feature, isDarkMode));
+    }
+  }, [isDarkMode]);
 
   const toggleTheaterMode = () => {
     setIsTheaterMode(prev => !prev);
