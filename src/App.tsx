@@ -12,7 +12,7 @@ const queryClient = new QueryClient();
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="system" storageKey="taginfo-theme">
+    <ThemeProvider defaultTheme="light" storageKey="taginfo-theme">
       <QueryClientProvider client={queryClient}>
         <Router>
           <div className="min-h-screen bg-background">
