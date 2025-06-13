@@ -1,10 +1,10 @@
-
 import { Style, Stroke, Fill, Circle } from 'ol/style';
 import { LineString, Point } from 'ol/geom';
 import Feature from 'ol/Feature';
 import { fromLonLat } from 'ol/proj';
 import { Train } from '@/types/train';
 import { Vector as VectorSource } from 'ol/source';
+import { FeatureLike } from 'ol/Feature';
 
 // Country-specific coordinates for trains
 export const getTrainCoordinates = (): Record<string, {from: number[], to: number[]}> => ({
@@ -66,7 +66,7 @@ export const createTrainFeatures = (
 };
 
 // Style function for map features with dark mode support
-export const getFeatureStyle = (feature: Feature, isDarkMode: boolean): Style => {
+export const getFeatureStyle = (feature: FeatureLike, isDarkMode: boolean): Style => {
   const id = feature.get('id') as string;
   
   if (id.endsWith('-start')) {
