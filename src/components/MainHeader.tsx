@@ -1,5 +1,5 @@
 
-import { TrainFront, Bookmark, Menu } from "lucide-react";
+import { TrainFront, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -45,12 +45,6 @@ const MainHeader = () => {
                 Stationsök
               </Button>
             </Link>
-            <Link to="/favorites">
-              <Button variant="outline" className="flex items-center gap-2">
-                <Bookmark className="h-4 w-4" />
-                Favoriter
-              </Button>
-            </Link>
             <HelpMenu />
             <ThemeToggle />
             <img 
@@ -67,12 +61,6 @@ const MainHeader = () => {
           <Link to="/station-search" className="block">
             <Button variant="outline" className="w-full justify-start">
               Stationsök
-            </Button>
-          </Link>
-          <Link to="/favorites" className="block">
-            <Button variant="outline" className="w-full justify-start">
-              <Bookmark className="h-4 w-4 mr-2" />
-              Favoriter
             </Button>
           </Link>
         </div>
