@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { TrainDataProvider } from "../providers/TrainDataProvider";
 import MainHeader from "../components/MainHeader";
-import TimetableToolbar from "../components/TimetableToolbar";
+import { TimetableToolbar } from "../components/TimetableToolbar";
 import TrainTimetable from "../components/TrainTimetable";
 
 const Index = () => {
