@@ -26,7 +26,7 @@ const Footer = () => {
             </div>
           </div>
           <p className="text-xs text-muted-foreground text-center">
-            © {new Date().getFullYear()} RISE Research Institutes of Sweden. Tåginfo följer systemets standardinställning för mörkt/ljust läge.
+            © {new Date().getFullYear()} RISE Research Institutes of Sweden.
           </p>
         </div>
       </div>
