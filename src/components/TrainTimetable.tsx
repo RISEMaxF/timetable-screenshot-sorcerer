@@ -14,7 +14,11 @@ import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { useTrainData } from "../providers/TrainDataProvider";
 import { useFavorites } from "@/contexts/FavoritesContext";
 
-const TrainTimetable = () => {
+interface TrainTimetableProps {
+  showFavorites: boolean;
+}
+
+const TrainTimetable = ({ showFavorites }: TrainTimetableProps) => {
   const { trains, updateTrain } = useTrainData();
   const { favoriteStations, addFavoriteStation, removeFavoriteStation, isFavoriteStation } = useFavorites();
   const [selectedTrains, setSelectedTrains] = useState<string[]>([]);
@@ -26,7 +30,6 @@ const TrainTimetable = () => {
   const [selectedCountry, setSelectedCountry] = useState("ALL");
   const [selectedStation, setSelectedStation] = useState("ALL");
   const [searchableColumns, setSearchableColumns] = useState<string[]>(["all"]);
-  const [showFavorites, setShowFavorites] = useState(false);
 
   // State for detail dialog
   const [selectedTrain, setSelectedTrain] = useState<Train | null>(null);
@@ -100,18 +103,10 @@ const TrainTimetable = () => {
 
   return (
     <>
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4">
         <h2 className="text-2xl font-bold text-foreground">
           {showFavorites ? "Favoritmarkeringar" : "Tågtidtabell"}
         </h2>
-        <Button 
-          variant="outline" 
-          onClick={() => setShowFavorites(!showFavorites)}
-          className="flex items-center gap-2"
-        >
-          <Star className={`h-4 w-4 ${showFavorites ? 'fill-yellow-400 text-yellow-400' : ''}`} />
-          {showFavorites ? "Visa alla tåg" : "Visa favoriter"}
-        </Button>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-4 w-full">

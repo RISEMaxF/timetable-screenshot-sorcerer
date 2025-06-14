@@ -1,5 +1,5 @@
 
-import { TrainFront, Menu } from "lucide-react";
+import { TrainFront, Menu, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -7,7 +7,12 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { ThemeToggle } from "./ThemeToggle";
 import HelpMenu from "./HelpMenu";
 
-const MainHeader = () => {
+interface MainHeaderProps {
+  showFavorites?: boolean;
+  onToggleFavorites?: () => void;
+}
+
+const MainHeader = ({ showFavorites = false, onToggleFavorites }: MainHeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isMobile = useIsMobile();
 
@@ -45,6 +50,16 @@ const MainHeader = () => {
                 Stationsök
               </Button>
             </Link>
+            {onToggleFavorites && (
+              <Button 
+                variant="outline" 
+                onClick={onToggleFavorites}
+                className="flex items-center gap-2"
+              >
+                <Star className={`h-4 w-4 ${showFavorites ? 'fill-yellow-400 text-yellow-400' : ''}`} />
+                {showFavorites ? "Visa alla tåg" : "Visa favoriter"}
+              </Button>
+            )}
             <HelpMenu />
             <ThemeToggle />
             <img 
@@ -63,6 +78,16 @@ const MainHeader = () => {
               Stationsök
             </Button>
           </Link>
+          {onToggleFavorites && (
+            <Button 
+              variant="outline" 
+              onClick={onToggleFavorites}
+              className="w-full justify-start flex items-center gap-2"
+            >
+              <Star className={`h-4 w-4 ${showFavorites ? 'fill-yellow-400 text-yellow-400' : ''}`} />
+              {showFavorites ? "Visa alla tåg" : "Visa favoriter"}
+            </Button>
+          )}
         </div>
       )}
     </div>
