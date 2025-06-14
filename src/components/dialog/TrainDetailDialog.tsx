@@ -24,7 +24,7 @@ const TrainDetailDialog = ({ train, isOpen, onClose }: TrainDetailDialogProps) =
         <div className="flex-1 overflow-hidden mt-4 mb-6">
           <TrainInfoGrid train={train} />
           <TrainHistoryTable train={train} />
-          <TrainDetailSections />
+          <TrainDetailSections trainId={train.id} />
         </div>
       </DialogContent>
     </Dialog>

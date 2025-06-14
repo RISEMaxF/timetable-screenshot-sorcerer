@@ -3,8 +3,13 @@ import React from "react";
 import { 
   Accordion, AccordionContent, AccordionItem, AccordionTrigger 
 } from "../ui/accordion";
+import TrainCarVisualization from "./TrainCarVisualization";
 
-const TrainDetailSections = () => {
+interface TrainDetailSectionsProps {
+  trainId: string;
+}
+
+const TrainDetailSections = ({ trainId }: TrainDetailSectionsProps) => {
   return (
     <div className="mt-5">
       <Accordion type="single" collapsible className="w-full">
@@ -35,9 +40,7 @@ const TrainDetailSections = () => {
             <span className="text-base font-medium">Tågsammansättning</span>
           </AccordionTrigger>
           <AccordionContent className="text-sm">
-            <div className="h-24 flex items-center justify-center bg-gray-100 rounded-md">
-              Tågsammansättnings information skulle visas här
-            </div>
+            <TrainCarVisualization trainId={trainId} />
           </AccordionContent>
         </AccordionItem>
       </Accordion>
