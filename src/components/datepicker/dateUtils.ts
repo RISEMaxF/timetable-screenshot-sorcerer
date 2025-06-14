@@ -1,4 +1,5 @@
-import { addDays, subDays, format } from "date-fns";
+
+import { addDays, subDays, format, isValid } from "date-fns";
 import { sv } from "date-fns/locale";
 import { DateDirection, DateRangeType } from "./types";
 
@@ -66,16 +67,24 @@ export function formatDateDisplay({
   };
   selectedDates: Date[];
 }): string {
+  // Helper function to safely format dates
+  const safeFormat = (dateToFormat: Date, formatString: string) => {
+    if (!dateToFormat || !isValid(dateToFormat)) {
+      return "Invalid date";
+    }
+    return format(dateToFormat, formatString, { locale: sv });
+  };
+
   if (dateRangeType === 'single') {
-    return format(date, "PPP", { locale: sv });
+    return safeFormat(date, "PPP");
   } else if (dateRangeType === 'range' && dateRange.from && dateRange.to) {
-    return `${format(dateRange.from, "d MMM", { locale: sv })} - ${format(dateRange.to, "d MMM", { locale: sv })}`;
+    return `${safeFormat(dateRange.from, "d MMM")} - ${safeFormat(dateRange.to, "d MMM")}`;
   } else if (dateRangeType === 'multi' && selectedDates.length > 0) {
     if (selectedDates.length === 1) {
-      return format(selectedDates[0], "PPP", { locale: sv });
+      return safeFormat(selectedDates[0], "PPP");
     } else {
-      return `${selectedDates.length} dagar: ${format(selectedDates[0], "d MMM", { locale: sv })} - ${format(selectedDates[selectedDates.length - 1], "d MMM", { locale: sv })}`;
+      return `${selectedDates.length} dagar: ${safeFormat(selectedDates[0], "d MMM")} - ${safeFormat(selectedDates[selectedDates.length - 1], "d MMM")}`;
     }
   }
-  return format(date, "PPP", { locale: sv });
+  return safeFormat(date, "PPP");
 }

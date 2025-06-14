@@ -7,6 +7,8 @@ import TrainTimetable from "../components/TrainTimetable";
 
 const Index = () => {
   const [showFavorites, setShowFavorites] = useState(false);
+  const [location, setLocation] = useState("SE");
+  const [date, setDate] = useState(new Date());
 
   const handleToggleFavorites = () => {
     setShowFavorites(!showFavorites);
@@ -20,7 +22,12 @@ const Index = () => {
           onToggleFavorites={handleToggleFavorites}
         />
         <div className="container mx-auto p-4 sm:p-6 space-y-6">
-          <TimetableToolbar />
+          <TimetableToolbar 
+            location={location}
+            setLocation={setLocation}
+            date={date}
+            setDate={setDate}
+          />
           <TrainTimetable showFavorites={showFavorites} />
         </div>
       </div>
