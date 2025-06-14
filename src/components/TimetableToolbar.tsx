@@ -85,8 +85,8 @@ export function TimetableToolbar({
   };
 
   return (
-    <div className="flex flex-col bg-gray-50 border-b border-gray-200">
-      <div className="bg-white px-6 py-4 border-b border-gray-200 shadow-sm">
+    <div className="flex flex-col bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+      <div className="bg-white dark:bg-gray-800 px-6 py-4 border-b border-gray-200 dark:border-gray-700 shadow-sm">
         <div className="flex flex-col gap-4">
           {/* Search row */}
           <div className="flex items-center gap-3">
