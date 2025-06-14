@@ -19,6 +19,7 @@ const FavoriteStationsList: React.FC<FavoriteStationsListProps> = ({
   // Get favorite stations for current country
   const currentCountryFavorites = favoriteStations.filter(fav => fav.country === location);
 
+  // Don't render anything if there are no favorites
   if (currentCountryFavorites.length === 0) {
     return null;
   }
