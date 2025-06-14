@@ -30,8 +30,8 @@ const SearchInput = ({
 
   return (
     <div className={cn(
-      "flex-1 flex items-center transition-all duration-200 rounded-full border shadow-sm overflow-hidden",
-      isFocused ? "ring-2 ring-blue-200 border-blue-300" : "border-gray-200"
+      "flex-1 flex items-center transition-all duration-200 rounded-full border shadow-sm overflow-hidden bg-white dark:bg-gray-800",
+      isFocused ? "ring-2 ring-blue-200 dark:ring-blue-500/30 border-blue-300 dark:border-blue-500" : "border-gray-200 dark:border-gray-600"
     )}>
       <SearchBox 
         searchTerm={searchTerm} 

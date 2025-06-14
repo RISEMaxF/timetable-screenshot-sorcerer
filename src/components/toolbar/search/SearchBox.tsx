@@ -14,7 +14,7 @@ const SearchBox = ({ searchTerm, setSearchTerm }: SearchBoxProps) => {
 
   return (
     <div className="relative flex-1 flex items-center h-10">
-      <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+      <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500">
         <Search className="h-4 w-4" />
       </div>
       <Input
@@ -24,8 +24,7 @@ const SearchBox = ({ searchTerm, setSearchTerm }: SearchBoxProps) => {
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         className={cn(
-          "pl-10 pr-4 h-10 border-0 shadow-none focus-visible:ring-0 w-full",
-          isFocused ? "bg-white" : "bg-transparent"
+          "pl-10 pr-4 h-10 border-0 shadow-none focus-visible:ring-0 w-full bg-transparent text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400"
         )}
       />
     </div>
