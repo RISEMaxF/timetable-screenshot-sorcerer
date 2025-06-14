@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Columns } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -80,18 +79,24 @@ const ColumnSelector = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-10 px-3 border-l border-gray-200 text-gray-700 rounded-none hover:bg-gray-50">
+        <Button 
+          variant="ghost" 
+          className="h-10 px-3 text-gray-700 dark:text-gray-300 rounded-none hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:text-gray-900 dark:hover:text-gray-100"
+        >
           <Columns className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56 bg-white border border-gray-100 shadow-lg rounded-lg p-1">
-        <div className="p-2 border-b border-gray-100">
-          <h3 className="text-xs font-medium text-gray-500 mb-2">SÖK I KOLUMNER</h3>
+      <DropdownMenuContent 
+        align="end" 
+        className="w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg rounded-lg p-1"
+      >
+        <div className="p-2 border-b border-gray-100 dark:border-gray-700">
+          <h3 className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">SÖK I KOLUMNER</h3>
           <div className="space-y-1">
             <DropdownMenuCheckboxItem 
               checked={searchableColumns.includes("all")}
               onCheckedChange={() => handleColumnToggle("all")}
-              className="cursor-pointer hover:bg-gray-50 rounded-md"
+              className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md text-gray-900 dark:text-gray-100"
             >
               Alla kolumner
             </DropdownMenuCheckboxItem>
@@ -101,7 +106,7 @@ const ColumnSelector = ({
                 key={column.id}
                 checked={isColumnSelected(column.id)}
                 onCheckedChange={() => handleColumnToggle(column.id)}
-                className="cursor-pointer hover:bg-gray-50 rounded-md"
+                className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md text-gray-900 dark:text-gray-100"
               >
                 {column.label}
               </DropdownMenuCheckboxItem>
@@ -110,7 +115,7 @@ const ColumnSelector = ({
         </div>
         
         <div className="p-2">
-          <h3 className="text-xs font-medium text-gray-500 mb-2">SÖKALTERNATIV</h3>
+          <h3 className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">SÖKALTERNATIV</h3>
           <div className="flex items-center px-2 py-1">
             <input 
               type="checkbox" 
@@ -119,7 +124,7 @@ const ColumnSelector = ({
               onChange={() => setExactMatch(!exactMatch)}
               className="mr-2 h-4 w-4 rounded text-blue-500 focus:ring-blue-500"
             />
-            <label htmlFor="exactMatch" className="text-sm text-gray-700">Exakt matchning</label>
+            <label htmlFor="exactMatch" className="text-sm text-gray-700 dark:text-gray-300">Exakt matchning</label>
           </div>
         </div>
       </DropdownMenuContent>

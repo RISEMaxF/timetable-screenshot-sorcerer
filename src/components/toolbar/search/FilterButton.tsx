@@ -20,7 +20,7 @@ const FilterButton = ({ setFilterStatus, onSort }: FilterButtonProps) => {
       <DropdownMenuTrigger asChild>
         <Button 
           variant="ghost" 
-          className="h-10 px-3 border-l border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-none hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:text-gray-900 dark:hover:text-gray-100"
+          className="h-10 px-3 border-l border-gray-200/60 dark:border-gray-600/40 text-gray-700 dark:text-gray-300 rounded-none hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:text-gray-900 dark:hover:text-gray-100"
         >
           <Filter className="h-4 w-4" />
         </Button>
