@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, Star, StarOff } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -10,6 +10,8 @@ import {
 import { COUNTRIES } from "@/constants/countries";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
+import { useFavorites } from "@/contexts/FavoritesContext";
+import { Separator } from "@/components/ui/separator";
 
 interface LocationSelectorProps {
   location: string;
@@ -106,6 +108,8 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
   const [openStation, setOpenStation] = useState(false);
   const [countrySearch, setCountrySearch] = useState("");
   const [stationSearch, setStationSearch] = useState("");
+  
+  const { favoriteStations, addFavoriteStation, removeFavoriteStation, isFavoriteStation } = useFavorites();
 
   // Get current country
   const currentCountry = COUNTRIES[location] || COUNTRIES.ALL;
@@ -126,12 +130,36 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
     s.name.toLowerCase().includes(stationSearch.toLowerCase())
   );
 
+  // Get favorite stations for current country
+  const currentCountryFavorites = favoriteStations.filter(fav => fav.country === location);
+
   // Handle country change - reset station to ALL when country changes
   const handleCountryChange = (countryCode: string) => {
     setLocation(countryCode);
     setStation("ALL");
     setCountrySearch("");
     setOpenCountry(false);
+  };
+
+  const handleStationSelect = (stationId: string) => {
+    setStation(stationId);
+    setStationSearch("");
+    setOpenStation(false);
+  };
+
+  const toggleFavorite = (stationId: string, stationName: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (stationId === "ALL") return; // Don't allow favoriting "All stations"
+    
+    if (isFavoriteStation(stationId, location)) {
+      removeFavoriteStation(stationId, location);
+    } else {
+      addFavoriteStation({
+        id: stationId,
+        name: stationName,
+        country: location
+      });
+    }
   };
 
   return (
@@ -218,6 +246,36 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
               className="h-8"
             />
             <div className="max-h-[300px] overflow-y-auto">
+              {/* Favorite stations section */}
+              {currentCountryFavorites.length > 0 && (
+                <>
+                  <div className="px-2 py-1 text-xs font-medium text-muted-foreground">
+                    Favoriter
+                  </div>
+                  {currentCountryFavorites.map((fav) => (
+                    <div
+                      key={`fav-${fav.id}`}
+                      className={cn(
+                        "flex items-center justify-between px-2 py-2 cursor-pointer rounded-md",
+                        fav.id === station ? "bg-accent" : "hover:bg-muted"
+                      )}
+                      onClick={() => handleStationSelect(fav.id)}
+                    >
+                      <div className="flex items-center">
+                        <Star className="h-3 w-3 text-yellow-500 mr-2" />
+                        <span>{fav.name}</span>
+                      </div>
+                      {fav.id === station && <Check className="h-4 w-4" />}
+                    </div>
+                  ))}
+                  <Separator className="my-2" />
+                </>
+              )}
+
+              {/* All stations section */}
+              <div className="px-2 py-1 text-xs font-medium text-muted-foreground">
+                Alla stationer
+              </div>
               {filteredStations.length === 0 ? (
                 <div className="py-2 text-center text-sm text-muted-foreground">
                   Inga träffar.
@@ -230,14 +288,28 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
                       "flex items-center justify-between px-2 py-2 cursor-pointer rounded-md",
                       stn.id === station ? "bg-accent" : "hover:bg-muted"
                     )}
-                    onClick={() => {
-                      setStation(stn.id);
-                      setStationSearch("");
-                      setOpenStation(false);
-                    }}
+                    onClick={() => handleStationSelect(stn.id)}
                   >
-                    <span>{stn.name}</span>
-                    {stn.id === station && <Check className="h-4 w-4" />}
+                    <div className="flex items-center">
+                      <span>{stn.name}</span>
+                    </div>
+                    <div className="flex items-center">
+                      {stn.id !== "ALL" && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6 p-0 hover:bg-transparent"
+                          onClick={(e) => toggleFavorite(stn.id, stn.name, e)}
+                        >
+                          {isFavoriteStation(stn.id, location) ? (
+                            <Star className="h-3 w-3 text-yellow-500 fill-yellow-500" />
+                          ) : (
+                            <StarOff className="h-3 w-3 text-muted-foreground" />
+                          )}
+                        </Button>
+                      )}
+                      {stn.id === station && <Check className="h-4 w-4 ml-1" />}
+                    </div>
                   </div>
                 ))
               )}

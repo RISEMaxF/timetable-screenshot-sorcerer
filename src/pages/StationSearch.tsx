@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import { TrainDataProvider, useTrainData } from "../providers/TrainDataProvider";
+import { FavoritesProvider } from "../contexts/FavoritesContext";
 import StationHeader from "../components/station/StationHeader";
 import StationSearchFilters from "../components/station/StationSearchFilters";
 import StationSearchResults from "../components/station/StationSearchResults";
@@ -87,7 +88,9 @@ const StationSearchContent = () => {
 const StationSearch = () => {
   return (
     <TrainDataProvider>
-      <StationSearchContent />
+      <FavoritesProvider>
+        <StationSearchContent />
+      </FavoritesProvider>
     </TrainDataProvider>
   );
 };
