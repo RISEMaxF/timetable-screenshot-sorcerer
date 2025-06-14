@@ -87,7 +87,7 @@ const StationSearchResults = ({
   return (
     <div>
       {/* Search bar above the table */}
-      <div className="p-4 border-b border-border">
+      <div className="p-4 border-b border-border bg-background">
         <div className="relative w-full max-w-md">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <Search className="h-5 w-5 text-muted-foreground" />
@@ -124,7 +124,7 @@ const StationSearchResults = ({
                 key={train.id}
                 className={cn(
                   index % 2 === 0 ? "bg-background" : "bg-muted/50",
-                  train.highlighted ? "bg-pink-50 dark:bg-pink-950/20" : ""
+                  train.highlighted ? "bg-red-100 dark:bg-red-900/40" : ""
                 )}
               >
                 <TableCell className="font-medium">{train.id}</TableCell>

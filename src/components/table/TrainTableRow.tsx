@@ -61,7 +61,7 @@ const TrainTableRow = ({
     }
     
     if (train.highlighted) {
-      return cn(baseClasses, "bg-pink-50 dark:bg-pink-900/20 hover:bg-pink-100 dark:hover:bg-pink-900/30");
+      return cn(baseClasses, "bg-red-100 dark:bg-red-900/40 hover:bg-red-200 dark:hover:bg-red-900/50");
     }
     
     // Default alternating rows
