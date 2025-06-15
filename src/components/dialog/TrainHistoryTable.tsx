@@ -111,44 +111,4 @@ const TrainHistoryTable = ({ train }: TrainHistoryTableProps) => {
   );
 };
 
-// Mock history data generator based on the train info
-const generateMockHistory = (train: Train): TrainHistoryItem[] => {
-  const baseTime = train.arrivalTime ? train.arrivalTime : "08:00";
-  const [hours, minutes] = baseTime.split(':').map(Number);
-  
-  const history: TrainHistoryItem[] = [
-    {
-      actor: "trv_dagligfärdplan",
-      time: `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`,
-      type: "Planerad",
-      reportedAt: "2024-09-12 00:40"
-    }
-  ];
-
-  // Add some simulated change history
-  for (let i = 1; i <= 15; i++) {
-    const newMinutes = (minutes + i * 2) % 60;
-    const newHours = (hours + Math.floor((minutes + i * 2) / 60)) % 24;
-    const timeStr = `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}`;
-    
-    history.push({
-      actor: "PlankanSJ",
-      time: train.arrivalTime,
-      type: "Beraknad",
-      reportedAt: timeStr,
-      details: i % 3 === 0 ? "Försenad p.g.a. signalfel" : undefined
-    });
-  }
-
-  // Add a "Faktisk" entry as the last item
-  history.push({
-    actor: "trv",
-    time: train.newTime || train.arrivalTime,
-    type: "Faktisk",
-    reportedAt: train.newTime || "08:50"
-  });
-
-  return history;
-};
-
 export default TrainHistoryTable;
