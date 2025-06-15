@@ -10,39 +10,43 @@ interface TrainCarVisualizationProps {
 const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
   const [viewMode, setViewMode] = useState<"train" | "list">("train");
   
-  // Mock data for train cars - in real app this would come from props or API
+  // Mock data for cargo train cars with realistic IDs
   const trainCars = [
-    { id: "A1", type: "locomotive", position: 1, carNumber: "001" },
-    { id: "B2", type: "passenger", position: 2, carNumber: "102" },
-    { id: "C3", type: "passenger", position: 3, carNumber: "103" },
-    { id: "D4", type: "passenger", position: 4, carNumber: "104" },
-    { id: "E5", type: "passenger", position: 5, carNumber: "105" },
-    { id: "F6", type: "dining", position: 6, carNumber: "201" },
-    { id: "G7", type: "passenger", position: 7, carNumber: "106" },
-    { id: "H8", type: "passenger", position: 8, carNumber: "107" }
+    { id: "X2-72001", type: "locomotive", position: 1, carNumber: "72001", weight: "84t" },
+    { id: "Sgns-60001", type: "flatcar", position: 2, carNumber: "60001", weight: "22t" },
+    { id: "Sgns-60002", type: "flatcar", position: 3, carNumber: "60002", weight: "22t" },
+    { id: "Eanos-52003", type: "hopper", position: 4, carNumber: "52003", weight: "25t" },
+    { id: "Eanos-52004", type: "hopper", position: 5, carNumber: "52004", weight: "25t" },
+    { id: "Shimmns-70005", type: "tank", position: 6, carNumber: "70005", weight: "28t" },
+    { id: "Sgns-60006", type: "flatcar", position: 7, carNumber: "60006", weight: "22t" },
+    { id: "Eanos-52007", type: "hopper", position: 8, carNumber: "52007", weight: "25t" }
   ];
 
   const getCarColor = (type: string) => {
     switch (type) {
       case "locomotive":
-        return "bg-red-500 dark:bg-red-600";
-      case "dining":
-        return "bg-yellow-500 dark:bg-yellow-600";
-      case "passenger":
+        return "bg-slate-700 dark:bg-slate-600";
+      case "tank":
+        return "bg-slate-500 dark:bg-slate-400";
+      case "hopper":
+        return "bg-gray-600 dark:bg-gray-500";
+      case "flatcar":
       default:
-        return "bg-blue-500 dark:bg-blue-600";
+        return "bg-gray-500 dark:bg-gray-600";
     }
   };
 
-  const getCarIcon = (type: string) => {
+  const getCarType = (type: string) => {
     switch (type) {
       case "locomotive":
-        return "🚂";
-      case "dining":
-        return "🍽️";
-      case "passenger":
+        return "Lok";
+      case "tank":
+        return "Tank";
+      case "hopper":
+        return "Hopper";
+      case "flatcar":
       default:
-        return "🚋";
+        return "Flat";
     }
   };
 
@@ -57,7 +61,7 @@ const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
             variant={viewMode === "train" ? "default" : "outline"}
             size="sm"
             onClick={() => setViewMode("train")}
-            className="bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-700 dark:hover:bg-blue-800"
+            className="bg-slate-600 hover:bg-slate-700 text-white dark:bg-slate-700 dark:hover:bg-slate-800"
           >
             <TrainIcon className="h-4 w-4 mr-1" />
             Tågvy
@@ -82,16 +86,16 @@ const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
                 <div
                   className={`
                     flex flex-col items-center justify-center
-                    w-20 h-16 rounded-lg text-white text-xs font-medium
+                    w-24 h-20 rounded-lg text-white text-xs font-medium
                     ${getCarColor(car.type)}
                     transition-all duration-200 hover:scale-105 cursor-pointer
                     shadow-md hover:shadow-lg
                   `}
-                  title={`Vagn ${car.id} - ${car.type} - Nummer ${car.carNumber}`}
+                  title={`${car.id} - ${getCarType(car.type)} - ${car.weight}`}
                 >
-                  <div className="text-lg mb-1">{getCarIcon(car.type)}</div>
-                  <div className="font-bold">{car.id}</div>
+                  <div className="font-bold text-sm">{car.id.split('-')[0]}</div>
                   <div className="text-xs opacity-90">#{car.carNumber}</div>
+                  <div className="text-xs opacity-75">{car.weight}</div>
                 </div>
                 {index < trainCars.length - 1 && (
                   <div className="w-2 h-1 bg-gray-400 dark:bg-gray-500 mx-1 rounded"></div>
@@ -100,24 +104,9 @@ const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
             ))}
           </div>
           
-          <div className="mt-4 flex gap-6 text-sm text-gray-600 dark:text-gray-400">
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-red-500 dark:bg-red-600 rounded"></div>
-              <span>Lok</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-blue-500 dark:bg-blue-600 rounded"></div>
-              <span>Passagerare</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-yellow-500 dark:bg-yellow-600 rounded"></div>
-              <span>Restaurang</span>
-            </div>
-          </div>
-          
-          <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-            <p className="text-sm text-blue-800 dark:text-blue-200 font-medium">
-              Total längd: {trainCars.length} vagnar | Riktning: Västerut →
+          <div className="mt-4 p-3 bg-slate-50 dark:bg-slate-900/20 rounded-lg border border-slate-200 dark:border-slate-800">
+            <p className="text-sm text-slate-800 dark:text-slate-200 font-medium">
+              Total längd: {trainCars.length} vagnar | Riktning: Västerut → | Total vikt: {trainCars.reduce((sum, car) => sum + parseInt(car.weight), 0)}t
             </p>
           </div>
         </div>
@@ -132,7 +121,7 @@ const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
                 <div className="flex items-center gap-4">
                   <div
                     className={`
-                      w-10 h-10 rounded-full flex items-center justify-center
+                      w-12 h-12 rounded-lg flex items-center justify-center
                       text-white font-bold text-sm
                       ${getCarColor(car.type)}
                       shadow-md
@@ -142,14 +131,16 @@ const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
                   </div>
                   <div>
                     <div className="font-semibold text-gray-900 dark:text-gray-100">
-                      Vagn {car.id}
+                      {car.id}
                     </div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400 capitalize">
-                      {car.type} - Nummer {car.carNumber}
+                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                      {getCarType(car.type)} - Nummer {car.carNumber} - {car.weight}
                     </div>
                   </div>
                 </div>
-                <div className="text-3xl">{getCarIcon(car.type)}</div>
+                <div className="text-sm font-mono text-gray-600 dark:text-gray-300">
+                  {getCarType(car.type)}
+                </div>
               </div>
             ))}
           </div>
