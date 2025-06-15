@@ -1,7 +1,6 @@
-
 import React, { useState } from "react";
 import { Button } from "../ui/button";
-import { List, Train as TrainIcon, X } from "lucide-react";
+import { List, Train as TrainIcon } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 
 interface TrainCar {
@@ -281,16 +280,8 @@ const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
       <Dialog open={isCarDetailOpen} onOpenChange={setIsCarDetailOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center justify-between">
-              <span>Vagndetaljer - {selectedCar?.id}</span>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsCarDetailOpen(false)}
-                className="h-6 w-6 p-0"
-              >
-                <X className="h-4 w-4" />
-              </Button>
+            <DialogTitle>
+              Vagndetaljer - {selectedCar?.id}
             </DialogTitle>
           </DialogHeader>
           
