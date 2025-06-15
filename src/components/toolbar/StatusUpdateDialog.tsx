@@ -30,32 +30,40 @@ const StatusUpdateDialog = ({ isOpen, onClose, selectedCount, onUpdate }: Status
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100">
         <DialogHeader>
-          <DialogTitle>Set Status for {selectedCount} Trains</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-gray-900 dark:text-gray-100">Set Status for {selectedCount} Trains</DialogTitle>
+          <DialogDescription className="text-gray-600 dark:text-gray-400">
             Mark all selected trains as completed or pending.
           </DialogDescription>
         </DialogHeader>
         <div className="py-4 flex gap-4">
           <Button 
             variant={statusValue === true ? "default" : "outline"}
-            className="flex-1"
+            className={`flex-1 ${
+              statusValue === true 
+                ? "bg-blue-600 hover:bg-blue-700 text-white" 
+                : "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+            }`}
             onClick={() => setStatusValue(true)}
           >
             Mark as Completed
           </Button>
           <Button 
             variant={statusValue === false ? "default" : "outline"}
-            className="flex-1"
+            className={`flex-1 ${
+              statusValue === false 
+                ? "bg-blue-600 hover:bg-blue-700 text-white" 
+                : "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+            }`}
             onClick={() => setStatusValue(false)}
           >
             Mark as Pending
           </Button>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={handleUpdate}>Apply to Selected</Button>
+          <Button variant="outline" onClick={onClose} className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">Cancel</Button>
+          <Button onClick={handleUpdate} className="bg-blue-600 hover:bg-blue-700 text-white">Apply to Selected</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

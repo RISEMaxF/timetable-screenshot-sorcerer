@@ -32,10 +32,10 @@ const TrackUpdateDialog = ({ isOpen, onClose, selectedCount, onUpdate }: TrackUp
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100">
         <DialogHeader>
-          <DialogTitle>Set Track for {selectedCount} Trains</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-gray-900 dark:text-gray-100">Set Track for {selectedCount} Trains</DialogTitle>
+          <DialogDescription className="text-gray-600 dark:text-gray-400">
             This will update the track for all selected trains.
           </DialogDescription>
         </DialogHeader>
@@ -44,12 +44,12 @@ const TrackUpdateDialog = ({ isOpen, onClose, selectedCount, onUpdate }: TrackUp
             value={trackValue} 
             onChange={(e) => setTrackValue(e.target.value)}
             placeholder="Enter track number"
-            className="w-full"
+            className="w-full bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
           />
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={handleUpdate}>Apply to Selected</Button>
+          <Button variant="outline" onClick={onClose} className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">Cancel</Button>
+          <Button onClick={handleUpdate} className="bg-blue-600 hover:bg-blue-700 text-white">Apply to Selected</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
