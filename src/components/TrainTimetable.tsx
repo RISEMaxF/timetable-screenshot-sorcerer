@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from "react";
 import { Table, TableBody } from "@/components/ui/table";
 import { Train } from "../types/train";
@@ -103,12 +102,6 @@ const TrainTimetable = ({ showFavorites }: TrainTimetableProps) => {
 
   return (
     <>
-      <div className="mb-4">
-        <h2 className="text-2xl font-bold text-foreground">
-          {showFavorites ? "Favoritmarkeringar" : "Tågtidtabell"}
-        </h2>
-      </div>
-
       <div className="flex flex-col lg:flex-row gap-4 w-full">
         <div className="lg:w-2/3 xl:w-3/4 border rounded-md overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
