@@ -14,7 +14,7 @@ const TrainDetailHeader = ({ train }: TrainDetailHeaderProps) => {
       <DialogTitle className="text-xl font-bold">
         Information för tåg {train.id}
       </DialogTitle>
-      <DialogDescription className="text-base text-black flex justify-between items-center mt-4">
+      <DialogDescription className="text-base text-gray-900 dark:text-gray-100 flex justify-between items-center mt-4">
         <div className="flex items-center space-x-6">
           <div>
             {train.newTime ? (
@@ -28,13 +28,13 @@ const TrainDetailHeader = ({ train }: TrainDetailHeaderProps) => {
             )}
           </div>
           <div className="flex items-center">
-            <span className="bg-green-100 rounded-full p-2 inline-flex">
-              <Info className="h-5 w-5 text-green-600" />
+            <span className="bg-green-100 dark:bg-green-900 rounded-full p-2 inline-flex">
+              <Info className="h-5 w-5 text-green-600 dark:text-green-400" />
             </span>
             <span className="ml-2">Ankomst station Hgl</span>
           </div>
         </div>
-        <div className="text-gray-700">
+        <div className="text-gray-700 dark:text-gray-300">
           <span className="mr-1">Spår</span>
           {train.newTrack ? (
             <>
