@@ -132,14 +132,13 @@ export function TimetableToolbar({
         </div>
       </div>
       
-      <div className="flex flex-col space-y-4 p-4">
-        <div className="flex flex-wrap justify-between items-center">
-          <BatchActionButtons 
-            selectedCount={selectedCount} 
-            onOpenDialog={handleOpenDialog}
-            selectedTrains={selectedTrains} 
-          />
-        </div>
+      {/* Removed visual styling, keeping only functional structure */}
+      <div className="px-6 py-2">
+        <BatchActionButtons 
+          selectedCount={selectedCount} 
+          onOpenDialog={handleOpenDialog}
+          selectedTrains={selectedTrains} 
+        />
       </div>
 
       <DialogManager 
