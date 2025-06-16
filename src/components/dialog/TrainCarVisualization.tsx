@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { List, Train as TrainIcon } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { Separator } from "../ui/separator";
 
 interface TrainCar {
   id: string;
@@ -15,6 +17,12 @@ interface TrainCar {
   maxLoad: string;
   currentLoad: string;
   status: string;
+  emptyWeight?: string;
+  numAxles?: string;
+  carryingUnits?: Array<{
+    id: string;
+    unitId: string;
+  }>;
 }
 
 interface TrainCarVisualizationProps {
@@ -34,25 +42,35 @@ const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
       position: 1, 
       carNumber: "72001", 
       weight: "84t",
+      emptyWeight: "84t",
       length: "19.5m",
+      numAxles: "6",
       manufacturer: "Siemens",
       yearBuilt: "2018",
       maxLoad: "N/A",
       currentLoad: "N/A",
-      status: "Operativ"
+      status: "Operativ",
+      carryingUnits: []
     },
     { 
       id: "Sgns-60001", 
       type: "flatcar", 
       position: 2, 
-      carNumber: "60001", 
+      carNumber: "731301.427443090647", 
       weight: "22t",
+      emptyWeight: "22t",
       length: "14.7m",
+      numAxles: "4",
       manufacturer: "Greenbrier",
       yearBuilt: "2019",
       maxLoad: "68t",
       currentLoad: "45t",
-      status: "Lastad"
+      status: "Lastad",
+      carryingUnits: [
+        { id: "1", unitId: "tcmf:grouping:train:id:6bc0848a-2615-4934-b599-014fa6f5d035" },
+        { id: "2", unitId: "tcmf:grouping:train:id:1c2a2867-05e7-4acd-9426-372401ddeeee" },
+        { id: "3", unitId: "tcmf:grouping:train:id:9a59f84a-c4df-40f8-ad9a-f16f0bbff57c" }
+      ]
     },
     { 
       id: "Sgns-60002", 
@@ -60,12 +78,15 @@ const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
       position: 3, 
       carNumber: "60002", 
       weight: "22t",
+      emptyWeight: "22t",
       length: "14.7m",
+      numAxles: "4",
       manufacturer: "Greenbrier",
       yearBuilt: "2019",
       maxLoad: "68t",
       currentLoad: "52t",
-      status: "Lastad"
+      status: "Lastad",
+      carryingUnits: []
     },
     { 
       id: "Eanos-52003", 
@@ -73,12 +94,15 @@ const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
       position: 4, 
       carNumber: "52003", 
       weight: "25t",
+      emptyWeight: "25t",
       length: "12.2m",
+      numAxles: "4",
       manufacturer: "Tatravagónka",
       yearBuilt: "2020",
       maxLoad: "58t",
       currentLoad: "58t",
-      status: "Full"
+      status: "Full",
+      carryingUnits: []
     },
     { 
       id: "Eanos-52004", 
@@ -86,12 +110,15 @@ const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
       position: 5, 
       carNumber: "52004", 
       weight: "25t",
+      emptyWeight: "25t",
       length: "12.2m",
+      numAxles: "4",
       manufacturer: "Tatravagónka",
       yearBuilt: "2020",
       maxLoad: "58t",
       currentLoad: "41t",
-      status: "Delvis lastad"
+      status: "Delvis lastad",
+      carryingUnits: []
     },
     { 
       id: "Shimmns-70005", 
@@ -99,12 +126,15 @@ const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
       position: 6, 
       carNumber: "70005", 
       weight: "28t",
+      emptyWeight: "28t",
       length: "16.8m",
+      numAxles: "4",
       manufacturer: "VTG",
       yearBuilt: "2017",
       maxLoad: "65t",
       currentLoad: "63t",
-      status: "Lastad"
+      status: "Lastad",
+      carryingUnits: []
     },
     { 
       id: "Sgns-60006", 
@@ -112,12 +142,15 @@ const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
       position: 7, 
       carNumber: "60006", 
       weight: "22t",
+      emptyWeight: "22t",
       length: "14.7m",
+      numAxles: "4",
       manufacturer: "Greenbrier",
       yearBuilt: "2019",
       maxLoad: "68t",
       currentLoad: "0t",
-      status: "Tom"
+      status: "Tom",
+      carryingUnits: []
     },
     { 
       id: "Eanos-52007", 
@@ -125,12 +158,15 @@ const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
       position: 8, 
       carNumber: "52007", 
       weight: "25t",
+      emptyWeight: "25t",
       length: "12.2m",
+      numAxles: "4",
       manufacturer: "Tatravagónka",
       yearBuilt: "2021",
       maxLoad: "58t",
       currentLoad: "58t",
-      status: "Full"
+      status: "Full",
+      carryingUnits: []
     }
   ];
 
@@ -278,64 +314,129 @@ const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
       )}
 
       <Dialog open={isCarDetailOpen} onOpenChange={setIsCarDetailOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>
-              Vagndetaljer - {selectedCar?.id}
+            <DialogTitle className="text-xl font-bold">
+              Vagn {selectedCar?.carNumber}
             </DialogTitle>
           </DialogHeader>
           
           {selectedCar && (
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Typ</p>
-                  <p className="text-base font-semibold">{getCarType(selectedCar.type)}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Position</p>
-                  <p className="text-base font-semibold">{selectedCar.position}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Vagnummer</p>
-                  <p className="text-base font-semibold">{selectedCar.carNumber}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Längd</p>
-                  <p className="text-base font-semibold">{selectedCar.length}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Egenvikt</p>
-                  <p className="text-base font-semibold">{selectedCar.weight}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Max last</p>
-                  <p className="text-base font-semibold">{selectedCar.maxLoad}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Aktuell last</p>
-                  <p className="text-base font-semibold">{selectedCar.currentLoad}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Status</p>
-                  <p className={`text-base font-semibold ${getStatusColor(selectedCar.status)}`}>
-                    {selectedCar.status}
-                  </p>
-                </div>
-              </div>
-              
-              <div className="border-t pt-4">
-                <div className="grid grid-cols-1 gap-3">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Tillverkare</p>
-                    <p className="text-base">{selectedCar.manufacturer}</p>
+            <div className="mt-4">
+              <Tabs defaultValue="information" className="w-full">
+                <TabsList className="grid w-full grid-cols-2 bg-gray-100 dark:bg-gray-800">
+                  <TabsTrigger 
+                    value="information"
+                    className="data-[state=active]:bg-white data-[state=active]:text-gray-900 dark:data-[state=active]:bg-gray-700 dark:data-[state=active]:text-gray-100"
+                  >
+                    INFORMATION
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="timeline"
+                    className="data-[state=active]:bg-white data-[state=active]:text-gray-900 dark:data-[state=active]:bg-gray-700 dark:data-[state=active]:text-gray-100"
+                  >
+                    TIMELINE
+                  </TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="information" className="mt-6 space-y-6">
+                  {/* Basic Information */}
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-x-8 gap-y-4">
+                      <div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Vagn ID</p>
+                        <p className="text-base font-medium">{selectedCar.carNumber}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Typ</p>
+                        <p className="text-base font-medium">{getCarType(selectedCar.type)}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Godsvikt</p>
+                        <p className="text-base font-medium">{selectedCar.currentLoad}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Egenvikt</p>
+                        <p className="text-base font-medium">{selectedCar.emptyWeight || selectedCar.weight}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Fordonsposition</p>
+                        <p className="text-base font-medium">{selectedCar.position}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Längd</p>
+                        <p className="text-base font-medium">{selectedCar.length}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Antal axlar</p>
+                        <p className="text-base font-medium">{selectedCar.numAxles || "4"}</p>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Byggnadsår</p>
-                    <p className="text-base">{selectedCar.yearBuilt}</p>
+
+                  <Separator />
+
+                  {/* Carrying Section */}
+                  {selectedCar.carryingUnits && selectedCar.carryingUnits.length > 0 && (
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-lg font-semibold">Transporterar</h3>
+                        <span className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded text-sm font-medium">
+                          {selectedCar.carryingUnits.length}
+                        </span>
+                      </div>
+                      
+                      <div className="space-y-3">
+                        <div>
+                          <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Enhets-ID</p>
+                          <div className="space-y-2">
+                            {selectedCar.carryingUnits.map((unit, index) => (
+                              <div key={unit.id} className="bg-gray-50 dark:bg-gray-800 p-3 rounded border border-gray-200 dark:border-gray-700">
+                                <p className="text-sm font-mono text-gray-700 dark:text-gray-300 break-all">
+                                  {unit.unitId}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <Separator />
+
+                  {/* Additional Details */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold">Övrig information</h3>
+                    <div className="grid grid-cols-1 gap-4">
+                      <div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Tillverkare</p>
+                        <p className="text-base font-medium">{selectedCar.manufacturer}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Byggnadsår</p>
+                        <p className="text-base font-medium">{selectedCar.yearBuilt}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Max last</p>
+                        <p className="text-base font-medium">{selectedCar.maxLoad}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Status</p>
+                        <p className={`text-base font-medium ${getStatusColor(selectedCar.status)}`}>
+                          {selectedCar.status}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+                </TabsContent>
+                
+                <TabsContent value="timeline" className="mt-6">
+                  <div className="h-64 flex items-center justify-center bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                    <p className="text-gray-500 dark:text-gray-400">Timeline information skulle visas här</p>
+                  </div>
+                </TabsContent>
+              </Tabs>
             </div>
           )}
         </DialogContent>
