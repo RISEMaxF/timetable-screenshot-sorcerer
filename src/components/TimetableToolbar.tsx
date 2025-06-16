@@ -47,7 +47,7 @@ export function TimetableToolbar({
   searchableColumns = ["all"],
   setSearchableColumns = () => {},
   setFilterStatus = () => {}
-}: TimetableToolbarProps) => {
+}: TimetableToolbarProps) {
   const [openDialog, setOpenDialog] = useState("");
   const [selectedDates, setSelectedDates] = useState<Date[]>([date]);
   
