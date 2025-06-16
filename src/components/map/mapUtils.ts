@@ -88,15 +88,23 @@ export const getFeatureStyle = (feature: FeatureLike, isDarkMode: boolean): Styl
       }),
       text: new Text({
         text: stationName,
-        font: '12px sans-serif',
+        font: 'bold 12px sans-serif',
         fill: new Fill({
           color: isDarkMode ? '#ffffff' : '#000000'
         }),
         stroke: new Stroke({
           color: isDarkMode ? '#000000' : '#ffffff',
-          width: 3
+          width: 2
         }),
-        offsetY: -20,
+        backgroundFill: new Fill({
+          color: isDarkMode ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)'
+        }),
+        backgroundStroke: new Stroke({
+          color: isDarkMode ? '#374151' : '#d1d5db',
+          width: 1
+        }),
+        padding: [4, 6, 4, 6],
+        offsetY: -25,
         textAlign: 'center',
         textBaseline: 'bottom'
       })
@@ -116,15 +124,23 @@ export const getFeatureStyle = (feature: FeatureLike, isDarkMode: boolean): Styl
       }),
       text: new Text({
         text: stationName,
-        font: '12px sans-serif',
+        font: 'bold 12px sans-serif',
         fill: new Fill({
           color: isDarkMode ? '#ffffff' : '#000000'
         }),
         stroke: new Stroke({
           color: isDarkMode ? '#000000' : '#ffffff',
-          width: 3
+          width: 2
         }),
-        offsetY: -20,
+        backgroundFill: new Fill({
+          color: isDarkMode ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)'
+        }),
+        backgroundStroke: new Stroke({
+          color: isDarkMode ? '#374151' : '#d1d5db',
+          width: 1
+        }),
+        padding: [4, 6, 4, 6],
+        offsetY: -25,
         textAlign: 'center',
         textBaseline: 'bottom'
       })
