@@ -1,4 +1,5 @@
-import { Style, Stroke, Fill, Circle } from 'ol/style';
+
+import { Style, Stroke, Fill, Circle, Text } from 'ol/style';
 import { LineString, Point } from 'ol/geom';
 import Feature from 'ol/Feature';
 import { fromLonLat } from 'ol/proj';
@@ -50,14 +51,16 @@ export const createTrainFeatures = (
   const startFeature = new Feature({
     geometry: new Point(fromLonLat([fromLon, fromLat])),
     id: `${selectedTrain.id}-start`,
-    name: `Start of train ${selectedTrain.id} (${selectedTrain.from})`
+    name: `Start of train ${selectedTrain.id} (${selectedTrain.from})`,
+    stationName: selectedTrain.from || 'Avgång'
   });
   
   // Create end point
   const endFeature = new Feature({
     geometry: new Point(fromLonLat([toLon, toLat])),
     id: `${selectedTrain.id}-end`,
-    name: `End of train ${selectedTrain.id} (${selectedTrain.to})`
+    name: `End of train ${selectedTrain.id} (${selectedTrain.to})`,
+    stationName: selectedTrain.to || 'Ankomst'
   });
 
   vectorSource.addFeature(routeFeature);
@@ -68,6 +71,7 @@ export const createTrainFeatures = (
 // Style function for map features with dark mode support
 export const getFeatureStyle = (feature: FeatureLike, isDarkMode: boolean): Style => {
   const id = feature.get('id') as string;
+  const stationName = feature.get('stationName') as string;
   
   if (id.endsWith('-start')) {
     // Style for departure station
@@ -81,6 +85,20 @@ export const getFeatureStyle = (feature: FeatureLike, isDarkMode: boolean): Styl
           color: isDarkMode ? '#1f2937' : '#ffffff',
           width: 3
         })
+      }),
+      text: new Text({
+        text: stationName,
+        font: '12px sans-serif',
+        fill: new Fill({
+          color: isDarkMode ? '#ffffff' : '#000000'
+        }),
+        stroke: new Stroke({
+          color: isDarkMode ? '#000000' : '#ffffff',
+          width: 3
+        }),
+        offsetY: -20,
+        textAlign: 'center',
+        textBaseline: 'bottom'
       })
     });
   } else if (id.endsWith('-end')) {
@@ -95,6 +113,20 @@ export const getFeatureStyle = (feature: FeatureLike, isDarkMode: boolean): Styl
           color: isDarkMode ? '#1f2937' : '#ffffff',
           width: 3
         })
+      }),
+      text: new Text({
+        text: stationName,
+        font: '12px sans-serif',
+        fill: new Fill({
+          color: isDarkMode ? '#ffffff' : '#000000'
+        }),
+        stroke: new Stroke({
+          color: isDarkMode ? '#000000' : '#ffffff',
+          width: 3
+        }),
+        offsetY: -20,
+        textAlign: 'center',
+        textBaseline: 'bottom'
       })
     });
   } else {
