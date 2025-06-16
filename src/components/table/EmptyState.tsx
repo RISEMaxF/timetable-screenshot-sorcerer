@@ -13,26 +13,26 @@ const EmptyState: React.FC<EmptyStateProps> = ({ searchTerm, filterApplied }) =>
     if (searchTerm && filterApplied) {
       return {
         icon: <SearchX className="h-12 w-12 text-gray-400 mb-2" />,
-        title: "No matching trains found",
-        description: "Try changing your search term or filter criteria"
+        title: "Inga matchande tåg hittades",
+        description: "Försök ändra din sökterm eller filterkriterier"
       };
     } else if (searchTerm) {
       return {
         icon: <SearchX className="h-12 w-12 text-gray-400 mb-2" />,
-        title: "No trains match your search",
-        description: `No trains found matching "${searchTerm}"`
+        title: "Inga tåg matchar din sökning",
+        description: `Inga tåg hittades som matchar "${searchTerm}"`
       };
     } else if (filterApplied) {
       return {
         icon: <Filter className="h-12 w-12 text-gray-400 mb-2" />,
-        title: "No trains match this filter",
-        description: "Try changing your filter criteria"
+        title: "Inga tåg matchar detta filter",
+        description: "Försök ändra dina filterkriterier"
       };
     } else {
       return {
         icon: <Filter className="h-12 w-12 text-gray-400 mb-2" />,
-        title: "No trains available",
-        description: "There are no trains to display at this time"
+        title: "Inga tåg tillgängliga",
+        description: "Det finns inga tåg att visa just nu"
       };
     }
   };
