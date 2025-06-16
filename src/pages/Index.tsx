@@ -2,13 +2,10 @@
 import { useState } from "react";
 import { TrainDataProvider } from "../providers/TrainDataProvider";
 import MainHeader from "../components/MainHeader";
-import { TimetableToolbar } from "../components/TimetableToolbar";
 import TrainTimetable from "../components/TrainTimetable";
 
 const Index = () => {
   const [showFavorites, setShowFavorites] = useState(false);
-  const [location, setLocation] = useState("SE");
-  const [date, setDate] = useState(new Date());
 
   const handleToggleFavorites = () => {
     setShowFavorites(!showFavorites);
@@ -22,12 +19,6 @@ const Index = () => {
           onToggleFavorites={handleToggleFavorites}
         />
         <div className="container mx-auto p-4 sm:p-6 space-y-6">
-          <TimetableToolbar 
-            location={location}
-            setLocation={setLocation}
-            date={date}
-            setDate={setDate}
-          />
           <TrainTimetable showFavorites={showFavorites} />
         </div>
       </div>

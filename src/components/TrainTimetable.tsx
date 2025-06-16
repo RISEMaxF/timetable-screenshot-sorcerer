@@ -1,3 +1,4 @@
+
 import { useState, useMemo } from "react";
 import { Table, TableBody } from "@/components/ui/table";
 import { Train } from "../types/train";
@@ -12,6 +13,7 @@ import { ChevronRight, AlarmClock, MapPin, Train as TrainIcon, Star } from "luci
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { useTrainData } from "../providers/TrainDataProvider";
 import { useFavorites } from "@/contexts/FavoritesContext";
+import { TimetableToolbar } from "./TimetableToolbar";
 
 interface TrainTimetableProps {
   showFavorites: boolean;
@@ -29,6 +31,8 @@ const TrainTimetable = ({ showFavorites }: TrainTimetableProps) => {
   const [selectedCountry, setSelectedCountry] = useState("ALL");
   const [selectedStation, setSelectedStation] = useState("ALL");
   const [searchableColumns, setSearchableColumns] = useState<string[]>(["all"]);
+  const [location, setLocation] = useState("SE");
+  const [date, setDate] = useState(new Date());
 
   // State for detail dialog
   const [selectedTrain, setSelectedTrain] = useState<Train | null>(null);
@@ -77,6 +81,19 @@ const TrainTimetable = ({ showFavorites }: TrainTimetableProps) => {
     }
   };
 
+  const handleBatchUpdate = (field: keyof Train, value: any) => {
+    selectedTrains.forEach(trainId => {
+      const train = trains.find(t => t.id === trainId);
+      if (train) {
+        updateTrain(trainId, { [field]: value });
+      }
+    });
+  };
+
+  const handleSearch = () => {
+    console.log("Search triggered with term:", searchTerm);
+  };
+
   // Filter trains based on favorites toggle
   const filteredTrains = useMemo(() => {
     let trainsToFilter = trains;
@@ -102,6 +119,24 @@ const TrainTimetable = ({ showFavorites }: TrainTimetableProps) => {
 
   return (
     <>
+      <TimetableToolbar 
+        location={location}
+        setLocation={setLocation}
+        date={date}
+        setDate={setDate}
+        selectedCount={selectedTrains.length}
+        selectedTrains={selectedTrains.map(id => trains.find(t => t.id === id)).filter(Boolean) as Train[]}
+        onBatchUpdate={handleBatchUpdate}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        exactMatch={exactMatch}
+        setExactMatch={setExactMatch}
+        onSearch={handleSearch}
+        searchableColumns={searchableColumns}
+        setSearchableColumns={setSearchableColumns}
+        setFilterStatus={setFilterStatus}
+      />
+      
       <div className="flex flex-col lg:flex-row gap-4 w-full">
         <div className="lg:w-2/3 xl:w-3/4 border rounded-md overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
