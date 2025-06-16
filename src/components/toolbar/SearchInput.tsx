@@ -31,8 +31,8 @@ const SearchInput = ({
   return (
     <div className={cn(
       "flex-1 flex items-center transition-all duration-200 rounded-full overflow-hidden",
-      "bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm",
-      "border border-gray-200/60 dark:border-gray-600/40",
+      "bg-white dark:bg-gray-800 backdrop-blur-sm",
+      "border border-gray-200 dark:border-gray-600",
       "shadow-sm hover:shadow-md dark:shadow-none",
       isFocused ? 
         "ring-2 ring-blue-200 dark:ring-blue-400/30 border-blue-300 dark:border-blue-400/50" : 
@@ -43,8 +43,7 @@ const SearchInput = ({
         setSearchTerm={setSearchTerm} 
       />
       
-      {/* Remove borders between buttons to eliminate white lines */}
-      <div className="flex items-center h-10 border-l border-gray-200/60 dark:border-gray-600/40">
+      <div className="flex items-center h-10 border-l border-gray-200 dark:border-gray-600">
         <ColumnSelector 
           searchableColumns={searchableColumns} 
           setSearchableColumns={setSearchableColumns}

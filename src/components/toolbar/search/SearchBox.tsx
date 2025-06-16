@@ -23,13 +23,7 @@ const SearchBox = ({ searchTerm, setSearchTerm }: SearchBoxProps) => {
         onChange={(e) => setSearchTerm(e.target.value)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        className={cn(
-          "pl-10 pr-4 h-10 border-0 w-full",
-          "bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100",
-          "placeholder:text-gray-500 dark:placeholder:text-gray-400",
-          "focus:bg-white dark:focus:bg-gray-800",
-          "focus-visible:ring-0 focus-visible:ring-offset-0"
-        )}
+        className="pl-10 pr-4 h-10 border-0 bg-transparent text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
       />
     </div>
   );
