@@ -17,6 +17,13 @@ const Footer = () => {
               <span className="text-sm">
                 För feedback, kontakta{" "}
                 <a 
+                  href="mailto:sandra.haraldson@ri.se" 
+                  className="text-blue-600 dark:text-blue-400 hover:underline"
+                >
+                  sandra.haraldson@ri.se
+                </a>
+                {" "}eller{" "}
+                <a 
                   href="mailto:johan.ostling@ri.se" 
                   className="text-blue-600 dark:text-blue-400 hover:underline"
                 >
