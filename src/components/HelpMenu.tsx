@@ -68,7 +68,7 @@ const HelpMenu = () => {
                     <strong>Tåg-ID:</strong> Unik identifierare för varje tåg
                   </li>
                   <li className="pb-1 border-b">
-                    <strong>OTN:</strong> Operations tracking number
+                    <strong>OTN:</strong> Operations tracking number - operationell spårningsnummer
                   </li>
                   <li className="pb-1 border-b">
                     <strong>Operatör:</strong> Företag som driver tågtjänsten
@@ -83,16 +83,19 @@ const HelpMenu = () => {
                     <strong>Ankomst:</strong> Schemalagd ankomsttid till stationen
                   </li>
                   <li className="pb-1 border-b">
+                    <strong>Avgång:</strong> Schemalagd avgångstid från stationen
+                  </li>
+                  <li className="pb-1 border-b">
                     <strong>Spår:</strong> Tilldelat spår för tåget
                   </li>
                   <li className="pb-1 border-b">
                     <strong>Anteckningar:</strong> Ytterligare information om tåget
                   </li>
                   <li className="pb-1 border-b">
-                    <strong>Ny operatör:</strong> Uppdatering av ny operatör, om det ändrats
+                    <strong>Ny operatör:</strong> Uppdaterad operatör, om det ändrats
                   </li>
                   <li className="pb-1 border-b">
-                    <strong>Ny tid:</strong> Uppdaterad ankomsttid, om det ändrats
+                    <strong>Ny tid:</strong> Uppdaterad ankomst- eller avgångstid
                   </li>
                   <li className="pb-1 border-b">
                     <strong>Spårändring:</strong> Information om spårbyten
@@ -101,7 +104,7 @@ const HelpMenu = () => {
                     <strong>Nya anteckningar:</strong> Nyligen tillagda kommentarer
                   </li>
                   <li className="pb-1 border-b">
-                    <strong>Klar:</strong> Om tåget är slutfört eller väntar
+                    <strong>Klar:</strong> Markerar om tåget är slutfört
                   </li>
                 </ul>
               </AccordionContent>
@@ -117,54 +120,82 @@ const HelpMenu = () => {
                   <ul className="list-disc pl-5 space-y-1">
                     <li>Klicka på valfri cell för att redigera dess innehåll</li>
                     <li>Klicka på en rad för att visa detaljerad tåginformation</li>
-                    <li>Använd sökrutan för att hitta tåg efter ID eller andra detaljer</li>
-                    <li>Filtrera tåg efter status med filtermenyn</li>
+                    <li>Använd sökrutan längst upp för att hitta specifika tåg</li>
+                    <li>Filtrera tåg efter status med filterknapparna</li>
                     <li>Sortera kolumner genom att klicka på kolumnrubrikerna</li>
+                    <li>Växla mellan ljust och mörkt tema med tema-knappen</li>
                   </ul>
                   
-                  <h4 className="font-medium mt-3">Sökning</h4>
+                  <h4 className="font-medium mt-3">Sök och filter</h4>
                   <ul className="list-disc pl-5 space-y-1">
-                    <li>Som standard hittar sökningen delvis matchningar (t.ex. "SJ" matchar "JSA")</li>
-                    <li>Aktivera kryssrutan "Exakt matchning" för striktare sökresultat</li>
-                    <li>Välj specifika kolumner att söka i via kolumnsväljaren</li>
-                    <li>Sökningen fungerar över tåg-ID, operatör, spår och anteckningar</li>
+                    <li>Använd sökrutan för att söka över alla tågdata</li>
+                    <li>Aktivera "Exakt matchning" för striktare sökresultat</li>
+                    <li>Använd kolumnsväljaren för att begränsa sökningen till specifika fält</li>
+                    <li>Filtrera efter land och datum med verktygsfältet</li>
                   </ul>
                   
                   <h4 className="font-medium mt-3">Stationssök</h4>
                   <ul className="list-disc pl-5 space-y-1">
-                    <li>Byt till "Stationsök" för att söka tåg baserat på stationer</li>
-                    <li>Sök på enskilda stationer eller mellan två stationer</li>
-                    <li>Filtrera sökresultat efter avgång, ankomst eller båda</li>
+                    <li>Navigera till "Stationsök" för att söka tåg mellan stationer</li>
+                    <li>Sök på enskilda stationer eller rutter mellan två stationer</li>
+                    <li>Filtrera på avgångar, ankomster eller båda</li>
+                    <li>Spara ofta använda stationer som favoriter</li>
                   </ul>
                   
                   <h4 className="font-medium mt-3">Flervalsläge</h4>
                   <ul className="list-disc pl-5 space-y-1">
-                    <li>Håll ned Ctrl/Cmd medan du klickar på rader för att välja flera tåg</li>
-                    <li>Använd gruppåtgärder för att uppdatera flera tåg på en gång</li>
-                    <li>Tryck på Esc för att rensa alla val</li>
+                    <li>Håll ned Ctrl/Cmd medan du klickar för att välja flera tåg</li>
+                    <li>Använd gruppåtgärder för att uppdatera flera tåg samtidigt</li>
+                    <li>Tryck Esc för att rensa alla val</li>
                   </ul>
                   
                   <h4 className="font-medium mt-3">Tangentbordsgenvägar</h4>
                   <ul className="list-disc pl-5 space-y-1">
                     <li><kbd className="px-1 py-0.5 bg-gray-100 rounded border">Ctrl+F</kbd> - Fokusera sökrutan</li>
                     <li><kbd className="px-1 py-0.5 bg-gray-100 rounded border">Esc</kbd> - Rensa markering</li>
+                    <li><kbd className="px-1 py-0.5 bg-gray-100 rounded border">Enter</kbd> - Bekräfta cell-redigering</li>
                   </ul>
                 </div>
               </AccordionContent>
             </AccordionItem>
 
-            <AccordionItem value="map">
+            <AccordionItem value="details">
               <AccordionTrigger className="text-sm font-medium">
-                Kartvy
+                Tågdetaljer och karta
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-2 text-sm">
-                  <p>Via tågdetaljvyn kan du se tågets position på en interaktiv karta. Kartan centreras automatiskt över Norden.</p>
-                  
+                  <h4 className="font-medium">Detaljvy</h4>
                   <ul className="list-disc pl-5 space-y-1">
-                    <li>Zooma in/ut med mushjulet eller knapparna på kartan</li>
-                    <li>Använd teaterläge för att se kartan i helskärm</li>
-                    <li>Tågikoner på kartan visar positioner för aktiva tåg</li>
+                    <li>Klicka på en tågrad för att öppna detaljvyn</li>
+                    <li>Se fullständig tåginformation, historik och ändringar</li>
+                    <li>Visa tågsammansättning med vagnar och last</li>
+                    <li>Expandera vagnsdetaljer för axlar, vikt och godsinformation</li>
+                  </ul>
+                  
+                  <h4 className="font-medium mt-3">Kartvy</h4>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>Klicka på "Visa karta" för att se tågets position</li>
+                    <li>Kartan centreras automatiskt över Norden</li>
+                    <li>Zooma in/ut med mushjulet eller kartans knappar</li>
+                    <li>Använd teaterläge för helskärmsvy av kartan</li>
+                    <li>Tågikoner visar positioner för aktiva tåg</li>
+                  </ul>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="favorites">
+              <AccordionTrigger className="text-sm font-medium">
+                Favoriter
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="space-y-2 text-sm">
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>Klicka på stjärnan i huvudvyn för att visa endast favorittåg</li>
+                    <li>Markera tåg som favoriter genom att klicka på stjärnan i tågdetaljvyn</li>
+                    <li>Spara ofta använda stationer som favoriter i stationssök</li>
+                    <li>Favoritdata sparas lokalt i din webbläsare</li>
                   </ul>
                 </div>
               </AccordionContent>
