@@ -1,9 +1,12 @@
+
 import React, { useState } from "react";
 import { Button } from "../ui/button";
-import { List, Train as TrainIcon } from "lucide-react";
+import { List, Train as TrainIcon, ChevronRight, ChevronDown } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Separator } from "../ui/separator";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
 
 interface TrainCar {
   id: string;
@@ -19,6 +22,7 @@ interface TrainCar {
   status: string;
   emptyWeight?: string;
   numAxles?: string;
+  goodsWeight?: string;
   carryingUnits?: Array<{
     id: string;
     unitId: string;
@@ -30,9 +34,10 @@ interface TrainCarVisualizationProps {
 }
 
 const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
-  const [viewMode, setViewMode] = useState<"train" | "list">("train");
+  const [viewMode, setViewMode] = useState<"train" | "list">("list");
   const [selectedCar, setSelectedCar] = useState<TrainCar | null>(null);
   const [isCarDetailOpen, setIsCarDetailOpen] = useState(false);
+  const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
   
   // Mock data for cargo train cars with realistic IDs and detailed information
   const trainCars: TrainCar[] = [
@@ -45,6 +50,7 @@ const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
       emptyWeight: "84t",
       length: "19.5m",
       numAxles: "6",
+      goodsWeight: "0kg",
       manufacturer: "Siemens",
       yearBuilt: "2018",
       maxLoad: "N/A",
@@ -56,11 +62,12 @@ const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
       id: "Sgns-60001", 
       type: "flatcar", 
       position: 2, 
-      carNumber: "731301.427443090647", 
+      carNumber: "731301427443090647", 
       weight: "22t",
       emptyWeight: "22t",
       length: "14.7m",
       numAxles: "4",
+      goodsWeight: "45000kg",
       manufacturer: "Greenbrier",
       yearBuilt: "2019",
       maxLoad: "68t",
@@ -76,11 +83,12 @@ const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
       id: "Sgns-60002", 
       type: "flatcar", 
       position: 3, 
-      carNumber: "60002", 
+      carNumber: "378045665544", 
       weight: "22t",
       emptyWeight: "22t",
-      length: "14.7m",
-      numAxles: "4",
+      length: "20m",
+      numAxles: "20",
+      goodsWeight: "52000kg",
       manufacturer: "Greenbrier",
       yearBuilt: "2019",
       maxLoad: "68t",
@@ -92,11 +100,12 @@ const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
       id: "Eanos-52003", 
       type: "hopper", 
       position: 4, 
-      carNumber: "52003", 
+      carNumber: "927400003434", 
       weight: "25t",
       emptyWeight: "25t",
-      length: "12.2m",
-      numAxles: "4",
+      length: "15m",
+      numAxles: "15",
+      goodsWeight: "58000kg",
       manufacturer: "Tatravagónka",
       yearBuilt: "2020",
       maxLoad: "58t",
@@ -108,64 +117,17 @@ const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
       id: "Eanos-52004", 
       type: "hopper", 
       position: 5, 
-      carNumber: "52004", 
+      carNumber: "437443802545", 
       weight: "25t",
       emptyWeight: "25t",
-      length: "12.2m",
-      numAxles: "4",
+      length: "31m",
+      numAxles: "31",
+      goodsWeight: "41000kg",
       manufacturer: "Tatravagónka",
       yearBuilt: "2020",
       maxLoad: "58t",
       currentLoad: "41t",
       status: "Delvis lastad",
-      carryingUnits: []
-    },
-    { 
-      id: "Shimmns-70005", 
-      type: "tank", 
-      position: 6, 
-      carNumber: "70005", 
-      weight: "28t",
-      emptyWeight: "28t",
-      length: "16.8m",
-      numAxles: "4",
-      manufacturer: "VTG",
-      yearBuilt: "2017",
-      maxLoad: "65t",
-      currentLoad: "63t",
-      status: "Lastad",
-      carryingUnits: []
-    },
-    { 
-      id: "Sgns-60006", 
-      type: "flatcar", 
-      position: 7, 
-      carNumber: "60006", 
-      weight: "22t",
-      emptyWeight: "22t",
-      length: "14.7m",
-      numAxles: "4",
-      manufacturer: "Greenbrier",
-      yearBuilt: "2019",
-      maxLoad: "68t",
-      currentLoad: "0t",
-      status: "Tom",
-      carryingUnits: []
-    },
-    { 
-      id: "Eanos-52007", 
-      type: "hopper", 
-      position: 8, 
-      carNumber: "52007", 
-      weight: "25t",
-      emptyWeight: "25t",
-      length: "12.2m",
-      numAxles: "4",
-      manufacturer: "Tatravagónka",
-      yearBuilt: "2021",
-      maxLoad: "58t",
-      currentLoad: "58t",
-      status: "Full",
       carryingUnits: []
     }
   ];
@@ -215,6 +177,16 @@ const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
       default:
         return "text-gray-600 dark:text-gray-400";
     }
+  };
+
+  const toggleRowExpansion = (carId: string) => {
+    const newExpanded = new Set(expandedRows);
+    if (newExpanded.has(carId)) {
+      newExpanded.delete(carId);
+    } else {
+      newExpanded.add(carId);
+    }
+    setExpandedRows(newExpanded);
   };
 
   return (
@@ -276,40 +248,118 @@ const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
           </div>
         </div>
       ) : (
-        <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
-          <div className="space-y-3">
-            {trainCars.map((car) => (
-              <div
-                key={car.id}
-                className="flex items-center justify-between p-4 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors shadow-sm cursor-pointer hover:shadow-md"
-                onClick={() => handleCarClick(car)}
-              >
-                <div className="flex items-center gap-4">
-                  <div
-                    className={`
-                      w-12 h-12 rounded-lg flex items-center justify-center
-                      text-white font-bold text-sm
-                      ${getCarColor(car.type)}
-                      shadow-md
-                    `}
-                  >
-                    {car.position}
-                  </div>
-                  <div>
-                    <div className="font-semibold text-gray-900 dark:text-gray-100">
-                      {car.id}
-                    </div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">
-                      {getCarType(car.type)} - Nummer {car.carNumber} - {car.weight}
-                    </div>
-                  </div>
-                </div>
-                <div className="text-sm font-mono text-gray-600 dark:text-gray-300">
-                  {getCarType(car.type)}
-                </div>
-              </div>
-            ))}
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+          {/* Wagons Header */}
+          <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Vagnar</h3>
+              <span className="bg-blue-600 text-white px-2 py-1 rounded text-sm font-medium">
+                {trainCars.length}
+              </span>
+            </div>
           </div>
+
+          {/* Table */}
+          <Table>
+            <TableHeader>
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="w-12"></TableHead>
+                <TableHead className="text-gray-600 dark:text-gray-400">Vagnnummer</TableHead>
+                <TableHead className="text-gray-600 dark:text-gray-400">Typ</TableHead>
+                <TableHead className="text-gray-600 dark:text-gray-400">Godsvikt</TableHead>
+                <TableHead className="text-gray-600 dark:text-gray-400">Längd</TableHead>
+                <TableHead className="text-gray-600 dark:text-gray-400">Antal axlar</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {trainCars.map((car) => (
+                <React.Fragment key={car.id}>
+                  <TableRow className="hover:bg-gray-50 dark:hover:bg-gray-700 border-b border-gray-100 dark:border-gray-700">
+                    <TableCell className="p-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 w-8 p-0"
+                        onClick={() => toggleRowExpansion(car.id)}
+                      >
+                        {expandedRows.has(car.id) ? (
+                          <ChevronDown className="h-4 w-4" />
+                        ) : (
+                          <ChevronRight className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </TableCell>
+                    <TableCell className="font-medium text-gray-900 dark:text-gray-100">
+                      {car.carNumber}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-400">
+                      -
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-400">
+                      {car.goodsWeight || "-kg"}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-400">
+                      {car.length}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-400">
+                      {car.numAxles}
+                    </TableCell>
+                  </TableRow>
+                  
+                  {/* Expandable Content */}
+                  {expandedRows.has(car.id) && (
+                    <TableRow>
+                      <TableCell colSpan={6} className="p-0">
+                        <div className="bg-gray-50 dark:bg-gray-800 p-4 border-t border-gray-200 dark:border-gray-700">
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                            <div>
+                              <p className="text-gray-500 dark:text-gray-400">Status</p>
+                              <p className={`font-medium ${getStatusColor(car.status)}`}>
+                                {car.status}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-gray-500 dark:text-gray-400">Tillverkare</p>
+                              <p className="font-medium text-gray-900 dark:text-gray-100">
+                                {car.manufacturer}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-gray-500 dark:text-gray-400">Byggnadsår</p>
+                              <p className="font-medium text-gray-900 dark:text-gray-100">
+                                {car.yearBuilt}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-gray-500 dark:text-gray-400">Max last</p>
+                              <p className="font-medium text-gray-900 dark:text-gray-100">
+                                {car.maxLoad}
+                              </p>
+                            </div>
+                          </div>
+                          
+                          {car.carryingUnits && car.carryingUnits.length > 0 && (
+                            <div className="mt-4">
+                              <p className="text-gray-500 dark:text-gray-400 text-sm mb-2">
+                                Transporterar ({car.carryingUnits.length} enheter)
+                              </p>
+                              <div className="space-y-1">
+                                {car.carryingUnits.map((unit) => (
+                                  <div key={unit.id} className="bg-white dark:bg-gray-700 p-2 rounded border text-xs font-mono text-gray-600 dark:text-gray-300">
+                                    {unit.unitId}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </React.Fragment>
+              ))}
+            </TableBody>
+          </Table>
         </div>
       )}
 
