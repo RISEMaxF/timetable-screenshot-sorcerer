@@ -1,4 +1,5 @@
 
+
 import { useState, useMemo } from "react";
 import { Table, TableBody } from "@/components/ui/table";
 import { Train } from "../types/train";
@@ -85,7 +86,8 @@ const TrainTimetable = ({ showFavorites }: TrainTimetableProps) => {
     selectedTrains.forEach(trainId => {
       const train = trains.find(t => t.id === trainId);
       if (train) {
-        updateTrain(trainId, { [field]: value });
+        const updatedTrain = { ...train, [field]: value };
+        updateTrain(updatedTrain);
       }
     });
   };
@@ -268,3 +270,4 @@ const TrainTimetable = ({ showFavorites }: TrainTimetableProps) => {
 };
 
 export default TrainTimetable;
+
