@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { List, Train as TrainIcon, ChevronRight, ChevronDown } from "lucide-react";
@@ -34,7 +33,7 @@ interface TrainCarVisualizationProps {
 }
 
 const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
-  const [viewMode, setViewMode] = useState<"train" | "list">("list");
+  const [viewMode, setViewMode] = useState<"train" | "list">("train"); // Changed default to "train" (Tågvy)
   const [selectedCar, setSelectedCar] = useState<TrainCar | null>(null);
   const [isCarDetailOpen, setIsCarDetailOpen] = useState(false);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
@@ -192,23 +191,35 @@ const TrainCarVisualization = ({ trainId }: TrainCarVisualizationProps) => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div className="flex gap-2">
+        <div className="flex gap-2 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
           <Button
-            variant={viewMode === "train" ? "default" : "outline"}
+            variant="ghost"
             size="sm"
             onClick={() => setViewMode("train")}
-            className="bg-slate-600 hover:bg-slate-700 text-white dark:bg-slate-700 dark:hover:bg-slate-800"
+            className={`
+              relative h-9 px-4 font-medium transition-all duration-200
+              ${viewMode === "train" 
+                ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm border border-gray-200 dark:border-gray-600" 
+                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/50"
+              }
+            `}
           >
-            <TrainIcon className="h-4 w-4 mr-1" />
+            <TrainIcon className="h-4 w-4 mr-2" />
             Tågvy
           </Button>
           <Button
-            variant={viewMode === "list" ? "default" : "outline"}
+            variant="ghost"
             size="sm"
             onClick={() => setViewMode("list")}
-            className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+            className={`
+              relative h-9 px-4 font-medium transition-all duration-200
+              ${viewMode === "list" 
+                ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm border border-gray-200 dark:border-gray-600" 
+                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/50"
+              }
+            `}
           >
-            <List className="h-4 w-4 mr-1" />
+            <List className="h-4 w-4 mr-2" />
             Listvy
           </Button>
         </div>
