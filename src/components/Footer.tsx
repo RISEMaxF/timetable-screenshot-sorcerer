@@ -32,9 +32,14 @@ const Footer = () => {
               </span>
             </div>
           </div>
-          <p className="text-xs text-muted-foreground text-center">
-            © {new Date().getFullYear()} RISE Research Institutes of Sweden.
-          </p>
+          <div className="text-center space-y-1">
+            <p className="text-xs text-muted-foreground">
+              © {new Date().getFullYear()} RISE Research Institutes of Sweden.
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Finansierat av RailwayCDM och NOMIR • Under utveckling
+            </p>
+          </div>
         </div>
       </div>
     </footer>
