@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { TrainService } from '../services/TrainService';
 import { InMemoryTrainRepository } from '../repositories/TrainRepository';
@@ -6,6 +5,7 @@ import { TrainAdapter } from '../adapters/TrainAdapter';
 import { trainData } from '../data/trainData';
 import { Train } from '../types/train';
 import { TrainSearchParams } from '../entities/Train';
+import { TrainDataLoader, MockTrainDataLoader } from '../services/TrainDataLoader';
 
 interface TrainDataContextType {
   trainService: TrainService;
@@ -33,9 +33,22 @@ interface TrainDataProviderProps {
 }
 
 export const TrainDataProvider = ({ children }: TrainDataProviderProps) => {
+  // Initialize data loader - use mock for now, easily switchable to real API
+  const [dataLoader] = useState(() => {
+    const isDevelopment = process.env.NODE_ENV === 'development';
+    
+    if (isDevelopment) {
+      // Use mock data loader during development
+      return new MockTrainDataLoader(TrainAdapter.toEntityList(trainData));
+    } else {
+      // Use real API loader in production
+      return new TrainDataLoader(process.env.REACT_APP_API_URL || '/api/trains');
+    }
+  });
+
+  // Keep existing service for operations that don't need external API
   const [trainService] = useState(() => {
     const repository = new InMemoryTrainRepository();
-    // Seed with existing data
     repository.seed(TrainAdapter.toEntityList(trainData));
     return new TrainService(repository);
   });
@@ -48,9 +61,11 @@ export const TrainDataProvider = ({ children }: TrainDataProviderProps) => {
     try {
       setLoading(true);
       setError(null);
-      const entities = await trainService.getAllTrains();
-      setTrains(TrainAdapter.fromEntityList(entities));
+      
+      const response = await dataLoader.reload();
+      setTrains(TrainAdapter.fromEntityList(response.trains));
     } catch (err) {
+      console.error('Failed to refresh trains:', err);
       setError(err instanceof Error ? err.message : 'Failed to load trains');
     } finally {
       setLoading(false);
@@ -59,14 +74,15 @@ export const TrainDataProvider = ({ children }: TrainDataProviderProps) => {
 
   const searchTrains = async (params: TrainSearchParams): Promise<Train[]> => {
     try {
-      const result = await trainService.searchTrains(params);
-      return TrainAdapter.fromEntityList(result.trains);
+      const response = await dataLoader.load(params);
+      return TrainAdapter.fromEntityList(response.trains);
     } catch (err) {
       console.error('Failed to search trains:', err);
       return [];
     }
   };
 
+  // Keep existing update methods using the service
   const updateTrain = async (train: Train) => {
     try {
       const updateDto = TrainAdapter.toUpdateDto(train);
