@@ -42,7 +42,7 @@ export const TrainDataProvider = ({ children }: TrainDataProviderProps) => {
       return new MockTrainDataLoader(TrainAdapter.toEntityList(trainData));
     } else {
       // Use real API loader in production
-      return new TrainDataLoader(process.env.REACT_APP_API_URL || '/api/trains');
+      return new TrainDataLoader('http://localhost:8000/api/v1/trains/simplified');
     }
   });
 

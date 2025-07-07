@@ -1,11 +1,11 @@
 
 export const API_CONFIG = {
   // Base API URL - will be different for FastAPI vs Supabase
-  BASE_URL: process.env.REACT_APP_API_URL || 'http://localhost:8000',
+  BASE_URL: 'http://localhost:8000/api/v1/trains/simplified',
   
   // API endpoints
   ENDPOINTS: {
-    TRAINS: '/trains',
+    TRAINS: '',
     TRAIN_CARS: '/train-cars',
     STATIONS: '/stations',
     OPERATORS: '/operators',
@@ -32,7 +32,7 @@ export const getApiConfig = () => {
     case 'development':
       return {
         ...API_CONFIG,
-        BASE_URL: 'http://localhost:8000', // FastAPI development server
+        BASE_URL: 'http://localhost:8000/api/v1/trains/simplified', // FastAPI development server
       };
     case 'production':
       return {

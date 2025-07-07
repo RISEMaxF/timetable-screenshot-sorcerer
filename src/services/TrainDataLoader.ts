@@ -11,7 +11,7 @@ export interface TrainDataResponse {
 export class TrainDataLoader extends BaseDataLoader<TrainDataResponse, TrainSearchParams> {
   private apiUrl: string;
 
-  constructor(apiUrl: string = '/api/trains') {
+  constructor(apiUrl: string = 'http://localhost:8000/api/v1/trains/simplified') {
     super();
     this.apiUrl = apiUrl;
     // Set shorter cache for real-time train data
@@ -21,7 +21,7 @@ export class TrainDataLoader extends BaseDataLoader<TrainDataResponse, TrainSear
   async fetchData(params?: TrainSearchParams): Promise<TrainDataResponse> {
     console.log('Fetching train data from API...', params);
     
-    const url = new URL(this.apiUrl, window.location.origin);
+    const url = new URL(this.apiUrl);
     
     if (params) {
       if (params.searchTerm) url.searchParams.set('search', params.searchTerm);
