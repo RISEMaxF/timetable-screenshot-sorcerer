@@ -14,6 +14,7 @@ interface MainHeaderProps {
 
 const MainHeader = ({ showFavorites = false, onToggleFavorites }: MainHeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [userInfo] = useState({ name: "Johan Östling" }); // TODO: Replace with actual user data
   const isMobile = useIsMobile();
 
   return (
@@ -29,7 +30,7 @@ const MainHeader = ({ showFavorites = false, onToggleFavorites }: MainHeaderProp
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
               <User className="h-4 w-4" />
-              <span>Johan Östling</span>
+              <span>{userInfo.name}</span>
             </div>
             <HelpMenu />
             <ThemeToggle />
@@ -51,7 +52,7 @@ const MainHeader = ({ showFavorites = false, onToggleFavorites }: MainHeaderProp
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
               <User className="h-4 w-4" />
-              <span>Johan Östling</span>
+              <span>{userInfo.name}</span>
             </div>
             <Link to="/station-search">
               <Button variant="outline" className="flex items-center gap-2">
