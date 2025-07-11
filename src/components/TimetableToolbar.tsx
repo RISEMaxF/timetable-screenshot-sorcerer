@@ -133,7 +133,7 @@ export function TimetableToolbar({
       </div>
       
       {/* Removed visual styling, keeping only functional structure */}
-      <div className="px-6 py-2">
+      <div className="px-6 py-2 bg-white dark:bg-gray-800">
         <BatchActionButtons 
           selectedCount={selectedCount} 
           onOpenDialog={handleOpenDialog}
