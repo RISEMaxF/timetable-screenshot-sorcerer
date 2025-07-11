@@ -1,5 +1,5 @@
 
-import { TrainFront, Menu, Star } from "lucide-react";
+import { TrainFront, Menu, Star, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -27,6 +27,10 @@ const MainHeader = ({ showFavorites = false, onToggleFavorites }: MainHeaderProp
         
         {isMobile ? (
           <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+              <User className="h-4 w-4" />
+              <span>Johan Östling</span>
+            </div>
             <HelpMenu />
             <ThemeToggle />
             <img 
@@ -45,6 +49,10 @@ const MainHeader = ({ showFavorites = false, onToggleFavorites }: MainHeaderProp
           </div>
         ) : (
           <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+              <User className="h-4 w-4" />
+              <span>Johan Östling</span>
+            </div>
             <Link to="/station-search">
               <Button variant="outline" className="flex items-center gap-2">
                 Stationsök
