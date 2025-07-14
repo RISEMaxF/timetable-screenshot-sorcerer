@@ -8,6 +8,7 @@ import SearchInput from "./toolbar/SearchInput";
 import CustomizeButton from "./toolbar/CustomizeButton";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
+import { DEFAULT_VALUES, FilterStatus } from "@/constants/app";
 
 interface TimetableToolbarProps {
   location: string;
@@ -26,13 +27,13 @@ interface TimetableToolbarProps {
   onSearch?: () => void;
   searchableColumns?: string[];
   setSearchableColumns?: (columns: string[]) => void;
-  setFilterStatus?: (status: "all" | "completed" | "pending") => void;
+  setFilterStatus?: (status: FilterStatus) => void;
 }
 
 export function TimetableToolbar({ 
   location, 
   setLocation,
-  station = "ALL",
+  station = DEFAULT_VALUES.STATION,
   setStation = () => {},
   date, 
   setDate,
@@ -44,7 +45,7 @@ export function TimetableToolbar({
   exactMatch = false,
   setExactMatch = () => {},
   onSearch = () => {},
-  searchableColumns = ["all"],
+  searchableColumns = DEFAULT_VALUES.SEARCHABLE_COLUMNS,
   setSearchableColumns = () => {},
   setFilterStatus = () => {}
 }: TimetableToolbarProps) {

@@ -8,6 +8,7 @@ import { ThemeToggle } from "../ThemeToggle";
 import HelpMenu from "../HelpMenu";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { ICON_SIZES } from "@/constants/app";
 
 const StationHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -33,7 +34,7 @@ const StationHeader = () => {
             <Popover>
               <PopoverTrigger asChild>
                 <button className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 transition-colors">
-                  <User className="h-4 w-4" />
+                  <User className={ICON_SIZES.SMALL} />
                   <span>{userInfo.name}</span>
                 </button>
               </PopoverTrigger>
@@ -81,7 +82,7 @@ const StationHeader = () => {
             <Popover>
               <PopoverTrigger asChild>
                 <button className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 transition-colors">
-                  <User className="h-4 w-4" />
+                  <User className={ICON_SIZES.SMALL} />
                   <span>{userInfo.name}</span>
                 </button>
               </PopoverTrigger>
@@ -116,7 +117,7 @@ const StationHeader = () => {
             </Link>
             <Link to="/favorites">
               <Button variant="outline" className="flex items-center gap-2 min-w-fit">
-                <Star className="h-4 w-4" />
+                <Star className={ICON_SIZES.SMALL} />
                 Favoritstationer
               </Button>
             </Link>

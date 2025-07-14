@@ -8,6 +8,7 @@ import { ThemeToggle } from "./ThemeToggle";
 import HelpMenu from "./HelpMenu";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { UI_TEXT, ICON_SIZES } from "@/constants/app";
 
 interface MainHeaderProps {
   showFavorites?: boolean;
@@ -38,7 +39,7 @@ const MainHeader = ({ showFavorites = false, onToggleFavorites }: MainHeaderProp
             <Popover>
               <PopoverTrigger asChild>
                 <button className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 transition-colors">
-                  <User className="h-4 w-4" />
+                  <User className={ICON_SIZES.SMALL} />
                   <span>{userInfo.name}</span>
                 </button>
               </PopoverTrigger>
@@ -86,7 +87,7 @@ const MainHeader = ({ showFavorites = false, onToggleFavorites }: MainHeaderProp
             <Popover>
               <PopoverTrigger asChild>
                 <button className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 transition-colors">
-                  <User className="h-4 w-4" />
+                  <User className={ICON_SIZES.SMALL} />
                   <span>{userInfo.name}</span>
                 </button>
               </PopoverTrigger>
@@ -124,8 +125,8 @@ const MainHeader = ({ showFavorites = false, onToggleFavorites }: MainHeaderProp
                 onClick={onToggleFavorites}
                 className="flex items-center gap-2 min-w-fit"
               >
-                <Star className={`h-4 w-4 ${showFavorites ? 'fill-yellow-400 text-yellow-400' : ''}`} />
-                {showFavorites ? "Visa alla tåg" : "Visa favoriter"}
+                <Star className={`${ICON_SIZES.SMALL} ${showFavorites ? 'fill-yellow-400 text-yellow-400' : ''}`} />
+                {showFavorites ? UI_TEXT.SHOW_ALL_TRAINS : UI_TEXT.SHOW_FAVORITES}
               </Button>
             )}
             <HelpMenu />
@@ -152,8 +153,8 @@ const MainHeader = ({ showFavorites = false, onToggleFavorites }: MainHeaderProp
               onClick={onToggleFavorites}
               className="w-full justify-start flex items-center gap-2"
             >
-              <Star className={`h-4 w-4 ${showFavorites ? 'fill-yellow-400 text-yellow-400' : ''}`} />
-              {showFavorites ? "Visa alla tåg" : "Visa favoriter"}
+              <Star className={`${ICON_SIZES.SMALL} ${showFavorites ? 'fill-yellow-400 text-yellow-400' : ''}`} />
+              {showFavorites ? UI_TEXT.SHOW_ALL_TRAINS : UI_TEXT.SHOW_FAVORITES}
             </Button>
           )}
         </div>
