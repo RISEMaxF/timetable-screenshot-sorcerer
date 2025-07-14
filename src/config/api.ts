@@ -1,7 +1,7 @@
 
 export const API_CONFIG = {
   // Base API URL - will be different for FastAPI vs Supabase
-  BASE_URL: process.env.REACT_APP_API_URL || 'http://localhost:8000',
+  BASE_URL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
   
   // API endpoints
   ENDPOINTS: {
@@ -40,26 +40,26 @@ export const API_CONFIG = {
 
 // Environment-specific configurations
 export const getApiConfig = () => {
-  const env = process.env.NODE_ENV;
+  const env = import.meta.env.MODE;
   
   switch (env) {
     case 'development':
       return {
         ...API_CONFIG,
-        BASE_URL: process.env.REACT_APP_API_URL || 'http://localhost:8000/api/v1/trains/simplified', // FastAPI development server
+        BASE_URL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1/trains/simplified',
       };
     case 'production':
       return {
         ...API_CONFIG,
-        BASE_URL: process.env.REACT_APP_API_URL || 'https://your-production-api.com/api/v1/trains/simplified',
+        BASE_URL: import.meta.env.VITE_API_URL || 'https://your-production-api.com/api/v1/trains/simplified',
       };
     case 'test':
       return {
         ...API_CONFIG,
-        BASE_URL: 'http://localhost:8001/api/v1/trains/simplified', // Test server
+        BASE_URL: 'http://localhost:8001/api/v1/trains/simplified',
         REALTIME: {
           ...API_CONFIG.REALTIME,
-          MAX_RECONNECT_ATTEMPTS: 1 // Faster test execution
+          MAX_RECONNECT_ATTEMPTS: 1
         }
       };
     default:

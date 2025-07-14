@@ -41,7 +41,7 @@ interface TrainDataProviderProps {
 
 export function TrainDataProvider({ children }: TrainDataProviderProps) {
   // Initialize data loader and service based on environment
-  const useRealApi = process.env.NODE_ENV === 'production' || process.env.REACT_APP_USE_REAL_API === 'true';
+  const useRealApi = import.meta.env.PROD || import.meta.env.VITE_USE_REAL_API === 'true';
   
   const [dataLoader] = useState(() => {
     if (useRealApi) {
