@@ -1,34 +1,29 @@
 
-import { Search } from "lucide-react";
+import { Search, AlertCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Building2 } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
 import { fuzzyMatch, partialWordMatch } from "@/utils/fuzzySearch";
-
-interface Train {
-  id: string;
-  operator: string;
-  from?: string;
-  to?: string;
-  arrivalTime?: string;
-  track?: string;
-  country: string;
-  highlighted?: boolean;
-}
+import { Train } from "@/types/train";
 
 interface StationSearchResultsProps {
   hasSearched: boolean;
   searchResults: Train[];
   searchTerm: string;
   setSearchTerm: (term: string) => void;
+  isLoading?: boolean;
+  error?: string | null;
 }
 
 const StationSearchResults = ({ 
   hasSearched, 
   searchResults, 
   searchTerm, 
-  setSearchTerm 
+  setSearchTerm,
+  isLoading = false,
+  error = null
 }: StationSearchResultsProps) => {
   // Enhanced flexible search filter for results
   const filteredResults = searchTerm ? searchResults.filter(train => {
@@ -63,6 +58,31 @@ const StationSearchResults = ({
       return false;
     });
   }) : searchResults;
+
+  // Error state
+  if (error) {
+    return (
+      <div className="p-4">
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            Ett fel inträffade vid sökning: {error}
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="p-8 text-center text-muted-foreground">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+        <h3 className="text-lg font-medium mb-2">Söker...</h3>
+        <p>Söker efter tåg enligt de valda kriterierna</p>
+      </div>
+    );
+  }
 
   if (!hasSearched) {
     return (

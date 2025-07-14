@@ -62,13 +62,16 @@ export const performRouteSearch = (
 ): Train[] => {
   let filteredTrains = trains;
   
-  console.log("Route search debug:", {
-    fromLocation,
-    selectedFromStation,
-    toLocation,
-    selectedToStation,
-    routeSearchType
-  });
+  // Development logging (removed in production)
+  if (import.meta.env.VITE_LOG_LEVEL === 'debug') {
+    console.log("Route search parameters:", {
+      fromLocation,
+      selectedFromStation,
+      toLocation,
+      selectedToStation,
+      routeSearchType
+    });
+  }
   
   // Filter trains based on route search type
   if (routeSearchType === "from") {
@@ -119,7 +122,10 @@ export const performRouteSearch = (
     }
   }
   
-  console.log("Filtered trains result:", filteredTrains.length);
+  // Development logging (removed in production)
+  if (import.meta.env.VITE_LOG_LEVEL === 'debug') {
+    console.log("Filtered trains result:", filteredTrains.length);
+  }
   
   return filteredTrains;
 };

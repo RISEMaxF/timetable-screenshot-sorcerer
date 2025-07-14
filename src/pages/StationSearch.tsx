@@ -6,6 +6,8 @@ import StationHeader from "../components/station/StationHeader";
 import StationSearchFilters from "../components/station/StationSearchFilters";
 import StationSearchResults from "../components/station/StationSearchResults";
 import { performStationSearch, performRouteSearch } from "../services/stationSearchService";
+import { Train } from "../types/train";
+import { ApiErrorHandler } from "../services/ErrorHandlingService";
 
 const StationSearchContent = () => {
   const { trains } = useTrainData();
@@ -17,30 +19,47 @@ const StationSearchContent = () => {
   const [toLocation, setToLocation] = useState("ALL");
   const [selectedToStation, setSelectedToStation] = useState("ALL");
   const [routeSearchType, setRouteSearchType] = useState<"from" | "to" | "both">("both");
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<Train[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchDate, setSearchDate] = useState(new Date());
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSearch = () => {
-    let results: any[] = [];
+  const handleSearch = async () => {
+    setIsLoading(true);
+    setError(null);
     
-    if (searchMode === "station") {
-      results = performStationSearch(trains, stationLocation, selectedStation);
-    } else {
-      results = performRouteSearch(
-        trains,
-        fromLocation,
-        selectedFromStation,
-        toLocation,
-        selectedToStation,
-        routeSearchType
-      );
+    try {
+      // Simulate API delay for realistic UX (as per frontend-only guidelines)
+      const mockDelay = parseInt(import.meta.env.VITE_MOCK_DELAY_MS || '300');
+      await new Promise(resolve => setTimeout(resolve, mockDelay));
+      
+      let results: Train[] = [];
+      
+      if (searchMode === "station") {
+        results = performStationSearch(trains, stationLocation, selectedStation);
+      } else {
+        results = performRouteSearch(
+          trains,
+          fromLocation,
+          selectedFromStation,
+          toLocation,
+          selectedToStation,
+          routeSearchType
+        );
+      }
+      
+      setSearchResults(results);
+      setHasSearched(true);
+    } catch (err) {
+      const errorMessage = ApiErrorHandler.handleApiError(err);
+      setError(errorMessage);
+      ApiErrorHandler.logError('StationSearch.handleSearch', err);
+    } finally {
+      setIsLoading(false);
     }
-    
-    setSearchResults(results);
-    setHasSearched(true);
   };
 
   return (
@@ -78,6 +97,8 @@ const StationSearchContent = () => {
             searchResults={searchResults}
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
+            isLoading={isLoading}
+            error={error}
           />
         </div>
       </div>
