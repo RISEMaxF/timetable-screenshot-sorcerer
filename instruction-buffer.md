@@ -4,6 +4,86 @@
 
 This is a sophisticated React-based train management application built with modern web technologies, implementing Clean Architecture principles with a focus on real-time data synchronization and user experience.
 
+## Development Environment Context
+
+### Frontend-Only Development Reality
+**IMPORTANT**: Working in isolated frontend environment without backend access. Backend is fully implemented and running separately (FastAPI + Kafka + PostgreSQL on localhost:8000) but cannot be tested directly in this environment.
+
+### Environment Configuration Strategy
+```typescript
+// Default to mock data in development environment
+const useRealApi = import.meta.env.PROD || import.meta.env.VITE_USE_REAL_API === 'true';
+// This defaults to InMemoryTrainRepository for development
+```
+
+### Mock Data as Source of Truth
+trainData.ts represents exact backend structure:
+```typescript
+// Real backend response format:
+{
+  "trains": [{
+    "id": "20250719.10",
+    "advertised_train_number": "10",  // Maps to announcedTrainNumber
+    "operator": "Unknown",
+    "from": "Ljun",
+    "to": null,
+    "country": "SE",
+    "track": "e",
+    "latest": "Last train_departed_from_station at Ljun",
+    "highlighted": false,
+    "completed": false,
+    "createdAt": "2025-07-07T12:07:52.896975",
+    "updatedAt": "2025-07-04T22:17:49.167000"
+  }],
+  "total": 1,
+  "hasMore": false
+}
+```
+
+### Missing Backend Endpoints (Design Ready)
+Frontend is prepared for these endpoints that need backend implementation:
+- `GET /api/v1/trains/simplified/search` - Advanced search with filters
+- `PUT /api/v1/trains/simplified/{id}` - Update individual train
+- `DELETE /api/v1/trains/simplified/{id}` - Delete train
+- `PUT /api/v1/trains/simplified/batch` - Batch operations
+- `GET /api/v1/trains/stations` - Station dropdown data
+- `GET /api/v1/trains/operators` - Operator dropdown data
+- `GET /api/v1/events/stream` - Real-time SSE stream
+
+### React Query Decision Points
+Three options available:
+1. **Implement React Query** (Recommended) - Add useQuery hooks for better caching
+2. **Remove React Query** - Uninstall dependency if not needed
+3. **Hybrid Approach** - Keep custom loaders + React Query for simple calls
+
+### Environment Variables
+```bash
+# .env.example (Frontend-only development)
+VITE_API_URL=http://localhost:8000
+VITE_USE_REAL_API=false          # Always false in development environment
+VITE_ENABLE_REAL_TIME=false      # Can't test real-time connections
+VITE_LOG_LEVEL=debug
+VITE_MOCK_DELAY_MS=300           # Simulate API delay for realistic UX
+```
+
+### Testing Strategy (Without Backend)
+```typescript
+// Mock API responses matching real backend format
+export const mockTrainResponse = {
+  trains: [/* exact backend format */],
+  total: 1,
+  hasMore: false
+};
+
+// Integration tests with mocked fetch
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    ok: true,
+    json: () => Promise.resolve(mockTrainResponse),
+  })
+);
+```
+
 ## Technology Stack
 
 - **Frontend**: React 18 + TypeScript + Vite
@@ -221,7 +301,16 @@ components/
 
 ## Development Patterns
 
-### 1. Type Safety Strategy
+### 1. Frontend-Only Development Focus
+
+**Code Quality Standards** (Without Backend Testing):
+- **Type Safety**: Extra emphasis on TypeScript correctness since backend can't be tested
+- **Error Handling**: Comprehensive error scenarios and user feedback
+- **Mock Accuracy**: Ensure mock data perfectly represents real backend responses
+- **Future-Proof**: Write code that works seamlessly when backend is connected
+- **Code Documentation**: Clear comments explaining backend integration points
+
+### 2. Type Safety Strategy
 
 **Comprehensive TypeScript Usage**:
 - Strong typing for all entities and DTOs
