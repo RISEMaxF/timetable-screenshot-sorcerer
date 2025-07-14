@@ -1,5 +1,5 @@
 
-import { Building2, TrainFront, Bookmark, Menu, User, LogOut } from "lucide-react";
+import { Building2, TrainFront, Bookmark, Menu, User, LogOut, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -116,8 +116,8 @@ const StationHeader = () => {
             </Link>
             <Link to="/favorites">
               <Button variant="outline" className="flex items-center gap-2 min-w-fit">
-                <Bookmark className="h-4 w-4" />
-                Favoriter
+                <Star className="h-4 w-4" />
+                Favoritstationer
               </Button>
             </Link>
             <HelpMenu />
@@ -141,8 +141,8 @@ const StationHeader = () => {
           </Link>
           <Link to="/favorites" className="block">
             <Button variant="outline" className="w-full justify-start">
-              <Bookmark className="h-4 w-4 mr-2" />
-              Favoriter
+              <Star className="h-4 w-4 mr-2" />
+              Favoritstationer
             </Button>
           </Link>
         </div>
