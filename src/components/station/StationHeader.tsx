@@ -115,7 +115,7 @@ const StationHeader = () => {
               </Button>
             </Link>
             <Link to="/favorites">
-              <Button variant="outline" className="flex items-center gap-2">
+              <Button variant="outline" className="flex items-center gap-2 min-w-fit">
                 <Bookmark className="h-4 w-4" />
                 Favoriter
               </Button>

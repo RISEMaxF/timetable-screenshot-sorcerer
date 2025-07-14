@@ -122,7 +122,7 @@ const MainHeader = ({ showFavorites = false, onToggleFavorites }: MainHeaderProp
               <Button 
                 variant="outline" 
                 onClick={onToggleFavorites}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 min-w-fit"
               >
                 <Star className={`h-4 w-4 ${showFavorites ? 'fill-yellow-400 text-yellow-400' : ''}`} />
                 {showFavorites ? "Visa alla tåg" : "Visa favoriter"}
