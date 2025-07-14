@@ -1,21 +1,28 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { TrainService } from '../services/TrainService';
-import { InMemoryTrainRepository } from '../repositories/TrainRepository';
-import { TrainAdapter } from '../adapters/TrainAdapter';
-import { trainData } from '../data/trainData';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Train } from '../types/train';
 import { TrainSearchParams } from '../entities/Train';
-import { TrainDataLoader, MockTrainDataLoader } from '../services/TrainDataLoader';
+import { TrainService } from '../services/TrainService';
+import { InMemoryTrainRepository, TrainRepository } from '../repositories/TrainRepository';
+import { EnhancedTrainDataLoader, MockEnhancedTrainDataLoader } from '../services/EnhancedTrainDataLoader';
+import { FastApiTrainService } from '../services/FastApiTrainService';
+import { TrainAdapter } from '../adapters/TrainAdapter';
+import { realTimeService } from '../services/RealTimeService';
+import { ApiErrorHandler } from '../services/ErrorHandlingService';
+import { trainData } from '../data/trainData';
 
 interface TrainDataContextType {
   trainService: TrainService;
   trains: Train[];
   loading: boolean;
   error: string | null;
+  isRealTimeConnected: boolean;
+  lastUpdated: Date | null;
   refreshTrains: () => Promise<void>;
   searchTrains: (params: TrainSearchParams) => Promise<Train[]>;
   updateTrain: (train: Train) => Promise<void>;
   batchUpdateTrains: (trainIds: string[], updates: Partial<Train>) => Promise<void>;
+  enableRealTime: () => void;
+  disableRealTime: () => void;
 }
 
 const TrainDataContext = createContext<TrainDataContextType | undefined>(undefined);
@@ -29,44 +36,53 @@ export const useTrainData = () => {
 };
 
 interface TrainDataProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-export const TrainDataProvider = ({ children }: TrainDataProviderProps) => {
-  // Initialize data loader - use mock for now, easily switchable to real API
+export function TrainDataProvider({ children }: TrainDataProviderProps) {
+  // Initialize data loader and service based on environment
+  const useRealApi = process.env.NODE_ENV === 'production' || process.env.REACT_APP_USE_REAL_API === 'true';
+  
   const [dataLoader] = useState(() => {
-    const isDevelopment = process.env.NODE_ENV === 'development';
-    
-    if (isDevelopment) {
-      // Use mock data loader during development
-      return new MockTrainDataLoader(TrainAdapter.toEntityList(trainData));
+    if (useRealApi) {
+      return new EnhancedTrainDataLoader(true);
     } else {
-      // Use real API loader in production
-      return new TrainDataLoader('http://localhost:8000/api/v1/trains/simplified');
+      return new MockEnhancedTrainDataLoader(TrainAdapter.toEntityList(trainData));
     }
   });
-
-  // Keep existing service for operations that don't need external API
-  const [trainService] = useState(() => {
-    const repository = new InMemoryTrainRepository();
-    repository.seed(TrainAdapter.toEntityList(trainData));
-    return new TrainService(repository);
+  
+  const [trainRepository] = useState<TrainRepository>(() => {
+    return useRealApi ? new FastApiTrainService() : new InMemoryTrainRepository();
   });
-
+  
+  const [trainService] = useState(() => new TrainService(trainRepository));
+  
   const [trains, setTrains] = useState<Train[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isRealTimeConnected, setIsRealTimeConnected] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
-  const refreshTrains = async () => {
+  const refreshTrains = async (): Promise<void> => {
     try {
       setLoading(true);
       setError(null);
       
-      const response = await dataLoader.reload();
-      setTrains(TrainAdapter.fromEntityList(response.trains));
+      const data = await dataLoader.load();
+      const trainEntities = data.trains;
+      const adaptedTrains = TrainAdapter.fromEntityList(trainEntities);
+      
+      setTrains(adaptedTrains);
+      setLastUpdated(data.lastUpdated);
+      
+      // Seed the in-memory repository with the loaded data
+      if (trainRepository instanceof InMemoryTrainRepository) {
+        trainRepository.seed(trainEntities);
+      }
     } catch (err) {
-      console.error('Failed to refresh trains:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load trains');
+      const errorMessage = ApiErrorHandler.handleApiError(err);
+      setError(errorMessage);
+      ApiErrorHandler.logError('TrainDataProvider.refreshTrains', err);
     } finally {
       setLoading(false);
     }
@@ -74,66 +90,114 @@ export const TrainDataProvider = ({ children }: TrainDataProviderProps) => {
 
   const searchTrains = async (params: TrainSearchParams): Promise<Train[]> => {
     try {
-      const response = await dataLoader.load(params);
-      return TrainAdapter.fromEntityList(response.trains);
+      const data = await dataLoader.load(params);
+      const trainEntities = data.trains;
+      return TrainAdapter.fromEntityList(trainEntities);
     } catch (err) {
-      console.error('Failed to search trains:', err);
+      const errorMessage = ApiErrorHandler.handleApiError(err);
+      setError(errorMessage);
+      ApiErrorHandler.logError('TrainDataProvider.searchTrains', err, { params });
       return [];
     }
   };
 
-  // Keep existing update methods using the service
-  const updateTrain = async (train: Train) => {
+  const updateTrain = async (train: Train): Promise<void> => {
     try {
-      const updateDto = TrainAdapter.toUpdateDto(train);
-      const updatedEntity = await trainService.updateTrain(train.id, updateDto);
+      const trainEntity = TrainAdapter.toEntity(train);
+      const updatedEntity = await trainService.updateTrain(trainEntity.id, TrainAdapter.toUpdateDto(train));
       const updatedTrain = TrainAdapter.fromEntity(updatedEntity);
       
-      setTrains(prev => 
-        prev.map(t => t.id === train.id ? updatedTrain : t)
+      setTrains(prevTrains => 
+        prevTrains.map(t => t.id === updatedTrain.id ? updatedTrain : t)
       );
+      setLastUpdated(new Date());
     } catch (err) {
-      console.error('Failed to update train:', err);
-      throw err;
+      const errorMessage = ApiErrorHandler.handleApiError(err);
+      setError(errorMessage);
+      ApiErrorHandler.logError('TrainDataProvider.updateTrain', err, { trainId: train.id });
     }
   };
 
-  const batchUpdateTrains = async (trainIds: string[], updates: Partial<Train>) => {
+  const batchUpdateTrains = async (trainIds: string[], updates: Partial<Train>): Promise<void> => {
     try {
       const updateDto = TrainAdapter.toUpdateDto(updates);
       const updatedEntities = await trainService.batchUpdateTrains(trainIds, updateDto);
       const updatedTrains = TrainAdapter.fromEntityList(updatedEntities);
       
-      setTrains(prev => 
-        prev.map(train => {
-          const updated = updatedTrains.find(u => u.id === train.id);
-          return updated || train;
+      setTrains(prevTrains => 
+        prevTrains.map(train => {
+          const updatedTrain = updatedTrains.find(ut => ut.id === train.id);
+          return updatedTrain || train;
         })
       );
+      setLastUpdated(new Date());
     } catch (err) {
-      console.error('Failed to batch update trains:', err);
-      throw err;
+      const errorMessage = ApiErrorHandler.handleApiError(err);
+      setError(errorMessage);
+      ApiErrorHandler.logError('TrainDataProvider.batchUpdateTrains', err, { trainIds, updates });
     }
   };
 
+  const enableRealTime = (): void => {
+    if (dataLoader instanceof EnhancedTrainDataLoader) {
+      dataLoader.enableRealTimeUpdates();
+      setIsRealTimeConnected(true);
+    }
+  };
+
+  const disableRealTime = (): void => {
+    if (dataLoader instanceof EnhancedTrainDataLoader) {
+      dataLoader.disableRealTimeUpdates();
+      setIsRealTimeConnected(false);
+    }
+  };
+
+  // Load initial data
   useEffect(() => {
     refreshTrains();
   }, []);
 
-  const value: TrainDataContextType = {
+  // Setup real-time connection status monitoring
+  useEffect(() => {
+    if (!useRealApi) return;
+
+    const checkRealTimeStatus = () => {
+      const status = realTimeService.getConnectionStatus();
+      setIsRealTimeConnected(status.connected);
+    };
+
+    // Check initial status
+    checkRealTimeStatus();
+
+    // Monitor connection status
+    const interval = setInterval(checkRealTimeStatus, 5000);
+
+    return () => {
+      clearInterval(interval);
+      if (dataLoader instanceof EnhancedTrainDataLoader) {
+        dataLoader.destroy();
+      }
+    };
+  }, [useRealApi, dataLoader]);
+
+  const contextValue: TrainDataContextType = {
     trainService,
     trains,
     loading,
     error,
+    isRealTimeConnected,
+    lastUpdated,
     refreshTrains,
     searchTrains,
     updateTrain,
-    batchUpdateTrains
+    batchUpdateTrains,
+    enableRealTime,
+    disableRealTime
   };
 
   return (
-    <TrainDataContext.Provider value={value}>
+    <TrainDataContext.Provider value={contextValue}>
       {children}
     </TrainDataContext.Provider>
   );
-};
+}
