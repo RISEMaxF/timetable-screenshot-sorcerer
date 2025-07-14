@@ -3,17 +3,19 @@ export const API_CONFIG = {
   // Base API URL - will be different for FastAPI vs Supabase
   BASE_URL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
   
-  // API endpoints
+  // API endpoints matching your backend plan
   ENDPOINTS: {
     TRAINS: '/api/v1/trains/simplified',
     TRAIN_SEARCH: '/api/v1/trains/simplified/search',
     TRAIN_DETAIL: '/api/v1/trains/simplified',
+    TRAIN_BATCH: '/api/v1/trains/simplified/batch',
     TRAIN_CARS: '/api/v1/trains/train-cars',
     STATIONS: '/api/v1/trains/stations',
     OPERATORS: '/api/v1/trains/operators',
     EVENTS: '/api/v1/events/train',
     EVENTS_STREAM: '/api/v1/events/stream',
-    TIMELINE: '/api/v1/events/train'
+    TIMELINE: '/api/v1/events/train',
+    HEALTH: '/health'
   },
   
   // Request configuration
