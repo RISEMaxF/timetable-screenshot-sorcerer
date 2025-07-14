@@ -1,4 +1,5 @@
 
+import { useMemo } from "react";
 import { Search, AlertCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Building2 } from "lucide-react";
@@ -25,39 +26,44 @@ const StationSearchResults = ({
   isLoading = false,
   error = null
 }: StationSearchResultsProps) => {
-  // Enhanced flexible search filter for results
-  const filteredResults = searchTerm ? searchResults.filter(train => {
-    const fieldsToSearch = [
-      train.id,
-      train.operator,
-      train.from || "",
-      train.to || "",
-      train.track || "",
-      train.country
-    ];
+  // Enhanced flexible search filter for results with performance optimization
+  const filteredResults = useMemo(() => {
+    if (!searchTerm) return searchResults;
+    
+    const searchLower = searchTerm.toLowerCase();
+    
+    return searchResults.filter(train => {
+      const fieldsToSearch = [
+        train.id,
+        train.operator,
+        train.from || "",
+        train.to || "",
+        train.track || "",
+        train.country
+      ];
 
-    return fieldsToSearch.some(field => {
-      const fieldStr = field.toString();
-      const searchLower = searchTerm.toLowerCase();
-      
-      // Try exact substring match first
-      if (fieldStr.toLowerCase().includes(searchLower)) {
-        return true;
-      }
-      
-      // Try fuzzy matching for typos
-      if (fuzzyMatch(searchTerm, fieldStr)) {
-        return true;
-      }
-      
-      // Try partial word matching
-      if (partialWordMatch(searchTerm, fieldStr)) {
-        return true;
-      }
-      
-      return false;
+      return fieldsToSearch.some(field => {
+        const fieldStr = field.toString();
+        
+        // Try exact substring match first (fastest)
+        if (fieldStr.toLowerCase().includes(searchLower)) {
+          return true;
+        }
+        
+        // Try fuzzy matching for typos
+        if (fuzzyMatch(searchTerm, fieldStr)) {
+          return true;
+        }
+        
+        // Try partial word matching
+        if (partialWordMatch(searchTerm, fieldStr)) {
+          return true;
+        }
+        
+        return false;
+      });
     });
-  }) : searchResults;
+  }, [searchResults, searchTerm]);
 
   // Error state
   if (error) {

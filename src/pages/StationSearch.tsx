@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { TrainDataProvider, useTrainData } from "../providers/TrainDataProvider";
 import { FavoritesProvider } from "../contexts/FavoritesContext";
 import StationHeader from "../components/station/StationHeader";
@@ -27,7 +27,37 @@ const StationSearchContent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSearch = async () => {
+  // Memoized search results to prevent unnecessary recalculations
+  const memoizedSearchResults = useMemo(() => {
+    if (!hasSearched) return [];
+    
+    if (searchMode === "station") {
+      return performStationSearch(trains, stationLocation, selectedStation);
+    } else {
+      return performRouteSearch(
+        trains,
+        fromLocation,
+        selectedFromStation,
+        toLocation,
+        selectedToStation,
+        routeSearchType
+      );
+    }
+  }, [
+    trains,
+    searchMode,
+    stationLocation,
+    selectedStation,
+    fromLocation,
+    selectedFromStation,
+    toLocation,
+    selectedToStation,
+    routeSearchType,
+    hasSearched
+  ]);
+
+  // Optimized search handler with useCallback to prevent unnecessary re-renders
+  const handleSearch = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     
@@ -36,22 +66,8 @@ const StationSearchContent = () => {
       const mockDelay = parseInt(import.meta.env.VITE_MOCK_DELAY_MS || '300');
       await new Promise(resolve => setTimeout(resolve, mockDelay));
       
-      let results: Train[] = [];
-      
-      if (searchMode === "station") {
-        results = performStationSearch(trains, stationLocation, selectedStation);
-      } else {
-        results = performRouteSearch(
-          trains,
-          fromLocation,
-          selectedFromStation,
-          toLocation,
-          selectedToStation,
-          routeSearchType
-        );
-      }
-      
-      setSearchResults(results);
+      // Set search results using memoized calculation
+      setSearchResults(memoizedSearchResults);
       setHasSearched(true);
     } catch (err) {
       const errorMessage = ApiErrorHandler.handleApiError(err);
@@ -60,7 +76,7 @@ const StationSearchContent = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [memoizedSearchResults]);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
